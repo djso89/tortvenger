@@ -15,7 +15,8 @@ flags = pygame.RESIZABLE
 screen = pygame.display.set_mode((info.current_w, info.current_h), flags)
 
 font = pygame.font.Font('AmericanTypewriter.ttc', 36)
-#bg = pygame.image.load('file here')
+bg = pygame.image.load('titlemockup.png')
+bg = pygame.transform.scale(bg, (info.current_w, info.current_h))
 
 def draw_text(text, font, color, surface, x, y):
     text_obj = font.render(text, 1, white)
@@ -25,7 +26,8 @@ def draw_text(text, font, color, surface, x, y):
 
 def main_menu():
     while True:
-        screen.fill(black)
+        screen.blit(bg, (0, 0))
+        #screen.fill(black)
         text = 'press any key to start'
         draw_text(text, font, white, screen, info.current_w / 2,
                   info.current_h / 1.25)
