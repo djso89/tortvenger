@@ -2,6 +2,8 @@
 import pygame
 from display import *
 
+cnt = 0
+
 class Player():
 
     def __init__(self, x, y):
@@ -15,6 +17,8 @@ class Player():
         self.images = pygame.image.load('images/krdy.png')
         self.numImages=2
         self.cImage = 0
+
+        self.cnt = 0
 
     def jump(self):
         if (self.onGround == False):
@@ -62,10 +66,13 @@ class Player():
 
         self.y -= self.velocity
 
-        if (self.cImage >= self.numImages-1):
-            self.cImage=0
-        else:
-            self.cImage+=1
+        if (self.cnt >= 10):
+            self.cnt = 0
+            if (self.cImage >= self.numImages-1):
+                self.cImage=0
+            else:
+                self.cImage+=1
+        self.cnt += 1
 
     def render(self, window):
         #pygame.draw.rect(window,(0,0,0), (self.x, self.y, self.width, self.height))
