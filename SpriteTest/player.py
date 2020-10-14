@@ -15,6 +15,7 @@ class Player():
         self.images = pygame.image.load('images/krdy.png')
         self.numImages=2
         self.cImage = 0
+
     def jump(self):
         if (self.onGround == False):
             return

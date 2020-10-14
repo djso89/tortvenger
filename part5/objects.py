@@ -13,6 +13,7 @@ class Player(pygame.sprite.Sprite):
         self.pos = vec((10,385))
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
+        self.score = 0
 
     def move(self):
         """ move the player """
@@ -40,6 +41,9 @@ class Player(pygame.sprite.Sprite):
         if self.vel.y > 0:
             if hits:
                 if self.pos.y < hits[0].rect.bottom:
+                    if hits[0].point == True:
+                        hits[0].point = False
+                        self.score += 1
                     self.pos.y = hits[0].rect.top + 1
                     self.vel.y = 0
                     self.jumping = False
@@ -63,10 +67,17 @@ class platform(pygame.sprite.Sprite):
         self.surf.fill((0, 255, 0))
         self.rect = self.surf.get_rect(center = (random.randint(0, WIDTH - 10)
                                      ,random.randint(0, HEIGHT - 30)))
-
+        self.point = True
+        self.speed = random.randint(-1, 1)
+        self.moving = True
 
     def move(self):
-        pass
+        if self.moving == True:
+            self.rect.move_ip(self.speed, 0)
+            if self.speed > 0 and self.rect.left > WIDTH:
+                self.rect.right = 0
+            if self.speed < 0 and self.rect.right < 0:
+                self.rect.left = WIDTH
 
 
 def check(platform, groupies):
@@ -100,6 +111,8 @@ def plat_gen():
 
 PT1 = platform()
 P1 = Player()
+PT1.point = False
+PT1.moving = False
 
 PT1.surf = pygame.Surface((WIDTH, 20))
 PT1.surf.fill((255,0, 0))
