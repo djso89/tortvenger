@@ -56,7 +56,7 @@ while True:
     for entity in all_sprites:
         displaysurface.blit(entity.surf, entity.rect)
         entity.move()
-    # print(P1.pos)
+    
 
     pygame.display.update()
     FramePerSec.tick(FPS)

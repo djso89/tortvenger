@@ -38,8 +38,10 @@ class Player(pygame.sprite.Sprite):
 
     def update(self):
         hits = pygame.sprite.spritecollide(self, platforms, False)
+        print(hits)
         if self.vel.y > 0:
             if hits:
+                print("playerY:{} platformY:{}".format(self.pos.y,hits[0].rect.bottom))
                 if self.pos.y < hits[0].rect.bottom:
                     if hits[0].point == True:
                         hits[0].point = False
