@@ -7,9 +7,9 @@ class Player(pygame.sprite.Sprite):
         """ draw the player Sprite """
         super().__init__()
         self.surf = pygame.Surface((30, 30))
-        self.surf.fill((128, 255, 40))
+        self.surf.fill((255, 255, 0))
         self.rect = self.surf.get_rect()
-        self.db_jmp = 0
+        self.jumping = False
         self.pos = vec((10,385))
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
@@ -36,16 +36,24 @@ class Player(pygame.sprite.Sprite):
         self.rect.midbottom = self.pos
 
     def update(self):
-        hits = pygame.sprite.spritecollide(P1, platforms, False)
-        if P1.vel.y > 0:
+        hits = pygame.sprite.spritecollide(self, platforms, False)
+        if self.vel.y > 0:
             if hits:
-                self.pos.y = hits[0].rect.top + 1
-                self.vel.y = 0
+                if self.pos.y < hits[0].rect.bottom:
+                    self.pos.y = hits[0].rect.top + 1
+                    self.vel.y = 0
+                    self.jumping = False
 
     def jump(self):
-        hits = pygame.sprite.spritecollide(P1, platforms, False)
-        if hits:
+        hits = pygame.sprite.spritecollide(self, platforms, False)
+        if hits and not self.jumping:
+            self.jumping = True
             self.vel.y = -15
+
+    def cancel_jump(self):
+        if self.jumping:
+            if self.vel.y < -3:
+                self.vel.y = -3
 
 
 class platform(pygame.sprite.Sprite):
@@ -60,14 +68,35 @@ class platform(pygame.sprite.Sprite):
     def move(self):
         pass
 
+
+def check(platform, groupies):
+    """ check if platforms are too close """
+    if pygame.sprite.spritecollideany(platform, groupies):
+        return True
+    else:
+        for entity in groupies:
+            if entity == platform:
+                continue
+            if (abs(platform.rect.top - entity.rect.bottom) < 40) \
+               and (abs(platform.rect.bottom - entity.rect.top) < 40):
+                return True
+        C = False
+
 def plat_gen():
     while len(platforms) < 7:
         width = random.randrange(50, 100)
         p = platform()
-        p.rect.center = (random.randrange(0, WIDTH - width),
+        C = True
+
+        while C:
+            p = platform()
+            p.rect.center = (random.randrange(0, WIDTH - width),
                          random.randrange(-50, 0))
+            C = check(p, platforms)
         platforms.add(p)
         all_sprites.add(p)
+
+
 
 PT1 = platform()
 P1 = Player()
