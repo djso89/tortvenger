@@ -35,6 +35,10 @@ class Player(pygame.sprite.Sprite):
         self.vel = vec(0,0)
         self.acc = vec(0, 0)
 
+        # orientation and movement status
+        self.orientation = 'right'
+        self.jmp = False
+
 
     def move(self):
         self.acc = vec(0, 2)
@@ -43,21 +47,26 @@ class Player(pygame.sprite.Sprite):
 
         if pressed_keys[K_LEFT]:
             self.acc.x = -ACC
+            self.orientation = 'left'
         if pressed_keys[K_RIGHT]:
             self.acc.x = ACC
+            self.orientation = 'right'
+
+
 
         self.acc.x += self.vel.x * FRIC
         self.vel += self.acc
         self.pos += self.vel + 0.5 * self.acc
 
         self.rect.midtop = self.pos
-        #self.rect.midbottom = self.pos + (0, self.height)
+
 
     def jump(self):
         """ jump action """
         hits = pygame.sprite.spritecollide(self, platforms, False)
         if hits:
-            self.vel.y = -30
+            self.vel.y = -45
+            self.jmp = True
 
 
 
@@ -65,26 +74,78 @@ class Player(pygame.sprite.Sprite):
         hits = pygame.sprite.spritecollide(self, platforms, False)
         if self.vel.y > 0:
             if hits:
+                self.jmp = False
                 self.vel.y = 0
                 self.pos.y = hits[0].rect.top - self.height - 1
                 # print("playerY: {}".format(self.pos.y))
                 # print("platTop{} platbottom: {}".format(hits[0].rect.top, hits[0].rect.bottom))
 
 
+    def reset(self, numWin):
+        #frame set up
+        self.numImages = numWin
+
+        #rectangle dimension
+        self.width = self.images.get_width() / self.numImages
+        self.height = self.images.get_height()
+        self.rect = self.images.get_rect()
 
 
-    def render(self, window):
-        """ paste the player object into screen """
-        screen.blit(self.images, (self.pos.x, self.pos.y),
+
+    def animate_once(self, pic, counter):
+        """animate just once """
+        if (self.cnt >= counter):
+            self.cnt = 0
+            if (self.cImage >= self.numImages-1):
+                self.cImage = self.numImages - 1
+            else:
+                self.cImage+=1
+
+        self.cnt += 1
+
+        screen.blit(self.images, self.pos,
                     (self.cImage*self.width, 0, self.width, self.height))
 
-        # animation loop: each counter (cnt) is equivalent to (1/FPS) seconds
-        if (self.cnt >= 10):
+
+    def animate(self, pic, counter):
+        """animate the player. The counter is the delay """
+        if (self.cnt >= counter):
             self.cnt = 0
             if (self.cImage >= self.numImages-1):
                 self.cImage=0
             else:
                 self.cImage+=1
+
         self.cnt += 1
+        screen.blit(pic, self.pos,
+                (self.cImage*self.width, 0, self.width, self.height))
+
+
+    def render(self, window):
+        """ paste the player object into screen """
+        if self.orientation == "right":
+            if self.jmp == False:
+                # load the image
+                self.images = pygame.image.load('images/krdy.png').convert_alpha()
+                self.reset(2)
+                self.animate(self.images,10)
+            else:
+                self.images = pygame.image.load('images/kjmp.png').convert_alpha()
+                self.reset(11)
+                # animation once
+                self.animate_once(self.images, 1)
+
+        if self.orientation == "left":
+            if self.jmp == False:
+                # load the image
+                self.images = pygame.image.load('images/krdy.png').convert_alpha()
+                self.reset(2)
+                new_images = pygame.transform.flip(self.images, True, False)
+                self.animate(new_images, 10)
+            else:
+                self.images = pygame.image.load('images/kjmpL.png').convert_alpha()
+                self.reset(11)
+                self.animate_once(self.images, 1)
+
 
 P1 = Player()
