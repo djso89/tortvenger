@@ -48,11 +48,12 @@ class Game:
 
         P1.render(screen)
         P1.move()
-        if (self.prd >= 1):
-            self.prd = 0;
-            print("player Jump: {}".format(P1.jmp))
-            print("PlayerY vel: {}".format(P1.vel.y))
+        # if (self.prd >= 1):
+        #     self.prd = 0;
+        #     print("player Jump: {}".format(P1.jmp))
+        #     print("PlayerY vel: {}".format(P1.vel.y))
+        #     print("PlayerPos: {}".format(P1.pos))
 
-        self.prd += 1
+        # self.prd += 1
         pygame.display.flip()
         self.clock.tick(60)

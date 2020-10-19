@@ -41,7 +41,7 @@ class Player(pygame.sprite.Sprite):
 
 
     def move(self):
-        self.acc = vec(0, 2)
+        self.acc = vec(0, 3)
 
         pressed_keys = pygame.key.get_pressed()
 
@@ -57,6 +57,10 @@ class Player(pygame.sprite.Sprite):
         self.acc.x += self.vel.x * FRIC
         self.vel += self.acc
         self.pos += self.vel + 0.5 * self.acc
+
+
+        if self.pos.x < 0:
+            self.pos.x = 0
 
         self.rect.midtop = self.pos
 
@@ -124,28 +128,29 @@ class Player(pygame.sprite.Sprite):
     def render(self, window):
         """ paste the player object into screen """
         if self.orientation == "right":
-            if self.jmp == False:
+            if self.jmp == True:
                 # load the image
-                self.images = pygame.image.load('images/krdy.png').convert_alpha()
-                self.reset(2)
-                self.animate(self.images,10)
-            else:
                 self.images = pygame.image.load('images/kjmp.png').convert_alpha()
                 self.reset(11)
                 # animation once
                 self.animate_once(self.images, 1)
 
+            self.images = pygame.image.load('images/krdy.png').convert_alpha()
+            self.reset(2)
+            self.animate(self.images,10)
+
         if self.orientation == "left":
-            if self.jmp == False:
+            if self.jmp == True:
                 # load the image
-                self.images = pygame.image.load('images/krdy.png').convert_alpha()
-                self.reset(2)
-                new_images = pygame.transform.flip(self.images, True, False)
-                self.animate(new_images, 10)
-            else:
-                self.images = pygame.image.load('images/kjmpL.png').convert_alpha()
+                jmpLPic = pygame.image.load('images/kjmpL.png')
+                self.images = jmpLPic.convert_alpha()
                 self.reset(11)
                 self.animate_once(self.images, 1)
+
+            self.images = pygame.image.load('images/krdy.png').convert_alpha()
+            self.reset(2)
+            new_images = pygame.transform.flip(self.images, True, False)
+            self.animate(new_images, 10)
 
 
 P1 = Player()
