@@ -3,21 +3,21 @@ import sys
 import pygame
 from display import *
 from player import Player
+from player import P1
 from block import *
 
 
 
-player = Player(300, 350)
 
 class Game:
 
     def __init__(self):
   #      self.settings = Settings()
+        pygame.init()
         self.clock = pygame.time.Clock()
+        self.prd = 0
 #        self.screen = pygame.display.set_mode(
  #          (self.settings.screen_width, self.settings.screen_height))
-        self.movex = 0
-        self.movey = 0
 
     def run_game(self):
         while True:
@@ -28,31 +28,32 @@ class Game:
     def _check_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                pygame.quit()
                 sys.exit()
             if (event.type == pygame.KEYDOWN):
                 if event.key == pygame.K_q:
+                    pygame.quit()
                     sys.exit()
-                elif event.key == pygame.K_RIGHT:
-                    self.movex = 5
+                if event.key == pygame.K_UP:
+                    P1.jump()
+            if (event.type == pygame.KEYDOWN):
+                if event.key == pygame.K_UP:
+                    P1.jump()
 
-                elif event.key == pygame.K_LEFT:
-                    self.movex = -5
-                elif event.key == pygame.K_UP:
-                    player.jump()
-            if (event.type == pygame.KEYUP):
-                if event.key == pygame.K_RIGHT:
-                    self.movex = 0
-                elif event.key == pygame.K_LEFT:
-                    self.movex = 0
 
     def _update_screen(self):
         screen.fill(setting.bg_color)
-
+        P1.update()
         for block in platforms:
-            block.render(screen)
-        player.pos.x += self.movex
+           screen.blit(block.surf, block.rect)
 
-        player.update()
-        player.render(screen)
-        self.clock.tick(60)
+        P1.render(screen)
+        P1.move()
+        # if (self.prd >= 100):
+        #     self.prd = 0;
+        #     print("playerX: {}, Y: {}".format(P1.pos.x, P1.pos.y))
+        #     print("playerRect midbottom: {}".format(P1.rect.midbottom))
+
+        # self.prd += 1
         pygame.display.flip()
+        self.clock.tick(60)
