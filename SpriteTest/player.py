@@ -18,7 +18,7 @@ class Player(pygame.sprite.Sprite):
         """ initialize player """
         super().__init__()
         # load the image
-        self.images = pygame.image.load('images/krdy.png')
+        self.images = pygame.image.load('images/krdy.png').convert_alpha()
 
         #frame set up
         self.numImages = 2

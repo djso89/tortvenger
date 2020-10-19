@@ -12,13 +12,10 @@ from block import *
 class Game:
 
     def __init__(self):
-  #      self.settings = Settings()
         pygame.init()
         self.clock = pygame.time.Clock()
         self.bg = pygame.image.load("images/bg_level.png").convert()
         self.prd = 0
-#        self.screen = pygame.display.set_mode(
- #          (self.settings.screen_width, self.settings.screen_height))
 
     def run_game(self):
         while True:
