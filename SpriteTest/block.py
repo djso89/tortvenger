@@ -3,19 +3,19 @@ import pygame
 from pygame import *
 from pygame.locals import *
 from display import *
-
+WIDTH = setting.screen_width
+HEIGHT = setting.screen_height
 
 class Block(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self, w, h):
         super().__init__()
-        self.surf = pygame.Surface((setting.screen_width, 40))
+        self.surf = pygame.Surface((w, 40))
         self.surf.set_alpha(12)
         self.surf.fill((255,255,255))
-        self.rect = self.surf.get_rect(center = (setting.screen_width/2,
-                                                 setting.screen_height - 20))
+        self.rect = self.surf.get_rect(center = (w/2, h - 20))
 
 
 
-PT1 = Block()
+Ground = Block(WIDTH, HEIGHT)
 platforms = pygame.sprite.Group()
-platforms.add(PT1)
+platforms.add(Ground)

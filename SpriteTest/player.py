@@ -37,7 +37,7 @@ class Player(pygame.sprite.Sprite):
 
 
     def move(self):
-        self.acc = vec(0, 3)
+        self.acc = vec(0, 2)
 
         pressed_keys = pygame.key.get_pressed()
 
@@ -57,7 +57,7 @@ class Player(pygame.sprite.Sprite):
         """ jump action """
         hits = pygame.sprite.spritecollide(self, platforms, False)
         if hits:
-            self.vel.y = -50
+            self.vel.y = -30
 
 
 

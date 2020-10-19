@@ -41,7 +41,7 @@ class Player(pygame.sprite.Sprite):
         print(hits)
         if self.vel.y > 0:
             if hits:
-                print("playerY:{} platformY:{}".format(self.pos.y,hits[0].rect.bottom))
+                print("playerY:{} platformY:{}".format(self.pos.y,hits[0].rect.top))
                 if self.pos.y < hits[0].rect.bottom:
                     if hits[0].point == True:
                         hits[0].point = False
