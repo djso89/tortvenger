@@ -15,6 +15,7 @@ class Game:
   #      self.settings = Settings()
         pygame.init()
         self.clock = pygame.time.Clock()
+        self.bg = pygame.image.load("images/bg_level.png").convert()
         self.prd = 0
 #        self.screen = pygame.display.set_mode(
  #          (self.settings.screen_width, self.settings.screen_height))
@@ -44,6 +45,7 @@ class Game:
     def _update_screen(self):
         screen.fill(setting.bg_color)
         P1.update()
+        screen.blit(self.bg, (0, 0))
         for block in platforms:
            screen.blit(block.surf, block.rect)
 
