@@ -4,6 +4,7 @@
 import pygame
 import sys
 from constants import *
+from mainMenu import *
 from pygame.locals import *
 from settings import *
 pygame.init()
@@ -21,7 +22,7 @@ class TitleScreen:
     """ titleScreen class """
     def displayTitle(self):
         """ renders the title page onto the user's screen """
-        pygame.display.se:t_caption('Tortvenger')
+        pygame.display.set_caption('Tortvenger')
         info = pygame.display.Info()
         flags = pygame.RESIZABLE
         screen = pygame.display.set_mode((info.current_w, info.current_h),
@@ -57,14 +58,14 @@ class TitleScreen:
                         settings.displayVolumeCtrl(screen, info.current_w, info.current_h)
                 if event.type == KEYDOWN:
                     if event.key == pygame.K_RETURN:
-                        screen.fill(BLACK)
-                        pygame.mixer.music.stop()
+                        mainmenu = MainMenu()
+                        mainmenu.displayOptions()
+                    if event.key == pygame.K_BACKSPACE:
+                        title = TitleScreen()
+                        title.displayTitle()
                     if event.key == pygame.K_ESCAPE:
                         pygame.quit()
                         sys.exit()
-                    if event.key == pygame.K_BACKSPACE:
-                        title = TitleScreen()
-                        title.displayTitle() 
 
             pygame.display.update()
             mouse = pygame.mouse.get_pos()
