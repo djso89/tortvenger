@@ -129,11 +129,24 @@ class Player(pygame.sprite.Sprite):
         """ paste the player object into screen """
         if self.orientation == "right":
             if self.jmp == True:
-                # load the image
                 self.images = pygame.image.load('images/kjmp.png').convert_alpha()
                 self.reset(11)
-                # animation once
-                self.animate_once(self.images, 1)
+                if self.cImage == self.numImages - 1:
+                    self.images = pygame.image.load('images/krdy.png').convert_alpha()
+                    self.reset(2)
+                # animation once: changes the cImage per period
+                if (self.cnt >= 1):
+                    self.cnt = 0
+                    if (self.cImage >= self.numImages-1):
+                        self.cImage = self.numImages - 1
+                    else:
+                        # counter the tick
+                        screen.blit(self.images, self.pos,
+                            (self.cImage*self.width, 0, self.width, self.height))
+                        if (self.cImage <= self.numImages - 1):
+                            self.cImage+=1
+                self.cnt += 1
+
 
             self.images = pygame.image.load('images/krdy.png').convert_alpha()
             self.reset(2)
