@@ -55,5 +55,7 @@ class Game:
         #     print("PlayerPos: {}".format(P1.pos))
 
         # self.prd += 1
+        print("x and y: {}".format(pygame.mouse.get_pos()))
+        print("block x and y: {}".format(Brick.rect.width))
         pygame.display.flip()
         self.clock.tick(60)
