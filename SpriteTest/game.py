@@ -42,20 +42,27 @@ class Game:
     def _update_screen(self):
         screen.fill(setting.bg_color)
         P1.update()
+        # draw the background
         screen.blit(self.bg, (0, 0))
+
+        #draw the platforms
         for block in platforms:
            screen.blit(block.surf, block.rect)
 
-        P1.render(screen)
         P1.move()
-        # if (self.prd >= 1):
-        #     self.prd = 0;
-        #     print("player Jump: {}".format(P1.jmp))
-        #     print("PlayerY vel: {}".format(P1.vel.y))
-        #     print("PlayerPos: {}".format(P1.pos))
+        P1.animate()
+        P1.render()
 
-        # self.prd += 1
-        print("x and y: {}".format(pygame.mouse.get_pos()))
-        print("block x and y: {}".format(Brick.rect.width))
+
+        if (self.prd >= 1):
+            self.prd = 0;
+            print("player Jump: {}".format(P1.jmp))
+            print("PlayerY vel: {}".format(P1.vel.y))
+            print("PlayerPos: {}".format(P1.pos))
+            print("Player image: {}".format(P1.image))
+
+        self.prd += 1
+#        print("x and y: {}".format(pygame.mouse.get_pos()))
+#        print("brick rect: {}".format(Brick.rect))
         pygame.display.flip()
         self.clock.tick(60)
