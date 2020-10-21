@@ -26,4 +26,4 @@ class Settings:
         surface.blit(bg, (0, 0))
 
         font = pygame.font.Font('fonts/Aeronaves.ttf', 100)
-        drawText('Settings', font, BLACK, surface, screenWidth/2, screenHeight/10)
+        drawText('Settings', font, BLACK, surface, screenWidth/2, screenHeight/7)
