@@ -26,8 +26,8 @@ class Player(pygame.sprite.Sprite):
         ss_jmp = sprite_sheetjmp.sprite_sheet
 
 
-        # animation counter period for jumps or non horizontal movements
-        self.jmpcnt = 0
+        #frame set up
+        self.cnt = 0
 
         # action frames
         self.ready_r = []
@@ -66,15 +66,15 @@ class Player(pygame.sprite.Sprite):
                                                self.width1/11, self.height1)
             self.jmp_r.append(image1)
 
-
         # load all the left facing jmp images
         for i in range(0, 11, 1):
-            self.width1 = ss_jmp.get_width()
-            self.height1 = ss_jmp.get_height()
-            image1 = sprite_sheetjmp.get_image(self.width1/11 * i, 0,
-                                               self.width1/11, self.height1)
+            width1 = ss_jmp.get_width()
+            height1 = ss_jmp.get_height()
+            image1 = sprite_sheetjmp.get_image(width1/11 * i, 0,
+                                               width1/11, height1)
             image1 = pygame.transform.flip(image1, True, False)
             self.jmp_l.append(image1)
+
 
         # set the image the player start with
         self.image = self.ready_r[0]
@@ -113,14 +113,14 @@ class Player(pygame.sprite.Sprite):
         if self.pos.x < 0:
             self.pos.x = 0
 
-        self.rect.midtop = self.pos
+        self.rect.topleft = self.pos
 
 
     def jump(self):
         """ jump action """
         hits = pygame.sprite.spritecollide(self, platforms, False)
         if hits:
-            self.vel.y = -50
+            self.vel.y = -45
             self.jmp = True
 
 
@@ -131,7 +131,7 @@ class Player(pygame.sprite.Sprite):
         if self.vel.y > 0:
             if hits:
                 self.jmp = False
-                self.jmpcnt = 0
+                self.cnt = 0
                 self.vel.y = 0
                 self.pos.y = hits[0].rect.top - self.height - 1
                 # print("playerY: {}".format(self.pos.y))
@@ -150,15 +150,14 @@ class Player(pygame.sprite.Sprite):
 
         elif self.jmp == True:
             # frame = (self.pos.y // 2) % len(self.jmp_r)
-            if (self.jmpcnt >= len(self.jmp_r) - 1):
-                self.jmpcnt = len(self.jmp_r) - 1
+            if (self.cnt >= 10):
+                self.cnt = 10
             else:
-                self.jmpcnt += 1
+                self.cnt += 1
             if self.orientation == 'right':
-                self.image = self.jmp_r[self.jmpcnt]
+                self.image = self.jmp_r[self.cnt]
             if self.orientation == 'left':
-                self.image = self.jmp_l[self.jmpcnt]
-
+                self.image = self.jmp_l[self.cnt]
     def render(self):
         """ paste the player object into screen """
         screen.blit(self.image, self.pos,
