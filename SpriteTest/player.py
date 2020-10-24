@@ -5,7 +5,7 @@ from pygame.locals import *
 from display import *
 from block import *
 from spritesheet import SpriteSheet
-
+from collections import namedtuple
 import random
 
 vec = pygame.math.Vector2
@@ -41,29 +41,29 @@ class Player(pygame.sprite.Sprite):
         # load all right facing ready images
 
         for i in range(0, 2, 1):
-            self.width = ss.get_width()
-            self.height = ss.get_height()
-            image = sprite_sheet.get_image(i * self.width/2, 0,
-                                           self.width/2, self.height)
+            width = ss.get_width()
+            height = ss.get_height()
+            image = sprite_sheet.get_image(i * width/2, 0,
+                                           width/2, height)
             self.ready_r.append(image)
 
 
         # load all left facing ready images
         for i in range(0, 2, 1):
-            self.width = ss.get_width()
-            self.height = ss.get_height()
-            image = sprite_sheet.get_image(self.width/2 * i, 0,
-                                           self.width/2, self.height)
+            width = ss.get_width()
+            height = ss.get_height()
+            image = sprite_sheet.get_image(width/2 * i, 0,
+                                           width/2, height)
             image = pygame.transform.flip(image, True, False)
             self.ready_l.append(image)
 
 
         # load all the right facing jmp images
         for i in range(0, 11, 1):
-            self.width1 = ss_jmp.get_width()
-            self.height1 = ss_jmp.get_height()
-            image1 = sprite_sheetjmp.get_image(self.width1/11 * i, 0,
-                                               self.width1/11, self.height1)
+            width1 = ss_jmp.get_width()
+            height1 = ss_jmp.get_height()
+            image1 = sprite_sheetjmp.get_image(width1/11 * i, 0,
+                                               width1/11, height1)
             self.jmp_r.append(image1)
 
         # load all the left facing jmp images
@@ -81,7 +81,8 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
 
         # kinematic factors
-        self.pos = vec((300, 350))
+        self.pos = vec((0, 350))
+
         self.vel = vec(0,0)
         self.acc = vec(0, 0)
 
@@ -113,7 +114,8 @@ class Player(pygame.sprite.Sprite):
         if self.pos.x < 0:
             self.pos.x = 0
 
-        self.rect.topleft = self.pos
+        self.rect = self.image.get_rect()
+        self.rect.left, self.rect.top  = self.pos.x, self.pos.y
 
 
     def jump(self):
@@ -128,36 +130,44 @@ class Player(pygame.sprite.Sprite):
     def update(self):
         """ check the collisions """
         hits = pygame.sprite.spritecollide(self, platforms, False)
-        if self.vel.y > 0:
-            if hits:
+        for block in hits:
+            if self.vel.y > 0:
                 self.jmp = False
                 self.cnt = 0
                 self.vel.y = 0
-                self.pos.y = hits[0].rect.top - self.height - 1
-                # print("playerY: {}".format(self.pos.y))
-                # print("platTop{} platbottom: {}".format(hits[0].rect.top, hits[0].rect.bottom))
+                self.pos.y = block.rect.top - self.rect.height - 1
 
 
-    def animate(self):
-        """animate the player. """
+
+
+    def ani_move(self):
+        """ animate the left right movement"""
         if self.orientation == 'right' and self.jmp == False:
             frame = (self.pos.x // 30) % len(self.ready_r)
-            print(frame)
             self.image = self.ready_r[int(frame)]
         elif self.orientation == 'left' and self.jmp == False:
             frame = (self.pos.x // 30) % len(self.ready_l)
             self.image = self.ready_l[int(frame)]
 
-        elif self.jmp == True:
-            # frame = (self.pos.y // 2) % len(self.jmp_r)
+
+    def ani_jump(self):
+        """ animate the jump """
+        if self.jmp == True:
             if (self.cnt >= 10):
                 self.cnt = 10
             else:
                 self.cnt += 1
-            if self.orientation == 'right':
-                self.image = self.jmp_r[self.cnt]
+                if self.orientation == 'right':
+                    self.image = self.jmp_r[self.cnt]
             if self.orientation == 'left':
                 self.image = self.jmp_l[self.cnt]
+
+
+    def animate(self):
+        """animate the player. """
+        self.ani_move()
+        self.ani_jump()
+
     def render(self):
         """ paste the player object into screen """
         screen.blit(self.image, self.pos,
