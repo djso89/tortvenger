@@ -75,27 +75,23 @@ class Player(pygame.sprite.Sprite):
             image1 = pygame.transform.flip(image1, True, False)
             self.jmp_l.append(image1)
 
+        # kinematic factors
+        self.pos = vec((0, 350))
+        self.vel = vec(0,0)
+        self.acc = vec(0, 0)
 
         # set the image the player start with
         self.image = self.ready_r[0]
         self.rect = self.image.get_rect()
 
-        # kinematic factors
-        self.pos = vec((0, 350))
-
-        self.vel = vec(0,0)
-        self.acc = vec(0, 0)
-
         # orientation and movement status
         self.orientation = 'right'
-        self.jmp = False
+        self.jmp = True
 
 
     def move(self):
         self.acc = vec(0, 3)
-
         pressed_keys = pygame.key.get_pressed()
-
         if pressed_keys[K_LEFT]:
             self.acc.x = -ACC
             self.orientation = 'left'
@@ -104,35 +100,39 @@ class Player(pygame.sprite.Sprite):
             self.orientation = 'right'
 
 
+    def jump(self):
+        """ jump action """
+        if self.jmp == True:
+            self.vel.y = -45
+            self.jmp = False
+#            self.cnt = 0
 
+
+
+    def update(self):
+        # move along the x direction
         self.acc.x += self.vel.x * FRIC
-        self.vel += self.acc
-        self.pos += self.vel + 0.5 * self.acc
+        self.vel.x += self.acc.x
+        self.pos.x += self.vel.x + 0.5 * self.acc.x
 
         #left Most boundary of stage. Block the player from
         #moving further
         if self.pos.x < 0:
             self.pos.x = 0
+        self.rect.x = self.pos.x
 
-        self.rect = self.image.get_rect()
-        self.rect.left, self.rect.top  = self.pos.x, self.pos.y
-
-
-    def jump(self):
-        """ jump action """
-        hits = pygame.sprite.spritecollide(self, platforms, False)
-        if hits:
-            self.vel.y = -45
-            self.jmp = True
+        #moving along the y direction
+        self.vel.y += self.acc.y
+        self.pos.y += self.vel.y + 0.5 * self.acc.y
 
 
+        self.rect.y = self.pos.y
 
-    def update(self):
         """ check the collisions """
         hits = pygame.sprite.spritecollide(self, platforms, False)
         for block in hits:
             if self.vel.y > 0:
-                self.jmp = False
+                self.jmp = True
                 self.cnt = 0
                 self.vel.y = 0
                 self.pos.y = block.rect.top - self.rect.height - 1
@@ -140,25 +140,26 @@ class Player(pygame.sprite.Sprite):
 
 
 
+
     def ani_move(self):
         """ animate the left right movement"""
-        if self.orientation == 'right' and self.jmp == False:
+        if self.orientation == 'right' and self.jmp == True:
             frame = (self.pos.x // 30) % len(self.ready_r)
             self.image = self.ready_r[int(frame)]
-        elif self.orientation == 'left' and self.jmp == False:
+        elif self.orientation == 'left' and self.jmp == True:
             frame = (self.pos.x // 30) % len(self.ready_l)
             self.image = self.ready_l[int(frame)]
 
 
     def ani_jump(self):
         """ animate the jump """
-        if self.jmp == True:
+        if self.jmp == False:
             if (self.cnt >= 10):
                 self.cnt = 10
             else:
                 self.cnt += 1
-                if self.orientation == 'right':
-                    self.image = self.jmp_r[self.cnt]
+            if self.orientation == 'right':
+                self.image = self.jmp_r[self.cnt]
             if self.orientation == 'left':
                 self.image = self.jmp_l[self.cnt]
 
