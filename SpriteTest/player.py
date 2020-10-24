@@ -82,7 +82,7 @@ class Player(pygame.sprite.Sprite):
 
         # set the image the player start with
         self.image = self.ready_r[0]
-        self.rect = self.image.get_rect()
+        self.rect = self.image.get_rect(topleft=self.pos)
 
         # orientation and movement status
         self.orientation = 'right'
@@ -121,21 +121,35 @@ class Player(pygame.sprite.Sprite):
             self.pos.x = 0
         self.rect.x = self.pos.x
 
+
+        """check the collision in X direction """
+        hits = pygame.sprite.spritecollide(self, platforms, False)
+        for block in hits:
+            if self.vel.x > 0: #moving right
+                self.rect.right = block.rect.left
+            elif self.vel.x < 0:
+                self.rect.left = block.rect.right
+            self.pos.x = self.rect.x
+
+
         #moving along the y direction
         self.vel.y += self.acc.y
         self.pos.y += self.vel.y + 0.5 * self.acc.y
-
-
+        # assign the y coordinate to frame's y
         self.rect.y = self.pos.y
 
-        """ check the collisions """
+        """ check the collisions in Y direction"""
         hits = pygame.sprite.spritecollide(self, platforms, False)
         for block in hits:
             if self.vel.y > 0:
                 self.jmp = True
                 self.cnt = 0
                 self.vel.y = 0
-                self.pos.y = block.rect.top - self.rect.height - 1
+                self.rect.bottom = block.rect.top
+            elif self.vel.y < 0:
+                self.rect.top = block.rect.bottom
+                self.vel.y = 0
+            self.pos.y = self.rect.y
 
 
 
