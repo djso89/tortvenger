@@ -24,8 +24,8 @@ class MainMenu(Menu):
         Menu.__init__(self, game)
         self.state = "Start"
         self.startx, self.starty = self.mid_w, self.mid_h + int(0.250 * self.game.DISPLAY_H)
-        self.optionsx, self.optionsy = self.mid_w, self.mid_h + int(0.290 * self.game.DISPLAY_H)
-        self.creditsx, self.creditsy = self.mid_w, self.mid_h + int(0.330 * self.game.DISPLAY_H)
+        self.optionsx, self.optionsy = self.mid_w, self.mid_h + int(0.300 * self.game.DISPLAY_H)
+        self.creditsx, self.creditsy = self.mid_w, self.mid_h + int(0.350 * self.game.DISPLAY_H)
         self.cursor_rect.midtop = (self.startx + self.offset, self.starty)
 
     def display_menu(self):
