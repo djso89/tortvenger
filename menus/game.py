@@ -20,11 +20,12 @@ class Game():
         self.curr_menu = self.main_menu
 
     def game_loop(self):
-        pygame.mixer.music.stop()
+        #pygame.mixer.music.stop()
         while self.playing:
             self.check_events()
             if self.START_KEY:
                 self.playing= False
+            pygame.mixer.music.stop()
             self.display.fill(self.BLACK)
             self.draw_text('Thanks for Playing', int(0.05 * self.DISPLAY_H), self.DISPLAY_W/2, self.DISPLAY_H/2)
             self.window.blit(self.display, (0,0))
