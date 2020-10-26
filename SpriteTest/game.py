@@ -12,13 +12,10 @@ from block import *
 class Game:
 
     def __init__(self):
-  #      self.settings = Settings()
         pygame.init()
         self.clock = pygame.time.Clock()
         self.bg = pygame.image.load("images/bg_level.png").convert()
         self.prd = 0
-#        self.screen = pygame.display.set_mode(
- #          (self.settings.screen_width, self.settings.screen_height))
 
     def run_game(self):
         while True:
@@ -45,17 +42,27 @@ class Game:
     def _update_screen(self):
         screen.fill(setting.bg_color)
         P1.update()
+        # draw the background
         screen.blit(self.bg, (0, 0))
+
+        #draw the platforms
         for block in platforms:
            screen.blit(block.surf, block.rect)
 
-        P1.render(screen)
         P1.move()
-        # if (self.prd >= 100):
-        #     self.prd = 0;
-        #     print("playerX: {}, Y: {}".format(P1.pos.x, P1.pos.y))
-        #     print("playerRect midbottom: {}".format(P1.rect.midbottom))
+        P1.animate()
+        P1.render()
 
-        # self.prd += 1
+
+        if (self.prd >= 1):
+            self.prd = 0;
+            print("player Jump: {}".format(P1.jmp))
+            print("PlayerY vel: {}".format(P1.vel.y))
+            print("PlayerPos: {}".format(P1.pos))
+            print("Player image: {}".format(P1.image))
+
+        self.prd += 1
+#        print("x and y: {}".format(pygame.mouse.get_pos()))
+#        print("brick rect: {}".format(Brick.rect))
         pygame.display.flip()
         self.clock.tick(60)
