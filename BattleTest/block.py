@@ -11,36 +11,19 @@ class Block(pygame.sprite.Sprite):
         """initialize the block. By default,
         the ground is established """
         super().__init__()
-        self.surf = pygame.Surface((WIDTH, 40))
+        self.surf = pygame.Surface((WIDTH, 20))
         self.surf.set_alpha(12)
         self.surf.fill((255,255,255))
-        self.rect = self.surf.get_rect(center = (WIDTH/2, HEIGHT - 20))
+        self.rect = self.surf.get_rect(center = (WIDTH/2, HEIGHT - 10))
+
+    def newBlock(self, x, y, w, h, a):
+        self.surf = pygame.Surface((w, h))
+        self.surf.set_alpha(a)
+        self.surf.fill((0, 0, 0))
+        self.rect = self.surf.get_rect(topleft = (x, y))
+
 
     def loadBrick(self, x, y):
         self.surf = pygame.image.load('images/block1.png').convert()
         self.surf.set_alpha(190)
-        self.rect = self.surf.get_rect(centerx=x, centery=y)
-
-
-Ground = Block()
-Brick = Block()
-Brick.loadBrick(WIDTH - 500, HEIGHT - 200)
-
-Brick1 = Block()
-Brick1.loadBrick(250, 470)
-
-Brick2 = Block()
-Brick2.loadBrick(500, 570)
-
-Brick3 = Block()
-Brick3.loadBrick(400, 510)
-
-Bricks = pygame.sprite.Group()
-Bricks.add(Brick)
-Bricks.add(Brick1)
-Bricks.add(Brick2)
-Bricks.add(Brick3)
-
-platforms = pygame.sprite.Group()
-platforms.add(Ground)
-platforms.add(Bricks)
+        self.rect = self.surf.get_rect(topleft=(x, y))
