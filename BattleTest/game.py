@@ -3,6 +3,7 @@ import sys
 import pygame
 from display import *
 from player import Player
+from action import KuppaAct
 from player import P1
 
 from covid19 import *
@@ -36,32 +37,50 @@ class Game:
                     pygame.display.quit()
                     pygame.quit()
                     sys.exit()
+                if event.key == pygame.K_d:
+                    P1.draw_the_swrd()
                 if event.key == pygame.K_UP:
                     P1.jump()
 
 
 
     def _update_screen(self):
-        # do the Player 1 routines
-        P1.move()
-        P1.update()
-        self.show_info()
+        """this function updates
+        objects on the screen"""
+        """do the Player 1 routines"""
+
+        self.player_stuff()
+#        self.show_info()
 
         # do the COVID19 routines
+        C19.move()
         C19.update()
 
+
+        """ drawing routines """
         # draw the Stage
         ST1.draw(screen)
-
-        #draw the player
-        P1.animate()
-        P1.render()
 
         #draw the cells
         C19.render()
 
+
+
+
+
+        #draw the player
+        P1.animate()
+        P1.render()
+        KuppaAct.render()
+
+
         pygame.display.flip()
         self.clock.tick(60)
+
+    def player_stuff(self):
+        P1.move()
+        P1.update()
+
 
 
 
@@ -81,7 +100,8 @@ class Game:
             if m1 == 1:
                 print("Point 1: {}".format(pygame.mouse.get_pos()))
             self.prd = 0;
-            # print("PlayerPos: {}".format(P1.pos))
+            print("C19Pos: {}".format(C19.pos))
+            print("C19vel: {}".format(C19.vel))
             # print("Player img: {}".format(P1.image))
             # print("Brick1 bottom {}".format(Brick1.rect.bottom))
 

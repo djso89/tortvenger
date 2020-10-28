@@ -7,37 +7,40 @@ from stage import *
 from spritesheet import SpriteSheet
 
 
+class Character:
+    pass
+
 
 class Player(pygame.sprite.Sprite):
 
-    def __init__(self):
-        """ initialize player """
-        super().__init__()
-        # load the image
+
+    def loadimages(self):
+        """ load all the kuppa action frames """
         sprite_sheet = SpriteSheet("images/krdy.png")
         sprite_sheetjmp = SpriteSheet("images/kjmp.png")
+        sprite_sheet_swd_off = SpriteSheet("images/k_swd_off.png")
+
         ss = sprite_sheet.sprite_sheet
         ss_jmp = sprite_sheetjmp.sprite_sheet
+        ss_swd_off = sprite_sheet_swd_off.sprite_sheet
+
+        for i in range(0, 2, 1):
+            width = ss_swd_off.get_width()
+            height = ss_swd_off.get_height()
+            image = sprite_sheet_swd_off.get_image(i * width / 2, 0,
+                                           width/2, height)
+            self.swrd_off.append(image)
 
 
-        #counter for animating jumping
-        self.cnt = 0
 
-        # action frames
-        self.ready_r = []
-        self.ready_l = []
-        self.jmp_l = []
-        self.jmp_r = []
 
         # load all right facing ready images
-
         for i in range(0, 2, 1):
             width = ss.get_width()
             height = ss.get_height()
             image = sprite_sheet.get_image(i * width/2, 0,
                                            width/2, height)
             self.ready_r.append(image)
-
 
         # load all left facing ready images
         for i in range(0, 2, 1):
@@ -66,6 +69,28 @@ class Player(pygame.sprite.Sprite):
             image1 = pygame.transform.flip(image1, True, False)
             self.jmp_l.append(image1)
 
+
+
+    def __init__(self):
+        """ initialize player """
+        super().__init__()
+
+        #counter for animating jumping
+        self.cnt = 0
+        self.cnt_swrd_draw = 0
+
+        # action frames
+        self.ready_r = []
+        self.ready_l = []
+        self.jmp_l = []
+        self.jmp_r = []
+
+        self.swrd_off = []
+
+        # load the image
+        self.loadimages()
+
+
         # kinematic factors
         self.pos = vec((0, 350))
         self.vel = vec(0,0)
@@ -79,6 +104,14 @@ class Player(pygame.sprite.Sprite):
         self.orientation = 'right'
         self.jmp = True
 
+        self.swd_on = False
+        self.swd_drwn = False
+
+    def draw_the_swrd(self):
+        """ draw the swrd function.
+        the function gets the key press reading
+        and toggles swrd_on flaf to True to False """
+        self.swd_on = not self.swd_on
 
     def move(self):
         """
@@ -153,13 +186,9 @@ class Player(pygame.sprite.Sprite):
     def collisionX(self):
         """check the collision in X direction """
 
+        # touch bricks
         hitB = pygame.sprite.spritecollide(self, Bricks, False)
         self.touchX(hitB)
-
-        #touch Plats
-        #hitP = pygame.sprite.spritecollide(self, Plats, False)
-        #self.touchX(hitP)
-
 
         #touch Cars
         hitC = pygame.sprite.spritecollide(self, Cars, False)
@@ -228,14 +257,19 @@ class Player(pygame.sprite.Sprite):
 
 
     """ animation functions """
+
+
     def ani_move(self):
         """ animate the left right movement"""
         if self.orientation == 'right' and self.jmp == True:
             frame = (self.pos.x // 30) % len(self.ready_r)
             self.image = self.ready_r[int(frame)]
+
+
         elif self.orientation == 'left' and self.jmp == True:
             frame = (self.pos.x // 30) % len(self.ready_l)
             self.image = self.ready_l[int(frame)]
+
 
 
     def ani_jump(self):
@@ -253,6 +287,7 @@ class Player(pygame.sprite.Sprite):
                 self.image = self.jmp_l[self.cnt//period]
 
 
+
     def animate(self):
         """animate the player. """
         self.ani_move()
@@ -260,12 +295,16 @@ class Player(pygame.sprite.Sprite):
 
     def render(self):
         """ paste the player object into screen """
-        screen.blit(self.image, self.pos,
-                (0, 0, self.image.get_width(),
-                 self.image.get_height()))
+
+        # check for action flags
+        if not self.swd_drwn:
+            screen.blit(self.image, self.pos,
+                        (0, 0, self.image.get_width(),
+                         self.image.get_height()))
 
 
 
+# initialize the player 1 object P1
 Kuppa = pygame.sprite.Group()
 P1 = Player()
 Kuppa.add(P1)

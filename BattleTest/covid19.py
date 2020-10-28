@@ -34,8 +34,13 @@ class COVID19(pygame.sprite.Sprite):
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
 
+        # image frame
         self.image = self.ready[0]
         self.rect = self.image.get_rect(topleft=self.pos)
+
+        # action flags
+        self.moving = True
+        self.pace_cnt = 0
 
 
     def move(self):
@@ -44,11 +49,21 @@ class COVID19(pygame.sprite.Sprite):
 
     def update(self):
         #moving along X
+        self.pace_cnt += 1
+        if self.pos.x < 0:
+            self.acc.x = ACC
+
+        if self.pos.x > 0:
+            self.acc.x = -ACC
+
+
         self.acc.x += self.vel.x * FRIC
         self.vel.x += self.acc.x
         self.pos.x += self.vel.x + 0.5 * self.acc.x
 
+
         self.rect.x = self.pos.x
+
 
         self.vel.y += self.acc.y
         self.pos.y += self.vel.y + 0.5 * self.acc.y
