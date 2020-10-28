@@ -11,25 +11,16 @@ class Character:
     pass
 
 
-class Player(pygame.sprite.Sprite):
+class Kuppa(pygame.sprite.Sprite):
 
 
     def loadimages(self):
         """ load all the kuppa action frames """
         sprite_sheet = SpriteSheet("images/krdy.png")
         sprite_sheetjmp = SpriteSheet("images/kjmp.png")
-        sprite_sheet_swd_off = SpriteSheet("images/k_swd_off.png")
 
         ss = sprite_sheet.sprite_sheet
         ss_jmp = sprite_sheetjmp.sprite_sheet
-        ss_swd_off = sprite_sheet_swd_off.sprite_sheet
-
-        for i in range(0, 2, 1):
-            width = ss_swd_off.get_width()
-            height = ss_swd_off.get_height()
-            image = sprite_sheet_swd_off.get_image(i * width / 2, 0,
-                                           width/2, height)
-            self.swrd_off.append(image)
 
 
 
@@ -41,13 +32,6 @@ class Player(pygame.sprite.Sprite):
             image = sprite_sheet.get_image(i * width/2, 0,
                                            width/2, height)
             self.ready_r.append(image)
-
-        # load all left facing ready images
-        for i in range(0, 2, 1):
-            width = ss.get_width()
-            height = ss.get_height()
-            image = sprite_sheet.get_image(width/2 * i, 0,
-                                           width/2, height)
             image = pygame.transform.flip(image, True, False)
             self.ready_l.append(image)
 
@@ -59,16 +43,8 @@ class Player(pygame.sprite.Sprite):
             image1 = sprite_sheetjmp.get_image(width1/11 * i, 0,
                                                width1/11, height1)
             self.jmp_r.append(image1)
-
-        # load all the left facing jmp images
-        for i in range(0, 11, 1):
-            width1 = ss_jmp.get_width()
-            height1 = ss_jmp.get_height()
-            image1 = sprite_sheetjmp.get_image(width1/11 * i, 0,
-                                               width1/11, height1)
             image1 = pygame.transform.flip(image1, True, False)
             self.jmp_l.append(image1)
-
 
 
     def __init__(self):
@@ -305,6 +281,4 @@ class Player(pygame.sprite.Sprite):
 
 
 # initialize the player 1 object P1
-Kuppa = pygame.sprite.Group()
-P1 = Player()
-Kuppa.add(P1)
+P1 = Kuppa()

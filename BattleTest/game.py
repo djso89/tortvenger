@@ -2,9 +2,7 @@
 import sys
 import pygame
 from display import *
-from player import Player
-from action import KuppaAct
-from player import P1
+from action import P1, KuppaAct
 
 from covid19 import *
 from stage import *
@@ -19,6 +17,7 @@ class Game:
         self.clock = pygame.time.Clock()
         #self.bg = pygame.image.load("images/bg_level.png").convert()
         self.prd = 0
+        self.value = 0
 
     def run_game(self):
         while True:
@@ -39,8 +38,15 @@ class Game:
                     sys.exit()
                 if event.key == pygame.K_d:
                     P1.draw_the_swrd()
+                if event.key == pygame.K_a:
+                    P1.vel.x = 0
+                    self.value += 1
                 if event.key == pygame.K_UP:
                     P1.jump()
+            if (event.type == pygame.KEYUP):
+                if event.key == pygame.K_a:
+                    P1.acc.x = 0
+                    print("value added: {}".format(self.value))
 
 
 
