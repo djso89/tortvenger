@@ -48,7 +48,8 @@ class Game:
             if (event.type == pygame.KEYUP):
                 if event.key == pygame.K_a:
                     P1.acc.x = 0
-                   
+
+
 
     def _update_screen(self):
         """this function updates
@@ -56,7 +57,7 @@ class Game:
         """do the Player 1 routines"""
 
         self.player_stuff()
-#        self.show_info()
+        self.show_info()
 
         # do the COVID19 routines
         C19.move()
@@ -106,8 +107,10 @@ class Game:
             if m1 == 1:
                 print("Point 1: {}".format(pygame.mouse.get_pos()))
             self.prd = 0;
-            print("C19Pos: {}".format(C19.pos))
-            print("C19vel: {}".format(C19.vel))
+
+            print("KuppaAct's ATK flag: {}".format(KuppaAct.ATK))
+#            print("C19Pos: {}".format(C19.pos))
+#            print("C19vel: {}".format(C19.vel))
             # print("Player img: {}".format(P1.image))
             # print("Brick1 bottom {}".format(Brick1.rect.bottom))
 

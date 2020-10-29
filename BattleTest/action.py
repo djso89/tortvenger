@@ -116,6 +116,7 @@ class K_Act(pygame.sprite.Sprite):
             if self.atk_comb == 1:
                 if (self.cnt_swd_cut >= period * 6):
                     self.cnt_swd_cut = 6 * period
+                    print("here")
                     # done cutting
                     self.ATK = False
 
@@ -127,16 +128,8 @@ class K_Act(pygame.sprite.Sprite):
                     self.image = self.swd_cut_l[self.cnt_swd_cut // period]
 
         else:
-             self.cnt_swd_cut = 0
+            self.cnt_swd_cut = 0
 
-#        else:
- #           self.cnt_swd_cut = 0
-  #          if self.atk_comb >= 2:
-   #             self.cnt_swd_cut = 0
-    #            self.atk_comb = 1
-
-            #if attack is off, set the frame where last frame of combo left off
-            # i.e. combo ==  ---> frame == 6
 
     def ani_move(self):
         if P1.orientation == 'right' and self.cnt_swrd_draw // 2 == 11:
