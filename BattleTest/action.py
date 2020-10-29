@@ -12,15 +12,21 @@ class K_Act(pygame.sprite.Sprite):
     """
 
     def empty_frames(self):
+        """initialize all the action frames """
+
+        # drawing sword frames
         self.swrd_draw_r = []
         self.swrd_draw_l = []
 
+        # sword ready stance frames
         self.swrd_rdy_r = []
         self.swrd_rdy_l = []
 
+        # sword cut frames
         self.swd_cut_r = []
         self.swd_cut_l = []
 
+        # sword jump frames
         self.swd_jmp_r = []
         self.swd_jmp_l = []
 
@@ -88,25 +94,61 @@ class K_Act(pygame.sprite.Sprite):
         # frame counter
         self.cnt_swrd_draw = 0
         self.cnt_swd_jmp = 0
+        self.cnt_swd_cut = 0
+
+        # sword cut flag and combo count
+        self.ATK = False
+        self.ATK_DONE = False
+        self.atk_comb = 1
 
         # position of the Action Frames
         self.pos = vec((0, 0))
 
     def ani_turn_off(self):
+        """ turn off the action frame """
         self.image = Surface((self.rect.width, self.rect.height), flags = SRCALPHA)
         self.image.fill((0, 0, 0, 0))
 
+    def ani_cut(self):
+        period = 2
+        #            check the combo number
+        if self.ATK:
+            if self.atk_comb == 1:
+                if (self.cnt_swd_cut >= period * 6):
+                    self.cnt_swd_cut = 6 * period
+                    # done cutting
+                    self.ATK = False
+
+                self.cnt_swd_cut += 1
+                if (P1.orientation == 'right'):
+                    self.image = self.swd_cut_r[self.cnt_swd_cut // period]
+
+                if (P1.orientation == 'left'):
+                    self.image = self.swd_cut_l[self.cnt_swd_cut // period]
+
+        else:
+             self.cnt_swd_cut = 0
+
+#        else:
+ #           self.cnt_swd_cut = 0
+  #          if self.atk_comb >= 2:
+   #             self.cnt_swd_cut = 0
+    #            self.atk_comb = 1
+
+            #if attack is off, set the frame where last frame of combo left off
+            # i.e. combo ==  ---> frame == 6
+
     def ani_move(self):
-        if P1.orientation == 'right' and self.cnt_swrd_draw // 4 == 11:
+        if P1.orientation == 'right' and self.cnt_swrd_draw // 2 == 11:
             frame = (self.pos.x // 30) % len(self.swrd_rdy_r)
             self.image = self.swrd_rdy_r[int(frame)]
-        if P1.orientation == 'left' and self.cnt_swrd_draw // 4 == 11:
+        if P1.orientation == 'left' and self.cnt_swrd_draw // 2 == 11:
             frame = (self.pos.x // 30) % len(self.swrd_rdy_l)
             self.image = self.swrd_rdy_l[int(frame)]
 
     def ani_swd_out(self):
         """ animate pulling out the sword """
-        period = 4
+        period = 2
         max_period = period * (len(self.swrd_draw_r) - 1)
         P1.swd_drwn = True  # turn the Player frame off
         if (self.cnt_swrd_draw >= max_period):
@@ -144,7 +186,6 @@ class K_Act(pygame.sprite.Sprite):
     def ani_swd_jmp(self):
         """ animate jump with sword in hands"""
         period = 2
-
         if P1.jmp == False and P1.swd_drwn:
             if (self.cnt_swd_jmp >= period * (len(self.swd_jmp_r) - 1)):
                 self.cnt_swd_jmp = period * (len(self.swd_jmp_r) - 1)
@@ -159,25 +200,27 @@ class K_Act(pygame.sprite.Sprite):
 
 
 
-    def ani_adj_offset(self):
+    def ani_adj_offset(self, x_off, y_off):
         """adjust the action frame coordinate """
         if P1.orientation == 'right':
-
-            self.pos.x = P1.pos.x - OFF_SET_X
-            self.pos.y = P1.pos.y - P1.rect.height - OFF_SET_Y
-
+            self.pos.x = P1.pos.x - OFF_SET_X + x_off
+            self.pos.y = P1.pos.y - P1.rect.height - OFF_SET_Y + y_off
         if P1.orientation == 'left':
             self.pos.x = P1.pos.x  -  (self.image.get_width()
-                                       - P1.image.get_width())
-            self.pos.y = P1.pos.y - P1.rect.height - OFF_SET_Y
+                                       - P1.image.get_width()) + x_off
+            self.pos.y = P1.pos.y - P1.rect.height - OFF_SET_Y + y_off
 
 
     def animate(self):
-        """animate the action frame """
+        """animate all the action frames """
         self.ani_swd_draw()
         self.ani_move()
         self.ani_swd_jmp()
-        self.ani_adj_offset()
+        self.ani_cut()
+        if self.ATK == False:
+            self.ani_adj_offset(0, 0)
+        elif self.ATK == True:
+            self.ani_adj_offset(-2, 2)
 
     def render(self):
         self.animate()

@@ -17,7 +17,7 @@ class Game:
         self.clock = pygame.time.Clock()
         #self.bg = pygame.image.load("images/bg_level.png").convert()
         self.prd = 0
-        self.value = 0
+        self.delay_cnt = 0
 
     def run_game(self):
         while True:
@@ -39,16 +39,16 @@ class Game:
                 if event.key == pygame.K_d:
                     P1.draw_the_swrd()
                 if event.key == pygame.K_a:
-                    P1.vel.x = 0
-                    self.value += 1
+                    #only when the sword is on
+                    if P1.swd_on:
+                        KuppaAct.ATK = True
                 if event.key == pygame.K_UP:
                     P1.jump()
+
             if (event.type == pygame.KEYUP):
                 if event.key == pygame.K_a:
                     P1.acc.x = 0
-                    print("value added: {}".format(self.value))
-
-
+                   
 
     def _update_screen(self):
         """this function updates
