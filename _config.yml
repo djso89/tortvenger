@@ -1,6 +1,1 @@
 theme: jekyll-theme-dinky
-    plugins:
-    - jekyll-seo-tag
-    author: Daniel
-
-show_downloads: true
