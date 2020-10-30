@@ -50,7 +50,9 @@ class Game():
                     self.UP_KEY = True
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
+                    return 1
                     sys.exit()
+
     def reset_keys(self):
         self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY = False, False, False, False
 
