@@ -1,8 +1,6 @@
 ## Tortvenger
 
-This is my project page
-
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+Smash that 'Rona
 
 ## Feature
 
