@@ -4,6 +4,7 @@ import sys
 from pygame.locals import *
 from display import *
 from stage import *
+import random
 from spritesheet import SpriteSheet
 
 
@@ -30,46 +31,46 @@ class COVID19(pygame.sprite.Sprite):
             self.ready.append(image)
 
         #kinematic factors
-        self.pos = vec((974, 73))
+        self.pos = vec(0, 0)
         self.vel = vec(0, 0)
-        self.acc = vec(0, 0)
 
         # image frame
         self.image = self.ready[0]
-        self.rect = self.image.get_rect(topleft=self.pos)
+        self.rect = self.image.get_rect()
 
         # action flags
-        self.moving = True
-        self.pace_cnt = 0
-
+        self.direction = random.randint(0, 1)
+        self.vel.x = random.randint(2, 6) / 1
+        
+        if self.direction == 0:
+            self.pos.x = 0
+            self.pos.y = 235
+        if self.direction == 1:
+            self.pos.x = 500
+            self.pos.y = 300
 
     def move(self):
-        self.acc = vec(0, 0)
+        if self.pos.x <= 0:
+            self.direction = 0
+        elif self.pos.x >= (WIDTH - self.image.get_width()):
+            self.direction = 1
+        
+        if self.direction == 0:
+            self.pos.x += self.vel.x
+        if self.direction == 1:
+            self.pos.x -=self.vel.x
+        self.rect.center = self.pos
+        
+    def ani_move(self):
+        """ animate the left right movement"""
+        if self.direction == 1:
+            frame = (self.pos.x // 30) % len(self.ready)
+            self.image = self.ready[int(frame)]
 
 
-    def update(self):
-        #moving along X
-        self.pace_cnt += 1
-        if self.pos.x < 0:
-            self.acc.x = ACC
-
-        if self.pos.x > 0:
-            self.acc.x = -ACC
-
-
-        self.acc.x += self.vel.x * FRIC
-        self.vel.x += self.acc.x
-        self.pos.x += self.vel.x + 0.5 * self.acc.x
-
-
-        self.rect.x = self.pos.x
-
-
-        self.vel.y += self.acc.y
-        self.pos.y += self.vel.y + 0.5 * self.acc.y
-
-        self.rect.y = self.pos.y
-
+        elif self.direction == 0:
+            frame = (self.pos.x // 30) % len(self.ready)
+            self.image = self.ready[int(frame)]
 
     def render(self):
         """paste the COVID19 cell into screen """
