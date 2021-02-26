@@ -10,7 +10,6 @@ class K_Act(pygame.sprite.Sprite):
     this is where K_Act reads P1 action flags
     to display the action
     """
-
     def empty_frames(self):
         """initialize all the action frames """
 
@@ -116,7 +115,7 @@ class K_Act(pygame.sprite.Sprite):
             if self.atk_comb == 1:
                 if (self.cnt_swd_cut >= period * 6):
                     self.cnt_swd_cut = 6 * period
-                    print("here")
+                    #print("here")
                     # done cutting
                     self.ATK = False
 

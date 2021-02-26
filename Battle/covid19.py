@@ -37,10 +37,11 @@ class COVID19(pygame.sprite.Sprite):
         # image frame
         self.image = self.ready[0]
         self.rect = self.image.get_rect()
+        self.vel.x = random.randint(2, 6) / 1
 
         # action flags
         self.direction = random.randint(0, 1)
-        self.vel.x = random.randint(2, 6) / 1
+        
         
         if self.direction == 0:
             self.pos.x = 0
@@ -50,6 +51,7 @@ class COVID19(pygame.sprite.Sprite):
             self.pos.y = 300
 
     def move(self):
+        """Make the cell move by itself """
         if self.pos.x <= 0:
             self.direction = 0
         elif self.pos.x >= (WIDTH - self.image.get_width()):

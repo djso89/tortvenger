@@ -11,11 +11,10 @@ from stage import *
 
 
 class Game:
-
+    """ Game class """
     def __init__(self):
         pygame.init()
         self.clock = pygame.time.Clock()
-        #self.bg = pygame.image.load("images/bg_level.png").convert()
         self.prd = 0
         self.delay_cnt = 0
 
@@ -108,12 +107,4 @@ class Game:
                 print("Point 1: {}".format(pygame.mouse.get_pos()))
             self.prd = 0;
 
-            print("KuppaAct's ATK flag: {}".format(KuppaAct.ATK))
-#            print("C19Pos: {}".format(C19.pos))
-#            print("C19vel: {}".format(C19.vel))
-            # print("Player img: {}".format(P1.image))
-            # print("Brick1 bottom {}".format(Brick1.rect.bottom))
-
         self.prd += 1
-#        print("x and y: {}".format(pygame.mouse.get_pos()))
-#        print("brick rect: {}".format(Brick.rect))
