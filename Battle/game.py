@@ -25,6 +25,7 @@ class Game:
 
 
     def _check_events(self):
+        """ this function checks the events"""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.display.quit()
@@ -38,14 +39,20 @@ class Game:
                 if event.key == pygame.K_d:
                     P1.draw_the_swrd()
                 if event.key == pygame.K_a:
-                    #only when the sword is on
+                    print("here")
+                    self.delay_cnt += 1
+                    print("release count: {}".format(self.delay_cnt))
+                    #only when the sword is on       
                     if P1.swd_on:
                         KuppaAct.ATK = True
+                    
                 if event.key == pygame.K_UP:
                     P1.jump()
 
             if (event.type == pygame.KEYUP):
                 if event.key == pygame.K_a:
+                    #KuppaAct.ATK = False
+                    #self.delay_cnt = 0;
                     P1.acc.x = 0
 
 
@@ -53,8 +60,8 @@ class Game:
     def _update_screen(self):
         """this function updates
         objects on the screen"""
-        """do the Player 1 routines"""
-
+        
+        # do the Player 1 routines
         self.player_stuff()
         self.show_info()
 
@@ -68,10 +75,8 @@ class Game:
         ST1.draw(screen)
 
         #draw the cells
+        C19.ani_move()
         C19.render()
-
-
-
 
 
         #draw the player
@@ -79,7 +84,7 @@ class Game:
         P1.render()
         KuppaAct.render()
 
-
+        # tick the clock at 60Hz rate
         pygame.display.flip()
         self.clock.tick(60)
 
@@ -102,6 +107,7 @@ class Game:
     def show_info(self):
 
         if (self.prd >= 10):
+            # print("combo # = {}".format(self.atk_comb))
             m1, m2, m3 = pygame.mouse.get_pressed()
             if m1 == 1:
                 print("Point 1: {}".format(pygame.mouse.get_pos()))

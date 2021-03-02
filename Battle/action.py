@@ -109,26 +109,26 @@ class K_Act(pygame.sprite.Sprite):
         self.image.fill((0, 0, 0, 0))
 
     def ani_cut(self):
+        """ animate sword cutting """
         period = 4
-        #            check the combo number
+        # check the combo number
         if self.ATK:
-            if self.atk_comb == 1:
-                if (self.cnt_swd_cut >= period * 6):
-                    self.cnt_swd_cut = 6 * period
-                    # done cutting
-                    self.ATK = False
-
+            if (self.cnt_swd_cut >= period * 6):
+                self.cnt_swd_cut = 6 * period
+                # done cutting
+                self.ATK = False
+            else:
                 self.cnt_swd_cut += 1
 
-                if (P1.orientation == 'right'):
-                    self.image = self.swd_cut_r[self.cnt_swd_cut // period]
+            if (P1.orientation == 'right'):
+                self.image = self.swd_cut_r[self.cnt_swd_cut // period]
 
-                if (P1.orientation == 'left'):
-                    self.image = self.swd_cut_l[self.cnt_swd_cut // period]
+            if (P1.orientation == 'left'):
+                self.image = self.swd_cut_l[self.cnt_swd_cut // period]
 
         else:
             self.cnt_swd_cut = 0
-            print("combo # = {}".format(self.atk_comb))
+            
 
 
     def ani_move(self):
