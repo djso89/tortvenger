@@ -97,13 +97,24 @@ class Kuppa(pygame.sprite.Sprite):
         """
         self.acc = vec(0, 3)
         pressed_keys = pygame.key.get_pressed()
-        if pressed_keys[K_LEFT] and not pressed_keys[K_a]:
-            self.acc.x = -ACC
-            self.orientation = 'left'
-        if pressed_keys[K_RIGHT] and not pressed_keys[K_a]:
-            self.acc.x = ACC
-            self.orientation = 'right'
-
+        if pressed_keys[K_LEFT]:
+            if not pressed_keys[K_a]:
+                self.acc.x = -ACC
+                self.orientation = 'left'
+            if pressed_keys[K_a] and not self.swd_on:
+                self.acc.x = -ACC
+                self.orientation = 'left'
+            if pressed_keys[K_a] and self.swd_on:
+                self.acc.x = 0
+        if pressed_keys[K_RIGHT]:
+            if not pressed_keys[K_a]: # and not pressed_keys[K_a]:
+                self.acc.x = ACC
+                self.orientation = 'right'
+            if pressed_keys[K_a] and not self.swd_on:
+                self.acc.x = ACC
+                self.orientation = 'right'
+            if pressed_keys[K_a] and self.swd_on:
+                self.acc.x = 0
 
     def jump(self):
         """ jump action """
