@@ -24,7 +24,23 @@ class Game:
         while True:
             self._check_events()
             self._update_screen()
-
+    
+    def Key_a_delay(self, cnt_h, cnt_btnM_h, cnt_btnM_l):
+        self.a_key_cnt = pygame.time.get_ticks() - self.a_key_cnt
+        print("you release key a for " + str(self.a_key_cnt) + "ms")
+        if P1.swd_on:
+            KuppaAct.ATK = True
+            # combo routine
+            cut_period = 2
+            cut_len = cut_period * (1000/60)  * KuppaAct.cnt_swd_cut + 1
+            if self.a_key_cnt >= cnt_h or (self.a_key_cnt <= cnt_btnM_h and self.a_key_cnt > cnt_btnM_l):#      236:
+                KuppaAct.atk_comb = 1
+            else:
+                print("combo up!!")
+                KuppaAct.atk_comb += 1
+            if KuppaAct.atk_comb == 3: #Max combo up to 2
+                KuppaAct.atk_comb = 1
+            print("Combo #: {}".format(KuppaAct.atk_comb))
 
     def _check_events(self):
         """ this function checks the events"""
@@ -41,19 +57,7 @@ class Game:
                 if event.key == pygame.K_d:
                     P1.draw_the_swrd()
                 if event.key == pygame.K_a:
-                    self.a_key_cnt = pygame.time.get_ticks() - self.a_key_cnt
-                    print("you release key a for " + str(self.a_key_cnt) + "ms")
-                    if P1.swd_on:
-                        KuppaAct.ATK = True
-                        # combo routine
-                        if self.a_key_cnt >= ((2* (1/60)) * 1000) * KuppaAct.cnt_swd_cut + 1:#      236:
-                            KuppaAct.atk_comb = 1
-                        else:# if self.a_key_cnt <= 235:
-                            print("combo up!!")
-                            KuppaAct.atk_comb += 1
-                        if KuppaAct.atk_comb == 3: #Max combo up to 2
-                            KuppaAct.atk_comb = 1
-                        print("Combo #: {}".format(KuppaAct.atk_comb))
+                    self.Key_a_delay(450, 85, 34)
                         
                 if event.key == pygame.K_UP:
                     P1.jump()

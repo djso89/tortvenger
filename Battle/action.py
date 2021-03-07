@@ -116,11 +116,11 @@ class K_Act(pygame.sprite.Sprite):
 
 
             
-    def ani_cut(self):
+    def ani_cut12(self):
         """ animate sword cutting """
         # check the combo number
         period = 2 # show the frames per 2 * (16.6 ms)
-        """Combo1 Routine"""
+        """Combo11 Routine"""
         if (self.atk_comb == 1):
             if (self.cnt_swd_cut >= period * 6):
                 # total amount of time upto last combo 1 frame
@@ -153,7 +153,7 @@ class K_Act(pygame.sprite.Sprite):
         Go refer to game.py for keyboard mechanism for Key_a
         """
         if self.ATK:
-            self.ani_cut()
+            self.ani_cut12()
         elif not self.ATK:
             self.cnt_swd_cut = 0      
 
@@ -244,7 +244,7 @@ class K_Act(pygame.sprite.Sprite):
         if self.ATK == False:
             self.ani_adj_offset(0, 0)
         elif self.ATK == True:
-            self.ani_adj_offset(-2, 2)
+            self.ani_adj_offset(0, 0)
 
     def render(self):
         self.animate()
