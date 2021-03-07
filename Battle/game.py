@@ -50,7 +50,7 @@ class Game:
                         elif self.a_key_cnt <= 191:
                             print("combo up!!")
                             KuppaAct.atk_comb += 1
-                        if KuppaAct.atk_comb == 4: #Max combo up to 3
+                        if KuppaAct.atk_comb == 3: #Max combo up to 2
                             KuppaAct.atk_comb = 1
                         print("Combo #: {}".format(KuppaAct.atk_comb))
                         
