@@ -46,9 +46,9 @@ class Game:
                     if P1.swd_on:
                         KuppaAct.ATK = True
                         # combo routine
-                        if self.a_key_cnt >= 192:
+                        if self.a_key_cnt >= ((2* (1/60)) * 1000) * KuppaAct.cnt_swd_cut + 1:#      236:
                             KuppaAct.atk_comb = 1
-                        elif self.a_key_cnt <= 191:
+                        else:# if self.a_key_cnt <= 235:
                             print("combo up!!")
                             KuppaAct.atk_comb += 1
                         if KuppaAct.atk_comb == 3: #Max combo up to 2

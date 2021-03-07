@@ -119,13 +119,28 @@ class K_Act(pygame.sprite.Sprite):
     def ani_cut(self):
         """ animate sword cutting """
         # check the combo number
-        period = 2
-        if (self.cnt_swd_cut >= period * 6):
-            self.cnt_swd_cut = 6 * period
-            # done cutting
-            self.ATK = False
-        else:
-            self.cnt_swd_cut += 1
+        period = 2 # show the frames per 2 * (16.6 ms)
+        """Combo1 Routine"""
+        if (self.atk_comb == 1):
+            if (self.cnt_swd_cut >= period * 6):
+                # total amount of time upto last combo 1 frame
+                self.cnt_swd_cut = 6 * period
+                # done cutting
+                self.ATK = False
+            else:
+                self.cnt_swd_cut += 1
+            # if (P1.orientation == 'right'):
+                # self.image = self.swd_cut_r[self.cnt_swd_cut // period]
+            # if (P1.orientation == 'left'):
+                # self.image = self.swd_cut_l[self.cnt_swd_cut // period]
+        """combo 2 """
+        if (self.atk_comb == 2):
+            if (self.cnt_swd_cut >= period * 13):
+                self.cnt_swd_cut = 13 * period
+                # done cutting
+                self.ATK = False
+            else:
+                self.cnt_swd_cut += 1
         if (P1.orientation == 'right'):
             self.image = self.swd_cut_r[self.cnt_swd_cut // period]
         if (P1.orientation == 'left'):
