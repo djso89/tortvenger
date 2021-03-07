@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Action Class - K_Act
+animating attacks and actions that involve when
+swords are drawn
+"""
+
 from player import *
 
 OFF_SET_X = 2
@@ -108,30 +114,40 @@ class K_Act(pygame.sprite.Sprite):
         self.image = Surface((self.rect.width, self.rect.height), flags = SRCALPHA)
         self.image.fill((0, 0, 0, 0))
 
+
+            
     def ani_cut(self):
         """ animate sword cutting """
-        period = 4
         # check the combo number
-        if self.ATK:
-            if (self.cnt_swd_cut >= period * 6):
-                self.cnt_swd_cut = 6 * period
-                # done cutting
-                self.ATK = False
-            else:
-                self.cnt_swd_cut += 1
-
-            if (P1.orientation == 'right'):
-                self.image = self.swd_cut_r[self.cnt_swd_cut // period]
-
-            if (P1.orientation == 'left'):
-                self.image = self.swd_cut_l[self.cnt_swd_cut // period]
-
+        period = 5
+        if (self.cnt_swd_cut >= period * 6):
+            self.cnt_swd_cut = 6 * period
+            # done cutting
+            self.ATK = False
         else:
-            self.cnt_swd_cut = 0
-            
+            self.cnt_swd_cut += 1
+        if (P1.orientation == 'right'):
+            self.image = self.swd_cut_r[self.cnt_swd_cut // period]
+        if (P1.orientation == 'left'):
+            self.image = self.swd_cut_l[self.cnt_swd_cut // period]
+
+    def attack(self):
+        """ game logic for attack
+        the ATK flag is triggered true. ATK is true when
+        Key_a is pressed
+        Go refer to game.py for keyboard mechanism for Key_a
+        """
+        if self.ATK:
+            self.ani_cut()
+        elif not self.ATK:
+            self.cnt_swd_cut = 0      
 
 
     def ani_move(self):
+        """animate the movement with holding the swords """
+        # check the Player object's orientation and if sword_draw_counter
+        # reached to last frame of sword_draw spritesheet 
+        # there are 11 frames (starting from 0) in sword
         if P1.orientation == 'right' and self.cnt_swrd_draw // 2 == 11:
             frame = (self.pos.x // 30) % len(self.swrd_rdy_r)
             self.image = self.swrd_rdy_r[int(frame)]
@@ -149,24 +165,24 @@ class K_Act(pygame.sprite.Sprite):
         else:
             self.cnt_swrd_draw += 1
         if (P1.orientation == 'right'):
-            self.image = self.swrd_draw_r[self.cnt_swrd_draw//period]
+            self.image = self.swrd_draw_r[self.cnt_swrd_draw // period]
         if (P1.orientation == 'left'):
-            self.image = self.swrd_draw_l[self.cnt_swrd_draw//period]
+            self.image = self.swrd_draw_l[self.cnt_swrd_draw // period]
 
     def ani_swd_in(self):
         """ animate drawing back the sword """
-        period = 4
+        period = 2
         max_period = period * (len(self.swrd_draw_r) - 1)
         if (self.cnt_swrd_draw <= 0):
             self.cnt_swrd_draw = 0
-            self.ani_turn_off()
+            self.ani_turn_off() # turn off the action frame
             P1.swd_drwn = False # turn the Player frame on
         else:
             self.cnt_swrd_draw -= 1
             if (P1.orientation == 'right'):
-                self.image = self.swrd_draw_r[self.cnt_swrd_draw//period]
+                self.image = self.swrd_draw_r[self.cnt_swrd_draw // period]
             if (P1.orientation == 'left'):
-                self.image = self.swrd_draw_l[self.cnt_swrd_draw//period]
+                self.image = self.swrd_draw_l[self.cnt_swrd_draw // period]
 
 
     def ani_swd_draw(self):
@@ -209,7 +225,7 @@ class K_Act(pygame.sprite.Sprite):
         self.ani_swd_draw()
         self.ani_move()
         self.ani_swd_jmp()
-        self.ani_cut()
+        self.attack()
         if self.ATK == False:
             self.ani_adj_offset(0, 0)
         elif self.ATK == True:

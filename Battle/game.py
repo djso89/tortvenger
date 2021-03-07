@@ -16,7 +16,9 @@ class Game:
         pygame.init()
         self.clock = pygame.time.Clock()
         self.prd = 0
-        self.delay_cnt = 0
+
+        # release counter for measing how long the a key is let go after it's pressed
+        self.a_key_cnt = 0
 
     def run_game(self):
         while True:
@@ -39,21 +41,24 @@ class Game:
                 if event.key == pygame.K_d:
                     P1.draw_the_swrd()
                 if event.key == pygame.K_a:
-                    print("here")
-                    self.delay_cnt += 1
-                    print("release count: {}".format(self.delay_cnt))
-                    #only when the sword is on       
+                    self.a_key_cnt = pygame.time.get_ticks() - self.a_key_cnt
+                    print("you release key a for " + str(self.a_key_cnt) + "ms")
                     if P1.swd_on:
                         KuppaAct.ATK = True
-                    
+                        if self.a_key_cnt >= 350:
+                            KuppaAct.atk_comb = 1
+                        else:
+                            print("combo up: {}".format(KuppaAct.atk_comb))
+                            KuppaAct.atk_comb += 1
+                            
+                        
                 if event.key == pygame.K_UP:
                     P1.jump()
 
             if (event.type == pygame.KEYUP):
                 if event.key == pygame.K_a:
-                    #KuppaAct.ATK = False
-                    #self.delay_cnt = 0;
-                    P1.acc.x = 0
+                    self.a_key_cnt = pygame.time.get_ticks()
+                    #P1.acc.x = 0
 
 
 
@@ -63,7 +68,7 @@ class Game:
         
         # do the Player 1 routines
         self.player_stuff()
-        self.show_info()
+        #self.show_info()
 
         # do the COVID19 routines
         C19.move()
@@ -90,6 +95,7 @@ class Game:
 
     def player_stuff(self):
         P1.move()
+        #KuppaAct.attack()
         P1.update()
 
 

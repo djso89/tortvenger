@@ -107,7 +107,7 @@ class Kuppa(pygame.sprite.Sprite):
             if pressed_keys[K_a] and self.swd_on:
                 self.acc.x = 0
         if pressed_keys[K_RIGHT]:
-            if not pressed_keys[K_a]: # and not pressed_keys[K_a]:
+            if not pressed_keys[K_a]:
                 self.acc.x = ACC
                 self.orientation = 'right'
             if pressed_keys[K_a] and not self.swd_on:
@@ -262,7 +262,6 @@ class Kuppa(pygame.sprite.Sprite):
     def ani_jump(self):
         """ animate the jump """
         period = 2
-
         if self.jmp == False:
             if (self.cnt >= period * (len(self.jmp_r) -1 )):
                 self.cnt = period * (len(self.jmp_r) -1 )
@@ -282,12 +281,10 @@ class Kuppa(pygame.sprite.Sprite):
 
     def render(self):
         """ paste the player object into screen """
-
         # check for action flags
         if not self.swd_drwn:
             screen.blit(self.image, self.pos,
-                        (0, 0, self.image.get_width(),
-                         self.image.get_height()))
+                (0, 0, self.image.get_width(), self.image.get_height()))
 
 
 
