@@ -45,9 +45,9 @@ class Game:
                     print("you release key a for " + str(self.a_key_cnt) + "ms")
                     if P1.swd_on:
                         KuppaAct.ATK = True
-                        if self.a_key_cnt >= 150:
+                        if self.a_key_cnt >= 192:
                             KuppaAct.atk_comb = 1
-                        elif self.a_key_cnt <= 149:
+                        elif self.a_key_cnt <= 191:
                             print("combo up!!")
                             KuppaAct.atk_comb += 1
                         if KuppaAct.atk_comb == 4: #Max combo up to 3

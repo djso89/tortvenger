@@ -119,7 +119,7 @@ class K_Act(pygame.sprite.Sprite):
     def ani_cut(self):
         """ animate sword cutting """
         # check the combo number
-        period = 1
+        period = 2
         if (self.cnt_swd_cut >= period * 6):
             self.cnt_swd_cut = 6 * period
             # done cutting
