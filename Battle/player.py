@@ -7,9 +7,6 @@ from stage import *
 from spritesheet import SpriteSheet
 
 
-class Character:
-    pass
-
 
 class Kuppa(pygame.sprite.Sprite):
 
@@ -21,10 +18,6 @@ class Kuppa(pygame.sprite.Sprite):
 
         ss = sprite_sheet.sprite_sheet
         ss_jmp = sprite_sheetjmp.sprite_sheet
-
-
-
-
         # load all right facing ready images
         for i in range(0, 2, 1):
             width = ss.get_width()
@@ -284,8 +277,9 @@ class Kuppa(pygame.sprite.Sprite):
         # check for action flags
         if not self.swd_drwn:
             screen.blit(self.image, self.pos,
-                (0, 0, self.image.get_width(), self.image.get_height()))
-
+            (0, 0, self.image.get_width(), self.image.get_height()))
+        # screen.blit(self.image, self.pos,
+           # (0, 0, self.image.get_width(), self.image.get_height()))
 
 
 # initialize the player 1 object P1

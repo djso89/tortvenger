@@ -7,6 +7,12 @@ swords are drawn
 
 from player import *
 
+MaxCombo = 4
+# show one frame per 33ms = 2 * (16.6 ms)
+cut_frame_period = 2
+# number of frames for one cut
+cut_frame_num = 7
+
 OFF_SET_X = 2
 OFF_SET_Y = 5
 
@@ -40,6 +46,7 @@ class K_Act(pygame.sprite.Sprite):
         sprite_sheet_swd_draw = SpriteSheet("images/k_swd_d.png")
         sprite_sheet_swd_rdy = SpriteSheet("images/k_swd_rdy.png")
         sprite_sheet_swd_cuts = SpriteSheet('images/k_swd_cut.png')
+        sprite_sheet_swd_cuts2 = SpriteSheet('images/k_swd_cut2.png')
         sprite_sheet_swd_jmp = SpriteSheet('images/k_swd_jmp.png')
 
 
@@ -56,11 +63,22 @@ class K_Act(pygame.sprite.Sprite):
 
 
         # load all the left and right facing for sword cutting
+        # combo 1 ~ 2
         for i in range(0, 14, 1):
             ss_swd_cuts = sprite_sheet_swd_cuts.sprite_sheet
             width = ss_swd_cuts.get_width()
             height = ss_swd_cuts.get_height()
             image = sprite_sheet_swd_cuts.get_image(i * width // 14, 0, width // 14, height)
+            self.swd_cut_r.append(image)
+            image = pygame.transform.flip(image, True, False)
+            self.swd_cut_l.append(image)
+            
+        # combo 3 - 4
+        for i in range(0, 14, 1):
+            ss_swd_cuts2 = sprite_sheet_swd_cuts2.sprite_sheet
+            width = ss_swd_cuts2.get_width()
+            height = ss_swd_cuts2.get_height()
+            image = sprite_sheet_swd_cuts2.get_image(i * width // 14, 0, width // 14, height)
             self.swd_cut_r.append(image)
             image = pygame.transform.flip(image, True, False)
             self.swd_cut_l.append(image)
@@ -116,35 +134,23 @@ class K_Act(pygame.sprite.Sprite):
 
 
             
-    def ani_cut12(self):
-        """ animate sword cutting """
-        # check the combo number
-        period = 2 # show the frames per 2 * (16.6 ms)
-        """Combo11 Routine"""
-        if (self.atk_comb == 1):
-            if (self.cnt_swd_cut >= period * 6):
-                # total amount of time upto last combo 1 frame
-                self.cnt_swd_cut = 6 * period
-                # done cutting
-                self.ATK = False
-            else:
-                self.cnt_swd_cut += 1
-            # if (P1.orientation == 'right'):
-                # self.image = self.swd_cut_r[self.cnt_swd_cut // period]
-            # if (P1.orientation == 'left'):
-                # self.image = self.swd_cut_l[self.cnt_swd_cut // period]
-        """combo 2 """
-        if (self.atk_comb == 2):
-            if (self.cnt_swd_cut >= period * 13):
-                self.cnt_swd_cut = 13 * period
-                # done cutting
-                self.ATK = False
-            else:
-                self.cnt_swd_cut += 1
+    def ani_cut(self):
+        """ animate sword cutting combo 1 ~ 2 """
+        # one cut length
+        cut_period = cut_frame_period * ((self.atk_comb * cut_frame_num) - 1)
+        
+        """Combo Routine"""
+        if (self.cnt_swd_cut >= cut_period):
+            #self.cnt_swd_cut = cut_period
+            # done cutting
+            self.ATK = False
+        else:
+            self.cnt_swd_cut += 1
+
         if (P1.orientation == 'right'):
-            self.image = self.swd_cut_r[self.cnt_swd_cut // period]
+            self.image = self.swd_cut_r[self.cnt_swd_cut // cut_frame_period]
         if (P1.orientation == 'left'):
-            self.image = self.swd_cut_l[self.cnt_swd_cut // period]
+            self.image = self.swd_cut_l[self.cnt_swd_cut // cut_frame_period]
 
     def attack(self):
         """ game logic for attack
@@ -153,7 +159,7 @@ class K_Act(pygame.sprite.Sprite):
         Go refer to game.py for keyboard mechanism for Key_a
         """
         if self.ATK:
-            self.ani_cut12()
+            self.ani_cut()
         elif not self.ATK:
             self.cnt_swd_cut = 0      
 
@@ -233,7 +239,14 @@ class K_Act(pygame.sprite.Sprite):
             self.pos.x = P1.pos.x  -  (self.image.get_width()
                                        - P1.image.get_width()) + x_off
             self.pos.y = P1.pos.y - P1.rect.height - OFF_SET_Y + y_off
-
+            
+    def combo_frame_adj_offset(self):
+        if self.ATK == False:
+            self.ani_adj_offset(0, 0)
+        elif self.ATK == True and self.atk_comb <= 2:
+            self.ani_adj_offset(2, -2)
+        elif self.ATK == True and (self.atk_comb > 2 and self.atk_comb <= MaxCombo):
+            self.ani_adj_offset(2, 4)
 
     def animate(self):
         """animate all the action frames """
@@ -241,13 +254,10 @@ class K_Act(pygame.sprite.Sprite):
         self.ani_move()
         self.ani_swd_jmp()
         self.attack()
-        if self.ATK == False:
-            self.ani_adj_offset(0, 0)
-        elif self.ATK == True:
-            self.ani_adj_offset(0, 0)
+        self.combo_frame_adj_offset()
 
     def render(self):
         self.animate()
-        screen.blit(self.image, self.pos, self.rect)
+        screen.blit(self.image, self.pos, (0, 0, self.image.get_width(), self.image.get_height()))
 
 KuppaAct = K_Act()

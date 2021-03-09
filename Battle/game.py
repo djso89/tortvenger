@@ -2,7 +2,7 @@
 import sys
 import pygame
 from display import *
-from action import P1, KuppaAct
+from k_action import P1, KuppaAct, MaxCombo, cut_frame_period, cut_frame_num
 
 from covid19 import *
 from stage import *
@@ -19,28 +19,32 @@ class Game:
 
         # release counter for measing how long the a key is let go after it's pressed
         self.a_key_cnt = 0
+        
+    def Key_a_delay(self, cnt_h, cnt_btnM_h, cnt_btnM_l):
+        """Key release Key_a mechanism """
+        self.a_key_cnt = pygame.time.get_ticks() - self.a_key_cnt
+        print("you release key a for " + str(self.a_key_cnt) + "ms")
+        if P1.swd_on:
+            KuppaAct.ATK = True
+            # combo routine
+            #cut_period = 2
+            #cut_len = cut_period * (1000/60)  * KuppaAct.cnt_swd_cut + 1
+            
+            if self.a_key_cnt >= cnt_h or (self.a_key_cnt <= cnt_btnM_h and self.a_key_cnt > cnt_btnM_l):
+                KuppaAct.atk_comb = 1
+            else:
+                print("combo up!!")
+                KuppaAct.atk_comb += 1
+            if KuppaAct.atk_comb == MaxCombo + 1: #Max combo up to 2
+                KuppaAct.atk_comb = 1
+            print("Combo #: {}".format(KuppaAct.atk_comb))
 
     def run_game(self):
         while True:
             self._check_events()
             self._update_screen()
     
-    def Key_a_delay(self, cnt_h, cnt_btnM_h, cnt_btnM_l):
-        self.a_key_cnt = pygame.time.get_ticks() - self.a_key_cnt
-        print("you release key a for " + str(self.a_key_cnt) + "ms")
-        if P1.swd_on:
-            KuppaAct.ATK = True
-            # combo routine
-            cut_period = 2
-            cut_len = cut_period * (1000/60)  * KuppaAct.cnt_swd_cut + 1
-            if self.a_key_cnt >= cnt_h or (self.a_key_cnt <= cnt_btnM_h and self.a_key_cnt > cnt_btnM_l):#      236:
-                KuppaAct.atk_comb = 1
-            else:
-                print("combo up!!")
-                KuppaAct.atk_comb += 1
-            if KuppaAct.atk_comb == 3: #Max combo up to 2
-                KuppaAct.atk_comb = 1
-            print("Combo #: {}".format(KuppaAct.atk_comb))
+    
 
     def _check_events(self):
         """ this function checks the events"""
@@ -57,7 +61,10 @@ class Game:
                 if event.key == pygame.K_d:
                     P1.draw_the_swrd()
                 if event.key == pygame.K_a:
-                    self.Key_a_delay(450, 85, 34)
+                    # show one frame per 33ms = 2 * (16.6 ms)
+                    cut_period = cut_frame_period * ((KuppaAct.atk_comb * cut_frame_num))
+                    cut_len = (cut_period * 1000) / 60
+                    self.Key_a_delay(cut_len, 85, 34)
                         
                 if event.key == pygame.K_UP:
                     P1.jump()
@@ -120,7 +127,6 @@ class Game:
     def show_info(self):
 
         if (self.prd >= 10):
-            # print("combo # = {}".format(self.atk_comb))
             m1, m2, m3 = pygame.mouse.get_pressed()
             if m1 == 1:
                 print("Point 1: {}".format(pygame.mouse.get_pos()))
