@@ -14,9 +14,15 @@ class Stage(pygame.sprite.Sprite):
         self.Steps = Steps
         self.Bricks = Bricks
         self.Cars = Cars
-        self.StageBlocks = pygame.sprite.Group()
-        self.StageBlocks.add(self.Bricks)
 
+        self.StageBlocks = pygame.sprite.Group()
+
+        self.StageBlocks.add(self.Plats)
+        self.StageBlocks.add(self.platforms)
+        self.StageBlocks.add(self.Cars)
+        self.StageBlocks.add(self.Steps)
+        self.StageBlocks.add(self.Bldgs)
+        
         self.bgimg = pygame.image.load("images/bg_level.png").convert()
         self.rect = self.bgimg.get_rect(topleft=(0,0))
 
@@ -24,12 +30,14 @@ class Stage(pygame.sprite.Sprite):
         self.bgimg = pygame.image.load(pic).convert()
         self.rect = self.bgimg.get_rect(topleft=(0,0))
 
-    def draw(self, screen):
+    def draw(self, screen, SB_SW):
         screen.fill(setting.bg_color)
         screen.blit(self.bgimg, (0, 0))
-
-        for block in self.StageBlocks:
-           screen.blit(block.surf, block.rect)
+        for block in self.Bricks:
+            screen.blit(block.surf, block.rect)
+        if SB_SW:
+            for block in self.StageBlocks:
+                screen.blit(block.surf, block.rect)
 
 
 ST1 = Stage()
@@ -45,7 +53,7 @@ BackDrop = pygame.sprite.Group()
 
 
 Stage1Blocks = pygame.sprite.Group()
-#Stage1Blocks.add(platforms)
+Stage1Blocks.add(platforms)
 Stage1Blocks.add(Bricks)
 #Stage1Blocks.add(BackDrop)
-#Stage1Blocks.add(Plats)
+Stage1Blocks.add(Plats)

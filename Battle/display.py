@@ -8,6 +8,6 @@ ACC = 0.5
 FRIC = -0.12
 
 setting = Settings()
-setting.flags = pygame.SCALED #| pygame.FULLSCREEN
+setting.flags = pygame.SCALED | pygame.RESIZABLE #| pygame.FULLSCREEN
 screen = pygame.display.set_mode((setting.screen_width, setting.screen_height), 
     setting.flags)

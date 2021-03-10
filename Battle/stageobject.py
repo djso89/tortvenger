@@ -2,17 +2,16 @@
 from block import *
 from display import *
 
-alph = 1
+alph = 68
+
 Ground = Block()
 
 Bricks = pygame.sprite.Group()
 Brick1 = Block()
-Brick2 = Block()
 Brick1.loadBrick(411, 237)
-Brick2.newBlock(0, 452, 188, 2, alph)
 
 Bricks.add(Brick1)
-Bricks.add(Brick2)
+#Bricks.add(Brick2)
 
 Cars = pygame.sprite.Group()
 Car1 = Block()
@@ -42,6 +41,11 @@ Step3.newBlock(616, 408, 600, 4, alph)
 Steps.add(Step3)
 
 Plats = pygame.sprite.Group()
+
+Plat = Block()
+Plat.newBlock(0, 452, 188, 2, alph)
+Plats.add(Plat)
+
 Plat1 = Block()
 Plat1.newBlock(503, 250, 233, 8, alph)
 Plats.add(Plat1)

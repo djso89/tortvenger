@@ -4,10 +4,9 @@ Action Class - K_Act
 animating attacks and actions that involve when
 swords are drawn
 """
-
 from player import *
 
-MaxCombo = 4
+MaxCombo = 2
 # show one frame per 33ms = 2 * (16.6 ms)
 cut_frame_period = 2
 # number of frames for one cut
@@ -215,7 +214,7 @@ class K_Act(pygame.sprite.Sprite):
 
     def ani_swd_jmp(self):
         """ animate jump with sword in hands"""
-        period = 2
+        period = 4
         if P1.jmp == False and P1.swd_drwn:
             if (self.cnt_swd_jmp >= period * (len(self.swd_jmp_r) - 1)):
                 self.cnt_swd_jmp = period * (len(self.swd_jmp_r) - 1)

@@ -12,8 +12,8 @@ class Block(pygame.sprite.Sprite):
         the ground is established """
         super().__init__()
         self.surf = pygame.Surface((WIDTH, 20))
-        self.surf.set_alpha(12)
-        self.surf.fill((255,255,255))
+        self.surf.set_alpha(17)
+        self.surf.fill((0, 0, 0))
         self.rect = self.surf.get_rect(center = (WIDTH/2, HEIGHT - 10))
 
     def newBlock(self, x, y, w, h, a):
