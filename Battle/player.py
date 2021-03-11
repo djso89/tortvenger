@@ -61,8 +61,8 @@ class Kuppa(pygame.sprite.Sprite):
 
 
         # kinematic factors
-        self.pos = vec((0, 350))
-        self.vel = vec(0,0)
+        self.pos = vec((0, 0))
+        self.vel = vec(0, 0)
         self.acc = vec(0, 0)
 
         # set the image the player start with
@@ -132,7 +132,7 @@ class Kuppa(pygame.sprite.Sprite):
             self.pos.x = self.rect.x
 
     def touchXL(self, hits):
-        #touch hits coming from right side
+        #touch hits coming from left side
         for block in hits:
             if self.vel.x < 0:
                 self.rect.left = block.rect.right

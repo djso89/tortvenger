@@ -6,8 +6,9 @@ swords are drawn
 """
 from player import *
 
-MaxCombo = 2
-# show one frame per 33ms = 2 * (16.6 ms)
+# number of maximum combo you can perform
+MaxCombo = 3
+# show one frame per 33ms = cut_frame_period * (1000 / FPS)
 cut_frame_period = 2
 # number of frames for one cut
 cut_frame_num = 7
@@ -140,7 +141,6 @@ class K_Act(pygame.sprite.Sprite):
         
         """Combo Routine"""
         if (self.cnt_swd_cut >= cut_period):
-            #self.cnt_swd_cut = cut_period
             # done cutting
             self.ATK = False
         else:

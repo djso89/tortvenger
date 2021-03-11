@@ -6,6 +6,7 @@ vec = pygame.math.Vector2
 
 ACC = 0.5
 FRIC = -0.12
+FPS = 60
 
 setting = Settings()
 setting.flags = pygame.SCALED | pygame.RESIZABLE #| pygame.FULLSCREEN

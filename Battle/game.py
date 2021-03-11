@@ -36,16 +36,20 @@ class Game:
                     # reset the combo to 1
                     KuppaAct.atk_comb = 1
                 else:
-                    print("combo up!!")
                     KuppaAct.atk_comb += 1
-            print("Combo #: {}".format(KuppaAct.atk_comb))
+            
+    def attack_event(self):
+        cut_period = cut_frame_period * ((KuppaAct.atk_comb * cut_frame_num))
+        cut_len = (cut_period * 1000) / FPS
+        self.Key_a_delay(cut_len, 101, 34)        
 
     def run_game(self):
         while True:
             self._check_events()
             self._update_screen()
     
-    
+    def print_key(self, key):
+        print(key)
 
     def _check_events(self):
         """ this function checks the events"""
@@ -53,7 +57,7 @@ class Game:
             if event.type == pygame.QUIT:
                 pygame.display.quit()
                 pygame.quit()
-                sys.exit()
+                sys.exit()   
             if (event.type == pygame.KEYDOWN):
                 if event.key == pygame.K_q:
                     pygame.display.quit()
@@ -64,10 +68,7 @@ class Game:
                 if event.key == pygame.K_s:
                     self.SB_toggle = not self.SB_toggle
                 if event.key == pygame.K_a:
-                    cut_period = cut_frame_period * ((KuppaAct.atk_comb * cut_frame_num))
-                    cut_len = (cut_period * 1000) / 60
-                    self.Key_a_delay(cut_len, 85, 34)
-                    
+                    self.attack_event()
                 if event.key == pygame.K_UP:
                     P1.jump()
             if (event.type == pygame.KEYUP):
@@ -99,23 +100,24 @@ class Game:
         C19.render()
 
 
-        #draw the player
-        P1.animate()
-        P1.render()
-        KuppaAct.render()
-        
-        # show combo
-        if KuppaAct.ATK:
-            KuppaCombo.update_combo(KuppaAct.atk_comb)
+        self.player_draw()    
         
 
         # tick the clock at 60Hz rate
         pygame.display.flip()
-        self.clock.tick(60)
+        self.clock.tick(FPS)
+        
+    def player_draw(self):
+        #draw the player
+        P1.animate()
+        P1.render()
+        KuppaAct.render()
+        # show combo
+        if KuppaAct.ATK:
+            KuppaCombo.update_combo(KuppaAct.atk_comb)        
 
     def player_stuff(self):
         P1.move()
-        #KuppaAct.attack()
         P1.update()
 
 
