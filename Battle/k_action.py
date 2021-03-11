@@ -4,7 +4,7 @@ Action Class - K_Act
 animating attacks and actions that involve when
 swords are drawn
 """
-from player import *
+from kuppa import *
 
 # number of maximum combo you can perform
 MaxCombo = 3
@@ -144,12 +144,11 @@ class K_Act(pygame.sprite.Sprite):
             # done cutting
             self.ATK = False
         else:
+            if (P1.orientation == 'right'):
+                self.image = self.swd_cut_r[self.cnt_swd_cut // cut_frame_period]
+            if (P1.orientation == 'left'):
+                self.image = self.swd_cut_l[self.cnt_swd_cut // cut_frame_period]
             self.cnt_swd_cut += 1
-
-        if (P1.orientation == 'right'):
-            self.image = self.swd_cut_r[self.cnt_swd_cut // cut_frame_period]
-        if (P1.orientation == 'left'):
-            self.image = self.swd_cut_l[self.cnt_swd_cut // cut_frame_period]
 
     def attack(self):
         """ game logic for attack
@@ -214,7 +213,7 @@ class K_Act(pygame.sprite.Sprite):
 
     def ani_swd_jmp(self):
         """ animate jump with sword in hands"""
-        period = 4
+        period = 5
         if P1.jmp == False and P1.swd_drwn:
             if (self.cnt_swd_jmp >= period * (len(self.swd_jmp_r) - 1)):
                 self.cnt_swd_jmp = period * (len(self.swd_jmp_r) - 1)

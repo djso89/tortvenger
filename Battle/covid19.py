@@ -7,6 +7,7 @@ from stage import *
 import random
 from spritesheet import SpriteSheet
 
+NumCells = 70
 
 class COVID19(pygame.sprite.Sprite):
     """COVID19 Class """
@@ -49,6 +50,10 @@ class COVID19(pygame.sprite.Sprite):
         if self.direction == 1:
             self.pos.x = 500
             self.pos.y = 300
+    
+    def place_cell(self, x, y):
+        self.pos.x = x
+        self.pos.y = y
 
     def move(self):
         """Make the cell move by itself """
@@ -65,14 +70,11 @@ class COVID19(pygame.sprite.Sprite):
         
     def ani_move(self):
         """ animate the left right movement"""
-        if self.direction == 1:
-            frame = (self.pos.x // 30) % len(self.ready)
-            self.image = self.ready[int(frame)]
-
-
-        elif self.direction == 0:
-            frame = (self.pos.x // 30) % len(self.ready)
-            self.image = self.ready[int(frame)]
+        frame = (self.pos.x // 15) % len(self.ready)
+        self.image = self.ready[int(frame)]
+            
+    def animate(self):
+        self.ani_move()
 
     def render(self):
         """paste the COVID19 cell into screen """
@@ -83,5 +85,19 @@ class COVID19(pygame.sprite.Sprite):
 
 
 Cells = pygame.sprite.Group()
+
+def cell_gen():
+    for i in range (0, NumCells, 1):
+        cell = COVID19()
+        x = random.randrange(0, WIN_W - cell.image.get_width())
+        y = random.randrange(0, WIN_H - cell.image.get_height())
+        cell.place_cell(x, y)
+        Cells.add(cell)
+    
+cell_gen()
 C19 = COVID19()
+C1 = COVID19()
+C1.place_cell(900, 20)
+C19.place_cell(0, 200)
 Cells.add(C19)
+Cells.add(C1)

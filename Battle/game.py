@@ -16,6 +16,7 @@ class Game:
     def __init__(self):
         pygame.init()
         self.clock = pygame.time.Clock()
+        self.prd = 0
         # toggle flag for displaying Stage Objects
         self.SB_toggle = False
 
@@ -25,7 +26,7 @@ class Game:
     def Key_a_delay(self, cnt_h, cnt_btnM_h, cnt_btnM_l):
         """Key release Key_a mechanism """
         self.a_key_cnt = pygame.time.get_ticks() - self.a_key_cnt
-        print("you release key a for " + str(self.a_key_cnt) + "ms")
+        # print("you release key a for " + str(self.a_key_cnt) + "ms")
         if P1.swd_on:
             KuppaAct.ATK = True
             if self.a_key_cnt >= cnt_h or (self.a_key_cnt <= cnt_btnM_h and self.a_key_cnt > cnt_btnM_l):
@@ -84,32 +85,34 @@ class Game:
         
         # do the Player 1 routines
         self.player_stuff()
-        #self.show_info()
+        self.show_info()
 
         # do the COVID19 routines
-        C19.move()
-        C19.update()
-
+        for cell in Cells:
+            cell.move()
+            cell.update()
 
         """ drawing routines """
         # draw the Stage
         ST1.draw(screen, self.SB_toggle)
 
-        #draw the cells
-        C19.ani_move()
-        C19.render()
-
-
+        # draw the cells and player
+        self.cell_draw()
         self.player_draw()    
         
-
+        """refresh the page per (1000/FPS) ms """
         # tick the clock at 60Hz rate
         pygame.display.flip()
         self.clock.tick(FPS)
         
+    def cell_draw(self):
+        #draw the cells
+        for cell in Cells:
+            cell.animate()
+            cell.render()
+        
     def player_draw(self):
         #draw the player
-        P1.animate()
         P1.render()
         KuppaAct.render()
         # show combo

@@ -274,6 +274,7 @@ class Kuppa(pygame.sprite.Sprite):
 
     def render(self):
         """ paste the player object into screen """
+        self.animate()
         # check for action flags
         if not self.swd_drwn:
             screen.blit(self.image, self.pos,
