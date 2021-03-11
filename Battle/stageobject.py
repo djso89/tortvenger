@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
+"""Stage 1-0 objects"""
 from block import *
 from display import *
+
+
 
 alph = 68
 

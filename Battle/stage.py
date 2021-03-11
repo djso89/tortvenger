@@ -15,6 +15,8 @@ class Stage(pygame.sprite.Sprite):
         self.Bricks = Bricks
         self.Cars = Cars
 
+
+        # stage objects to show
         self.StageBlocks = pygame.sprite.Group()
 
         self.StageBlocks.add(self.Plats)

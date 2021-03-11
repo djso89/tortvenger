@@ -7,7 +7,7 @@ from stage import *
 import random
 from spritesheet import SpriteSheet
 
-NumCells = 70
+NumCells = 3
 
 class COVID19(pygame.sprite.Sprite):
     """COVID19 Class """
@@ -38,7 +38,7 @@ class COVID19(pygame.sprite.Sprite):
         # image frame
         self.image = self.ready[0]
         self.rect = self.image.get_rect()
-        self.vel.x = random.randint(2, 6) / 1
+        self.vel.x = random.randint(2, 6) / 2
 
         # action flags
         self.direction = random.randint(0, 1)
@@ -70,7 +70,7 @@ class COVID19(pygame.sprite.Sprite):
         
     def ani_move(self):
         """ animate the left right movement"""
-        frame = (self.pos.x // 15) % len(self.ready)
+        frame = (self.pos.x // 30) % len(self.ready)
         self.image = self.ready[int(frame)]
             
     def animate(self):
@@ -95,6 +95,7 @@ def cell_gen():
         Cells.add(cell)
     
 cell_gen()
+
 C19 = COVID19()
 C1 = COVID19()
 C1.place_cell(900, 20)

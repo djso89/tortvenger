@@ -31,13 +31,13 @@ class Kuppa(pygame.sprite.Sprite):
 
         # load all the right facing jmp images
         for i in range(0, 11, 1):
-            width1 = ss_jmp.get_width()
-            height1 = ss_jmp.get_height()
-            image1 = sprite_sheetjmp.get_image(width1/11 * i, 0,
-                                               width1/11, height1)
-            self.jmp_r.append(image1)
-            image1 = pygame.transform.flip(image1, True, False)
-            self.jmp_l.append(image1)
+            width = ss_jmp.get_width()
+            height = ss_jmp.get_height()
+            image = sprite_sheetjmp.get_image(width/11 * i, 0,
+                                               width/11, height)
+            self.jmp_r.append(image)
+            image = pygame.transform.flip(image, True, False)
+            self.jmp_l.append(image)
 
 
     def __init__(self):
