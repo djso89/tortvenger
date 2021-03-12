@@ -110,7 +110,7 @@ class K_Act(pygame.sprite.Sprite):
         self.load_images()
 
         self.image_a = self.swrd_draw_r[0]
-        self.rect = self.image_a.get_rect()
+        self.rect_a = self.image_a.get_rect()
 
         # frame counter
         self.cnt_swrd_draw = 0
@@ -127,7 +127,7 @@ class K_Act(pygame.sprite.Sprite):
 
     def ani_turn_off(self):
         """ turn off the action frame """
-        self.image_a = Surface((self.rect.width, self.rect.height), flags = SRCALPHA)
+        self.image_a = Surface((self.rect_a.width, self.rect_a.height), flags = SRCALPHA)
         self.image_a.fill((0, 0, 0, 0))
 
 
