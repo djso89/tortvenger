@@ -2,7 +2,7 @@
 import pygame
 import sys
 from pygame.locals import *
-from display import *
+from display import screen, WIN_W
 from stage import *
 from spritesheet import SpriteSheet
 
@@ -221,8 +221,8 @@ class Kuppa(pygame.sprite.Sprite):
             self.pos.x = 0
         self.rect.x = self.pos.x
 
-        if self.pos.x > WIDTH - self.rect.width:
-            self.pos.x = WIDTH - self.rect.width
+        if self.pos.x > WIN_W - self.rect.width:
+            self.pos.x = WIN_W - self.rect.width
         self.rect.x = self.pos.x
 
         self.collisionX()

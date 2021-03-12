@@ -60,8 +60,6 @@ class K_Act(pygame.sprite.Sprite):
             image = pygame.transform.flip(image, True, False)
             self.swd_jmp_l.append(image)
 
-
-
         # load all the left and right facing for sword cutting
         # combo 1 ~ 2
         for i in range(0, 14, 1):
