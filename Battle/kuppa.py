@@ -114,6 +114,8 @@ class Kuppa(pygame.sprite.Sprite):
         if self.jmp == True:
             self.vel.y = -40
             self.jmp = False
+            
+    # Kuppa touching the stage objects
 
     def touchX(self, hits):
         #touch hits
@@ -174,10 +176,8 @@ class Kuppa(pygame.sprite.Sprite):
         hitC = pygame.sprite.spritecollide(self, Cars, False)
         self.touchX(hitC)
 
-
-
-
     def collisionY(self):
+
         """ check the collision in Y direction """
 
         #touch ground platforms

@@ -213,7 +213,7 @@ class K_Act(pygame.sprite.Sprite):
 
     def ani_swd_jmp(self):
         """ animate jump with sword in hands"""
-        period = 5
+        period = 3
         if P1.jmp == False and P1.swd_drwn:
             if (self.cnt_swd_jmp >= period * (len(self.swd_jmp_r) - 1)):
                 self.cnt_swd_jmp = period * (len(self.swd_jmp_r) - 1)
