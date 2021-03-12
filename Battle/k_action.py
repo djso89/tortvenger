@@ -123,7 +123,7 @@ class K_Act(pygame.sprite.Sprite):
         self.atk_comb = 1
 
         # position of the Action Frames
-        self.pos = vec((0, 0))
+        self.pos_a = vec((0, 0))
 
     def ani_turn_off(self):
         """ turn off the action frame """
@@ -160,16 +160,16 @@ class K_Act(pygame.sprite.Sprite):
             self.cnt_swd_cut = 0      
 
 
-    def ani_move(self):
+    def ani_swd_move(self):
         """animate the movement with holding the swords """
         # check the Player object's orientation and if sword_draw_counter
         # reached to last frame of sword_draw spritesheet 
         # there are 11 frames (starting from 0) in sword
         if P1.orientation == 'right' and self.cnt_swrd_draw // 2 == 11:
-            frame = (self.pos.x // 30) % len(self.swrd_rdy_r)
+            frame = (self.pos_a.x // 30) % len(self.swrd_rdy_r)
             self.image = self.swrd_rdy_r[int(frame)]
         if P1.orientation == 'left' and self.cnt_swrd_draw // 2 == 11:
-            frame = (self.pos.x // 30) % len(self.swrd_rdy_l)
+            frame = (self.pos_a.x // 30) % len(self.swrd_rdy_l)
             self.image = self.swrd_rdy_l[int(frame)]
 
     def ani_swd_out(self):
@@ -229,12 +229,12 @@ class K_Act(pygame.sprite.Sprite):
     def ani_adj_offset(self, x_off, y_off):
         """adjust the action frame coordinate """
         if P1.orientation == 'right':
-            self.pos.x = P1.pos.x - OFF_SET_X + x_off
-            self.pos.y = P1.pos.y - P1.rect.height - OFF_SET_Y + y_off
+            self.pos_a.x = P1.pos.x - OFF_SET_X + x_off
+            self.pos_a.y = P1.pos.y - P1.rect.height - OFF_SET_Y + y_off
         if P1.orientation == 'left':
-            self.pos.x = P1.pos.x  -  (self.image.get_width()
+            self.pos_a.x = P1.pos.x  -  (self.image.get_width()
                                        - P1.image.get_width()) + x_off
-            self.pos.y = P1.pos.y - P1.rect.height - OFF_SET_Y + y_off
+            self.pos_a.y = P1.pos.y - P1.rect.height - OFF_SET_Y + y_off
             
     def combo_frame_adj_offset(self):
         if self.ATK == False:
@@ -244,16 +244,16 @@ class K_Act(pygame.sprite.Sprite):
         elif self.ATK == True and (self.atk_comb > 2 and self.atk_comb <= MaxCombo):
             self.ani_adj_offset(2, 4)
 
-    def animate(self):
+    def ani_action(self):
         """animate all the action frames """
         self.ani_swd_draw()
-        self.ani_move()
+        self.ani_swd_move()
         self.ani_swd_jmp()
         self.attack()
         self.combo_frame_adj_offset()
 
     def render(self):
-        self.animate()
-        screen.blit(self.image, self.pos, (0, 0, self.image.get_width(), self.image.get_height()))
+        self.ani_action()
+        screen.blit(self.image, self.pos_a, (0, 0, self.image.get_width(), self.image.get_height()))
 
 KuppaAct = K_Act()

@@ -54,7 +54,6 @@ class Kuppa(pygame.sprite.Sprite):
         self.jmp_l = []
         self.jmp_r = []
 
-        self.swrd_off = []
 
         # load the image
         self.loadimages()
