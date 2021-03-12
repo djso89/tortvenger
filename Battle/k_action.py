@@ -109,8 +109,8 @@ class K_Act(pygame.sprite.Sprite):
 
         self.load_images()
 
-        self.image = self.swrd_draw_r[0]
-        self.rect = self.image.get_rect()
+        self.image_a = self.swrd_draw_r[0]
+        self.rect = self.image_a.get_rect()
 
         # frame counter
         self.cnt_swrd_draw = 0
@@ -127,8 +127,8 @@ class K_Act(pygame.sprite.Sprite):
 
     def ani_turn_off(self):
         """ turn off the action frame """
-        self.image = Surface((self.rect.width, self.rect.height), flags = SRCALPHA)
-        self.image.fill((0, 0, 0, 0))
+        self.image_a = Surface((self.rect.width, self.rect.height), flags = SRCALPHA)
+        self.image_a.fill((0, 0, 0, 0))
 
 
             
@@ -143,9 +143,9 @@ class K_Act(pygame.sprite.Sprite):
             self.ATK = False
         else:
             if (P1.orientation == 'right'):
-                self.image = self.swd_cut_r[self.cnt_swd_cut // cut_frame_period]
+                self.image_a = self.swd_cut_r[self.cnt_swd_cut // cut_frame_period]
             if (P1.orientation == 'left'):
-                self.image = self.swd_cut_l[self.cnt_swd_cut // cut_frame_period]
+                self.image_a = self.swd_cut_l[self.cnt_swd_cut // cut_frame_period]
             self.cnt_swd_cut += 1
 
     def attack(self):
@@ -167,10 +167,10 @@ class K_Act(pygame.sprite.Sprite):
         # there are 11 frames (starting from 0) in sword
         if P1.orientation == 'right' and self.cnt_swrd_draw // 2 == 11:
             frame = (self.pos_a.x // 30) % len(self.swrd_rdy_r)
-            self.image = self.swrd_rdy_r[int(frame)]
+            self.image_a = self.swrd_rdy_r[int(frame)]
         if P1.orientation == 'left' and self.cnt_swrd_draw // 2 == 11:
             frame = (self.pos_a.x // 30) % len(self.swrd_rdy_l)
-            self.image = self.swrd_rdy_l[int(frame)]
+            self.image_a = self.swrd_rdy_l[int(frame)]
 
     def ani_swd_out(self):
         """ animate pulling out the sword """
@@ -182,9 +182,9 @@ class K_Act(pygame.sprite.Sprite):
         else:
             self.cnt_swrd_draw += 1
         if (P1.orientation == 'right'):
-            self.image = self.swrd_draw_r[self.cnt_swrd_draw // period]
+            self.image_a = self.swrd_draw_r[self.cnt_swrd_draw // period]
         if (P1.orientation == 'left'):
-            self.image = self.swrd_draw_l[self.cnt_swrd_draw // period]
+            self.image_a = self.swrd_draw_l[self.cnt_swrd_draw // period]
 
     def ani_swd_in(self):
         """ animate drawing back the sword """
@@ -197,9 +197,9 @@ class K_Act(pygame.sprite.Sprite):
         else:
             self.cnt_swrd_draw -= 1
             if (P1.orientation == 'right'):
-                self.image = self.swrd_draw_r[self.cnt_swrd_draw // period]
+                self.image_a = self.swrd_draw_r[self.cnt_swrd_draw // period]
             if (P1.orientation == 'left'):
-                self.image = self.swrd_draw_l[self.cnt_swrd_draw // period]
+                self.image_a = self.swrd_draw_l[self.cnt_swrd_draw // period]
 
 
     def ani_swd_draw(self):
@@ -218,9 +218,9 @@ class K_Act(pygame.sprite.Sprite):
             else:
                 self.cnt_swd_jmp += 1
             if P1.orientation == 'right':
-                self.image = self.swd_jmp_r[self.cnt_swd_jmp // period]
+                self.image_a = self.swd_jmp_r[self.cnt_swd_jmp // period]
             if P1.orientation == 'left':
-                self.image = self.swd_jmp_l[self.cnt_swd_jmp // period]
+                self.image_a = self.swd_jmp_l[self.cnt_swd_jmp // period]
         else:
             self.cnt_swd_jmp = 0
 
@@ -232,7 +232,7 @@ class K_Act(pygame.sprite.Sprite):
             self.pos_a.x = P1.pos.x - OFF_SET_X + x_off
             self.pos_a.y = P1.pos.y - P1.rect.height - OFF_SET_Y + y_off
         if P1.orientation == 'left':
-            self.pos_a.x = P1.pos.x  -  (self.image.get_width()
+            self.pos_a.x = P1.pos.x  -  (self.image_a.get_width()
                                        - P1.image.get_width()) + x_off
             self.pos_a.y = P1.pos.y - P1.rect.height - OFF_SET_Y + y_off
             
@@ -254,6 +254,6 @@ class K_Act(pygame.sprite.Sprite):
 
     def render(self):
         self.ani_action()
-        screen.blit(self.image, self.pos_a, (0, 0, self.image.get_width(), self.image.get_height()))
+        screen.blit(self.image_a, self.pos_a, (0, 0, self.image_a.get_width(), self.image_a.get_height()))
 
 KuppaAct = K_Act()
