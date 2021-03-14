@@ -26,7 +26,7 @@ class Game:
 
         # release counter for measing how long the a key is let go after it's pressed
         self.a_key_cnt = 0
-        
+
     def Key_a_delay(self, cnt_h, cnt_btnM_h, cnt_btnM_l):
         """Key release Key_a mechanism """
         self.a_key_cnt = pygame.time.get_ticks() - self.a_key_cnt
@@ -34,26 +34,34 @@ class Game:
         if P1.swd_on:
             KuppaAct.ATK = True
             if self.a_key_cnt >= cnt_h or (self.a_key_cnt <= cnt_btnM_h and self.a_key_cnt > cnt_btnM_l):
-                KuppaAct.atk_comb = 1
+                print("took too long for press a")
+                if KuppaAct.ATK_DONE:
+                    KuppaAct.atk_comb = 1
+                    KuppaAct.cnt_swd_cut = 0
             else:
                 #check if current attack combo reached MaxCombo
                 if KuppaAct.atk_comb == MaxCombo:
                     # reset the combo to 1
-                    KuppaAct.atk_comb = 1
+                    if KuppaAct.ATK_DONE:
+                        print("max combo here")
+                        KuppaAct.atk_comb = 1
+                    else:
+                        print("here")
                 else:
                     if KuppaAct.ATK_DONE:
+                        print("combo up")
                         KuppaAct.atk_comb += 1
-            
+
     def attack_event(self):
-        cut_period = cut_frame_period * ((KuppaAct.atk_comb * cut_frame_num))
+        cut_period = cut_frame_period * (cut_frame_num)
         cut_len = (cut_period * 1000) / FPS
-        self.Key_a_delay(cut_len, 100 ,34)        
+        self.Key_a_delay(cut_len, 100 ,34)
 
     def run_game(self):
         while True:
             self._check_events()
             self._update_screen()
-    
+
     def print_key(self, key):
         print(key)
 
@@ -63,7 +71,7 @@ class Game:
             if event.type == pygame.QUIT:
                 pygame.display.quit()
                 pygame.quit()
-                sys.exit()   
+                sys.exit()
             if (event.type == pygame.KEYDOWN):
                 if event.key == pygame.K_q:
                     pygame.display.quit()

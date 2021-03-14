@@ -142,6 +142,7 @@ class K_Act(pygame.sprite.Sprite):
             self.cnt_swd_cut = 0
             self.ATK = False
             self.ATK_DONE = True
+            print("combo#{} done cutting".format(self.atk_comb))
         else:
             self.ATK_DONE = False
             combo_i = (self.atk_comb * cut_frame_num) - cut_frame_num
