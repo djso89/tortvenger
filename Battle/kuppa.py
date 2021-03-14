@@ -74,6 +74,9 @@ class Kuppa(pygame.sprite.Sprite):
 
         self.swd_on = False
         self.swd_drwn = False
+        
+    def get_rect(self):
+        return self.image.get_rect()
 
     def draw_the_swrd(self):
         """ draw the swrd function.
@@ -274,12 +277,13 @@ class Kuppa(pygame.sprite.Sprite):
     def render(self):
         """ paste the player object into screen """
         self.animate()
+        w = self.image.get_width()
+        h = self.image.get_height()
         # check for action flags
-        if not self.swd_drwn:
-            screen.blit(self.image, self.pos,
-            (0, 0, self.image.get_width(), self.image.get_height()))
-        # screen.blit(self.image, self.pos,
-           # (0, 0, self.image.get_width(), self.image.get_height()))
+        # if not self.swd_drwn:
+            # screen.blit(self.image, self.pos, (0, 0,w ,h))
+        screen.blit(self.image, self.pos,
+           (0, 0, self.image.get_width(), self.image.get_height()))
 
 
 # initialize the player 1 object P1

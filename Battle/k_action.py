@@ -7,7 +7,7 @@ swords are drawn
 from kuppa import *
 
 # number of maximum combo you can perform
-MaxCombo = 3
+MaxCombo = 4
 # show one frame per 33ms = cut_frame_period * (1000 / FPS)
 cut_frame_period = 2
 # number of frames for one cut
@@ -109,8 +109,6 @@ class K_Act(pygame.sprite.Sprite):
 
         self.load_images()
 
-        self.image_a = self.swrd_draw_r[0]
-        self.rect_a = self.image_a.get_rect()
 
         # frame counter
         self.cnt_swrd_draw = 0
@@ -121,9 +119,13 @@ class K_Act(pygame.sprite.Sprite):
         self.ATK = False
         self.ATK_DONE = False
         self.atk_comb = 1
-
+        
         # position of the Action Frames
         self.pos_a = vec((0, 0))
+        
+        self.image_a = self.swrd_draw_r[0]
+        self.rect_a = self.image_a.get_rect(topleft=self.pos_a)
+
 
     def ani_turn_off(self):
         """ turn off the action frame """
@@ -135,7 +137,7 @@ class K_Act(pygame.sprite.Sprite):
     def ani_cut(self):
         """ animate sword cutting combo 1 ~ 2 """
         # one cut length
-        cut_period = cut_frame_period * ((self.atk_comb * cut_frame_num) - 1)
+        cut_period = cut_frame_period * ((self.atk_comb * cut_frame_num))
         
         """Combo Routine"""
         if (self.cnt_swd_cut >= cut_period):
@@ -146,7 +148,9 @@ class K_Act(pygame.sprite.Sprite):
                 self.image_a = self.swd_cut_r[self.cnt_swd_cut // cut_frame_period]
             if (P1.orientation == 'left'):
                 self.image_a = self.swd_cut_l[self.cnt_swd_cut // cut_frame_period]
+            print("cut frame index: {} combo: {}".format(self.cnt_swd_cut // cut_frame_period, self.atk_comb))
             self.cnt_swd_cut += 1
+
 
     def attack(self):
         """ game logic for attack
@@ -180,11 +184,11 @@ class K_Act(pygame.sprite.Sprite):
         if (self.cnt_swrd_draw >= max_period):
             self.cnt_swrd_draw = max_period
         else:
+            if (P1.orientation == 'right'):
+                self.image_a = self.swrd_draw_r[self.cnt_swrd_draw // period]
+            if (P1.orientation == 'left'):
+                self.image_a = self.swrd_draw_l[self.cnt_swrd_draw // period]
             self.cnt_swrd_draw += 1
-        if (P1.orientation == 'right'):
-            self.image_a = self.swrd_draw_r[self.cnt_swrd_draw // period]
-        if (P1.orientation == 'left'):
-            self.image_a = self.swrd_draw_l[self.cnt_swrd_draw // period]
 
     def ani_swd_in(self):
         """ animate drawing back the sword """
@@ -230,30 +234,37 @@ class K_Act(pygame.sprite.Sprite):
         """adjust the action frame coordinate """
         if P1.orientation == 'right':
             self.pos_a.x = P1.pos.x - OFF_SET_X + x_off
-            self.pos_a.y = P1.pos.y - P1.rect.height - OFF_SET_Y + y_off
+            self.pos_a.y = P1.pos.y + y_off - P1.rect.height - OFF_SET_Y 
         if P1.orientation == 'left':
             self.pos_a.x = P1.pos.x  -  (self.image_a.get_width()
-                                       - P1.image.get_width()) + x_off
+                                     - P1.image.get_width()) + x_off
             self.pos_a.y = P1.pos.y - P1.rect.height - OFF_SET_Y + y_off
             
+        
+        self.rect_a = self.image_a.get_rect(topleft=self.pos_a)  
+
+        
     def combo_frame_adj_offset(self):
         if self.ATK == False:
             self.ani_adj_offset(0, 0)
         elif self.ATK == True and self.atk_comb <= 2:
             self.ani_adj_offset(2, -2)
         elif self.ATK == True and (self.atk_comb > 2 and self.atk_comb <= MaxCombo):
-            self.ani_adj_offset(2, 4)
+            self.ani_adj_offset(2, 5)
 
     def ani_action(self):
+        self.combo_frame_adj_offset()
         """animate all the action frames """
         self.ani_swd_draw()
         self.ani_swd_move()
         self.ani_swd_jmp()
         self.attack()
-        self.combo_frame_adj_offset()
+        
 
     def render(self):
         self.ani_action()
-        screen.blit(self.image_a, self.pos_a, (0, 0, self.image_a.get_width(), self.image_a.get_height()))
+        w = self.image_a.get_width()
+        h = self.image_a.get_height()
+        screen.blit(self.image_a, self.pos_a, (0, 0, w, h))
 
 KuppaAct = K_Act()

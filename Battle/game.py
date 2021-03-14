@@ -5,6 +5,8 @@ from display import *
 from k_action import P1, KuppaAct, MaxCombo, cut_frame_period, cut_frame_num
 from fonts.combo_splash import KuppaCombo
 
+
+
 from covid19 import *
 from stage import *
 
@@ -17,6 +19,8 @@ class Game:
         pygame.init()
         self.clock = pygame.time.Clock()
         self.prd = 0
+        self.frames = 0
+        
         # toggle flag for displaying Stage Objects
         self.SB_toggle = False
 
@@ -75,6 +79,7 @@ class Game:
             if (event.type == pygame.KEYUP):
                 if event.key == pygame.K_a:
                     self.a_key_cnt = pygame.time.get_ticks()
+                    #KuppaAct.atk_comb = 1
                 if event.key == pygame.K_s:
                     self.SB_toggle = not self.SB_toggle
 
@@ -85,7 +90,7 @@ class Game:
         
         # do the Player 1 routines
         self.player_stuff()
-        self.show_info()
+        #self.show_info()
 
         # do the COVID19 routines
         for cell in Cells:
@@ -133,14 +138,28 @@ class Game:
 
 
 
-
-
+    def get_coord(self):
+        m1, m2, m3 = pygame.mouse.get_pressed()
+        if m1 == 1:
+            print("Point 1: {}".format(pygame.mouse.get_pos()))
+                
     def show_info(self):
-
-        if (self.prd >= 10):
-            m1, m2, m3 = pygame.mouse.get_pressed()
-            if m1 == 1:
-                print("Point 1: {}".format(pygame.mouse.get_pos()))
+        #self.get_coord()
+        p_rect = P1.rect
+        if (self.prd >= 1):
+            print("player1's image is {}".format(P1.rect))
+            self.print_stat()
             self.prd = 0;
 
         self.prd += 1
+        
+    def print_stat(self):
+        if (KuppaAct.ATK):
+            act_rect = KuppaAct.rect_a
+            print("action rect's image is {}".format(act_rect))
+            print("frames: {}".format(self.frames))
+            print("combo: {} Atack: {}".format(KuppaAct.atk_comb, KuppaAct.ATK))
+            self.frames += 1
+            print("------------------------------------")
+        else:
+            self.frames = 0
