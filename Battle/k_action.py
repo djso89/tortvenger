@@ -119,10 +119,9 @@ class K_Act(pygame.sprite.Sprite):
         self.ATK = False
         self.ATK_DONE = False
         self.atk_comb = 1
-        
+
         # position of the Action Frames
         self.pos_a = vec((0, 0))
-        
         self.image_a = self.swrd_draw_r[0]
         self.rect_a = self.image_a.get_rect(topleft=self.pos_a)
 
@@ -133,22 +132,25 @@ class K_Act(pygame.sprite.Sprite):
         self.image_a.fill((0, 0, 0, 0))
 
 
-            
     def ani_cut(self):
         """ animate sword cutting combo 1 ~ 2 """
         # one cut length
-        cut_period = cut_frame_period * ((self.atk_comb * cut_frame_num))
-        
+        cut_period = cut_frame_period * ((cut_frame_num))
         """Combo Routine"""
-        if (self.cnt_swd_cut >= cut_period):
+        if (self.cnt_swd_cut  >= cut_period):
             # done cutting
+            self.cnt_swd_cut = 0
             self.ATK = False
+            self.ATK_DONE = True
         else:
+            self.ATK_DONE = False
+            combo_i = (self.atk_comb * cut_frame_num) - cut_frame_num
+            frame_i = combo_i + (self.cnt_swd_cut // cut_frame_period)
             if (P1.orientation == 'right'):
-                self.image_a = self.swd_cut_r[self.cnt_swd_cut // cut_frame_period]
+                self.image_a = self.swd_cut_r[frame_i]
             if (P1.orientation == 'left'):
-                self.image_a = self.swd_cut_l[self.cnt_swd_cut // cut_frame_period]
-            print("cut frame index: {} combo: {}".format(self.cnt_swd_cut // cut_frame_period, self.atk_comb))
+                self.image_a = self.swd_cut_l[frame_i]
+            print("cut frame index: {} combo: {}".format(frame_i, self.atk_comb))
             self.cnt_swd_cut += 1
 
 
@@ -161,13 +163,13 @@ class K_Act(pygame.sprite.Sprite):
         if self.ATK:
             self.ani_cut()
         elif not self.ATK:
-            self.cnt_swd_cut = 0      
+            self.cnt_swd_cut = 0
 
 
     def ani_swd_move(self):
         """animate the movement with holding the swords """
         # check the Player object's orientation and if sword_draw_counter
-        # reached to last frame of sword_draw spritesheet 
+        # reached to last frame of sword_draw spritesheet
         # there are 11 frames (starting from 0) in sword
         if P1.orientation == 'right' and self.cnt_swrd_draw // 2 == 11:
             frame = (self.pos_a.x // 30) % len(self.swrd_rdy_r)
@@ -234,16 +236,14 @@ class K_Act(pygame.sprite.Sprite):
         """adjust the action frame coordinate """
         if P1.orientation == 'right':
             self.pos_a.x = P1.pos.x - OFF_SET_X + x_off
-            self.pos_a.y = P1.pos.y + y_off - P1.rect.height - OFF_SET_Y 
+            self.pos_a.y = P1.pos.y + y_off - P1.rect.height - OFF_SET_Y
         if P1.orientation == 'left':
             self.pos_a.x = P1.pos.x  -  (self.image_a.get_width()
                                      - P1.image.get_width()) + x_off
             self.pos_a.y = P1.pos.y - P1.rect.height - OFF_SET_Y + y_off
-            
-        
-        self.rect_a = self.image_a.get_rect(topleft=self.pos_a)  
+        self.rect_a = self.image_a.get_rect(topleft=self.pos_a)
 
-        
+
     def combo_frame_adj_offset(self):
         if self.ATK == False:
             self.ani_adj_offset(0, 0)
@@ -259,12 +259,12 @@ class K_Act(pygame.sprite.Sprite):
         self.ani_swd_move()
         self.ani_swd_jmp()
         self.attack()
-        
 
     def render(self):
         self.ani_action()
         w = self.image_a.get_width()
         h = self.image_a.get_height()
         screen.blit(self.image_a, self.pos_a, (0, 0, w, h))
+
 
 KuppaAct = K_Act()

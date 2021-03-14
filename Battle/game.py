@@ -30,7 +30,7 @@ class Game:
     def Key_a_delay(self, cnt_h, cnt_btnM_h, cnt_btnM_l):
         """Key release Key_a mechanism """
         self.a_key_cnt = pygame.time.get_ticks() - self.a_key_cnt
-        # print("you release key a for " + str(self.a_key_cnt) + "ms")
+        print("you release key a for " + str(self.a_key_cnt) + "ms")
         if P1.swd_on:
             KuppaAct.ATK = True
             if self.a_key_cnt >= cnt_h or (self.a_key_cnt <= cnt_btnM_h and self.a_key_cnt > cnt_btnM_l):
@@ -41,12 +41,13 @@ class Game:
                     # reset the combo to 1
                     KuppaAct.atk_comb = 1
                 else:
-                    KuppaAct.atk_comb += 1
+                    if KuppaAct.ATK_DONE:
+                        KuppaAct.atk_comb += 1
             
     def attack_event(self):
         cut_period = cut_frame_period * ((KuppaAct.atk_comb * cut_frame_num))
         cut_len = (cut_period * 1000) / FPS
-        self.Key_a_delay(cut_len, 101, 34)        
+        self.Key_a_delay(cut_len, 100 ,34)        
 
     def run_game(self):
         while True:
