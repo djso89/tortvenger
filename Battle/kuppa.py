@@ -280,10 +280,10 @@ class Kuppa(pygame.sprite.Sprite):
         w = self.image.get_width()
         h = self.image.get_height()
         # check for action flags
-        # if not self.swd_drwn:
-            # screen.blit(self.image, self.pos, (0, 0,w ,h))
-        screen.blit(self.image, self.pos,
-           (0, 0, self.image.get_width(), self.image.get_height()))
+        if not self.swd_drwn:
+            screen.blit(self.image, self.pos, (0, 0,w ,h))
+        # screen.blit(self.image, self.pos,
+           # (0, 0, self.image.get_width(), self.image.get_height()))
 
 
 # initialize the player 1 object P1

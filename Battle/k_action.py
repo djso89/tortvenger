@@ -142,7 +142,7 @@ class K_Act(pygame.sprite.Sprite):
             self.cnt_swd_cut = 0
             self.ATK = False
             self.ATK_DONE = True
-            print("combo#{} done cutting".format(self.atk_comb))
+            # print("combo#{} done cutting".format(self.atk_comb))
         else:
             self.ATK_DONE = False
             combo_i = (self.atk_comb * cut_frame_num) - cut_frame_num
@@ -151,7 +151,8 @@ class K_Act(pygame.sprite.Sprite):
                 self.image_a = self.swd_cut_r[frame_i]
             if (P1.orientation == 'left'):
                 self.image_a = self.swd_cut_l[frame_i]
-            print("cut frame index: {} combo: {}".format(frame_i, self.atk_comb))
+            # print("cut frame index: {} combo: {}".format(frame_i, self.atk_comb))
+            # print("image rect is {}".format(self.rect_a))
             self.cnt_swd_cut += 1
 
 
@@ -241,7 +242,7 @@ class K_Act(pygame.sprite.Sprite):
         if P1.orientation == 'left':
             self.pos_a.x = P1.pos.x  -  (self.image_a.get_width()
                                      - P1.image.get_width()) + x_off
-            self.pos_a.y = P1.pos.y - P1.rect.height - OFF_SET_Y + y_off
+            self.pos_a.y = P1.pos.y  + y_off - P1.rect.height - OFF_SET_Y
         self.rect_a = self.image_a.get_rect(topleft=self.pos_a)
 
 
@@ -251,7 +252,7 @@ class K_Act(pygame.sprite.Sprite):
         elif self.ATK == True and self.atk_comb <= 2:
             self.ani_adj_offset(2, -2)
         elif self.ATK == True and (self.atk_comb > 2 and self.atk_comb <= MaxCombo):
-            self.ani_adj_offset(2, 5)
+            self.ani_adj_offset(2, 20)
 
     def ani_action(self):
         self.combo_frame_adj_offset()

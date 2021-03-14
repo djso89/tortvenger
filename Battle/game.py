@@ -20,7 +20,7 @@ class Game:
         self.clock = pygame.time.Clock()
         self.prd = 0
         self.frames = 0
-        
+
         # toggle flag for displaying Stage Objects
         self.SB_toggle = False
 
@@ -30,26 +30,19 @@ class Game:
     def Key_a_delay(self, cnt_h, cnt_btnM_h, cnt_btnM_l):
         """Key release Key_a mechanism """
         self.a_key_cnt = pygame.time.get_ticks() - self.a_key_cnt
-        print("you release key a for " + str(self.a_key_cnt) + "ms")
+        # print("you release key a for " + str(self.a_key_cnt) + "ms")
         if P1.swd_on:
             KuppaAct.ATK = True
             if self.a_key_cnt >= cnt_h or (self.a_key_cnt <= cnt_btnM_h and self.a_key_cnt > cnt_btnM_l):
-                print("took too long for press a")
-                if KuppaAct.ATK_DONE:
-                    KuppaAct.atk_comb = 1
-                    KuppaAct.cnt_swd_cut = 0
+                KuppaAct.atk_comb = 1
+                KuppaAct.cnt_swd_cut = 0
             else:
                 #check if current attack combo reached MaxCombo
                 if KuppaAct.atk_comb == MaxCombo:
                     # reset the combo to 1
-                    if KuppaAct.ATK_DONE:
-                        print("max combo here")
-                        KuppaAct.atk_comb = 1
-                    else:
-                        print("here")
+                    KuppaAct.atk_comb = 1
                 else:
                     if KuppaAct.ATK_DONE:
-                        print("combo up")
                         KuppaAct.atk_comb += 1
 
     def attack_event(self):
@@ -96,7 +89,7 @@ class Game:
     def _update_screen(self):
         """this function updates
         objects on the screen"""
-        
+
         # do the Player 1 routines
         self.player_stuff()
         #self.show_info()
@@ -112,26 +105,26 @@ class Game:
 
         # draw the cells and player
         self.cell_draw()
-        self.player_draw()    
-        
+        self.player_draw()
+
         """refresh the page per (1000/FPS) ms """
         # tick the clock at 60Hz rate
         pygame.display.flip()
         self.clock.tick(FPS)
-        
+
     def cell_draw(self):
         #draw the cells
         for cell in Cells:
             cell.animate()
             cell.render()
-        
+
     def player_draw(self):
         #draw the player
         P1.render()
         KuppaAct.render()
         # show combo
         if KuppaAct.ATK:
-            KuppaCombo.update_combo(KuppaAct.atk_comb)        
+            KuppaCombo.update_combo(KuppaAct.atk_comb)
 
     def player_stuff(self):
         P1.move()
