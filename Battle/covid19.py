@@ -11,7 +11,7 @@ NumCells = 3
 
 class COVID19(pygame.sprite.Sprite):
     """COVID19 Class """
-    def __init__(self):
+    def __init__(self, x, y):
         """ initialize COVID19 Cell """
         super().__init__()
         sprite_sheet = SpriteSheet("images/C19_rdy.png")
@@ -32,24 +32,24 @@ class COVID19(pygame.sprite.Sprite):
             self.ready.append(image)
 
         #kinematic factors
-        self.pos = vec(0, 0)
+        self.pos = vec(x, y)
         self.vel = vec(0, 0)
 
         # image frame
         self.image = self.ready[0]
-        self.rect = self.image.get_rect()
+        self.rect = self.image.get_rect(topleft=self.pos)
         self.vel.x = random.randint(2, 6) / 2
 
         # action flags
         self.direction = random.randint(0, 1)
         
         
-        if self.direction == 0:
-            self.pos.x = 0
-            self.pos.y = 235
-        if self.direction == 1:
-            self.pos.x = 500
-            self.pos.y = 300
+        # if self.direction == 0:
+            # self.pos.x = 0
+            # self.pos.y = 235
+        # if self.direction == 1:
+            # self.pos.x = 500
+            # self.pos.y = 300
     
     def place_cell(self, x, y):
         self.pos.x = x
@@ -59,14 +59,15 @@ class COVID19(pygame.sprite.Sprite):
         """Make the cell move by itself """
         if self.pos.x <= 0:
             self.direction = 0
-        elif self.pos.x >= (WIDTH - self.image.get_width()):
+        elif self.pos.x >= (WIN_W - self.image.get_width()):
             self.direction = 1
         
         if self.direction == 0:
             self.pos.x += self.vel.x
         if self.direction == 1:
-            self.pos.x -=self.vel.x
-        self.rect.center = self.pos
+            self.pos.x -= self.vel.x
+        self.rect.x = self.pos.x
+        self.rect.y = self.pos.y
         
     def ani_move(self):
         """ animate the left right movement"""
@@ -88,17 +89,16 @@ Cells = pygame.sprite.Group()
 
 def cell_gen():
     for i in range (0, NumCells, 1):
-        cell = COVID19()
         x = random.randrange(0, WIN_W - cell.image.get_width())
         y = random.randrange(0, WIN_H - cell.image.get_height())
-        cell.place_cell(x, y)
+        cell = COVID19(x, y)
         Cells.add(cell)
     
-cell_gen()
+# cell_gen()
 
-C19 = COVID19()
-C1 = COVID19()
-C1.place_cell(900, 20)
-C19.place_cell(0, 200)
+C19 = COVID19(900, 320)
+#C1 = COVID19()
+#C1.place_cell(900, 20)
+#C19.place_cell(0, 0)
 Cells.add(C19)
-Cells.add(C1)
+#Cells.add(C1)

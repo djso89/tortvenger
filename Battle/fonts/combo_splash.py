@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import pygame
-from k_action import KuppaAct, P1
+from kuppabattle import *
 from display import screen
 from fonts.bordertext import Borderline_Txt
 
@@ -21,7 +21,7 @@ class K_Comb(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         self.Txtclr = green
-        self.ComboNum = str(KuppaAct.atk_comb)
+        self.ComboNum = str(P1.atk_comb)
         
         self.Txtclr = black
         self.ComboFont = pygame.font.Font('fonts/atk_comb.ttf', 36)

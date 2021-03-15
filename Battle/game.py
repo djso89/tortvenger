@@ -2,7 +2,7 @@
 import sys
 import pygame
 from display import *
-from k_action import P1, KuppaAct, MaxCombo, cut_frame_period, cut_frame_num
+from kuppabattle import *
 from fonts.combo_splash import KuppaCombo
 
 
@@ -32,23 +32,23 @@ class Game:
         self.a_key_cnt = pygame.time.get_ticks() - self.a_key_cnt
         # print("you release key a for " + str(self.a_key_cnt) + "ms")
         if P1.swd_on:
-            KuppaAct.ATK = True
+            P1.ATK = True
             if self.a_key_cnt >= cnt_h or (self.a_key_cnt <= cnt_btnM_h and self.a_key_cnt > cnt_btnM_l):
-                KuppaAct.atk_comb = 1
-                KuppaAct.cnt_swd_cut = 0
+                P1.atk_comb = 1
+                P1.cnt_swd_cut = 0
             else:
                 #check if current attack combo reached MaxCombo
-                if KuppaAct.atk_comb == MaxCombo:
+                if P1.atk_comb == MaxCombo:
                     # reset the combo to 1
-                    KuppaAct.atk_comb = 1
+                    P1.atk_comb = 1
                 else:
-                    if KuppaAct.ATK_DONE:
-                        KuppaAct.atk_comb += 1
+                    if P1.ATK_DONE:
+                        P1.atk_comb += 1
 
     def attack_event(self):
         cut_period = cut_frame_period * (cut_frame_num)
         cut_len = (cut_period * 1000) / FPS
-        self.Key_a_delay(cut_len, 100 ,34)
+        self.Key_a_delay(cut_len, 110 ,34)
 
     def run_game(self):
         while True:
@@ -81,7 +81,7 @@ class Game:
             if (event.type == pygame.KEYUP):
                 if event.key == pygame.K_a:
                     self.a_key_cnt = pygame.time.get_ticks()
-                    #KuppaAct.atk_comb = 1
+                    #P1.atk_comb = 1
                 if event.key == pygame.K_s:
                     self.SB_toggle = not self.SB_toggle
 
@@ -98,7 +98,9 @@ class Game:
         for cell in Cells:
             cell.move()
             cell.update()
-
+        
+        
+        #P1.touch_cell()
         """ drawing routines """
         # draw the Stage
         ST1.draw(screen, self.SB_toggle)
@@ -121,10 +123,10 @@ class Game:
     def player_draw(self):
         #draw the player
         P1.render()
-        KuppaAct.render()
+        P1.render_a()
         # show combo
-        if KuppaAct.ATK:
-            KuppaCombo.update_combo(KuppaAct.atk_comb)
+        if P1.ATK:
+            KuppaCombo.update_combo(P1.atk_comb)
 
     def player_stuff(self):
         P1.move()
@@ -156,11 +158,11 @@ class Game:
         self.prd += 1
         
     def print_stat(self):
-        if (KuppaAct.ATK):
-            act_rect = KuppaAct.rect_a
+        if (P1.ATK):
+            act_rect = P1.rect_a
             print("action rect's image is {}".format(act_rect))
             print("frames: {}".format(self.frames))
-            print("combo: {} Atack: {}".format(KuppaAct.atk_comb, KuppaAct.ATK))
+            print("combo: {} Atack: {}".format(P1.atk_comb, P1.ATK))
             self.frames += 1
             print("------------------------------------")
         else:

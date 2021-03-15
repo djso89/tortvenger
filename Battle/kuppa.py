@@ -2,7 +2,7 @@
 import pygame
 import sys
 from pygame.locals import *
-from display import screen, WIN_W
+from display import *
 from stage import *
 from spritesheet import SpriteSheet
 
@@ -35,9 +35,9 @@ class Kuppa(pygame.sprite.Sprite):
             height = ss_jmp.get_height()
             image = sprite_sheetjmp.get_image(width/11 * i, 0,
                                                width/11, height)
-            self.jmp_r.append(image)
+            self.OnGround_r.append(image)
             image = pygame.transform.flip(image, True, False)
-            self.jmp_l.append(image)
+            self.OnGround_l.append(image)
 
 
     def __init__(self):
@@ -51,8 +51,8 @@ class Kuppa(pygame.sprite.Sprite):
         # action frames
         self.ready_r = []
         self.ready_l = []
-        self.jmp_l = []
-        self.jmp_r = []
+        self.OnGround_l = []
+        self.OnGround_r = []
 
 
         # load the image
@@ -70,7 +70,7 @@ class Kuppa(pygame.sprite.Sprite):
 
         # orientation and movement status
         self.orientation = 'right'
-        self.jmp = True
+        self.OnGround = True
 
         self.swd_on = False
         self.swd_drwn = False
@@ -113,9 +113,9 @@ class Kuppa(pygame.sprite.Sprite):
 
     def jump(self):
         """ jump action """
-        if self.jmp == True:
+        if self.OnGround == True:
             self.vel.y = -40
-            self.jmp = False
+            self.OnGround = False
             
     # Kuppa touching the stage objects
 
@@ -147,7 +147,7 @@ class Kuppa(pygame.sprite.Sprite):
         in Y direction"""
         for block in hits:
             if self.vel.y > 0:
-                self.jmp = True
+                self.OnGround = True
                 self.cnt = 0
                 self.vel.y = 0
                 self.rect.bottom = block.rect.top
@@ -160,7 +160,7 @@ class Kuppa(pygame.sprite.Sprite):
         """ check just for falling direction """
         for block in hits:
             if self.vel.y > 0:
-                self.jmp = True
+                self.OnGround = True
                 self.cnt = 0
                 self.vel.y = 0
                 self.rect.bottom = block.rect.top
@@ -205,50 +205,19 @@ class Kuppa(pygame.sprite.Sprite):
         #touch Steps
         hitSt = pygame.sprite.spritecollide(self, Steps, False)
         self.touchYUD(hitSt)
-
-
-    def update(self):
-        """
-        function that calculates position
-        and check collision
-        """
-        # move along the x direction
-        self.acc.x += self.vel.x * FRIC
-        self.vel.x += self.acc.x
-        self.pos.x += self.vel.x + 0.5 * self.acc.x
-
-        #left Most boundary of stage. Block the player from
-        #moving further
-        if self.pos.x < 0:
-            self.pos.x = 0
-        self.rect.x = self.pos.x
-
-        if self.pos.x > WIN_W - self.rect.width:
-            self.pos.x = WIN_W - self.rect.width
-        self.rect.x = self.pos.x
-
-        self.collisionX()
-
-        #moving along the y direction
-        self.vel.y += self.acc.y
-        self.pos.y += self.vel.y + 0.5 * self.acc.y
-        # assign the y coordinate to frame's y
-        self.rect.y = self.pos.y
-
-        self.collisionY()
-
+        
 
     """ animation functions """
 
 
     def ani_move(self):
         """ animate the left right movement"""
-        if self.orientation == 'right' and self.jmp == True:
+        if self.orientation == 'right' and self.OnGround == True:
             frame = (self.pos.x // 30) % len(self.ready_r)
             self.image = self.ready_r[int(frame)]
 
 
-        elif self.orientation == 'left' and self.jmp == True:
+        elif self.orientation == 'left' and self.OnGround == True:
             frame = (self.pos.x // 30) % len(self.ready_l)
             self.image = self.ready_l[int(frame)]
 
@@ -257,15 +226,15 @@ class Kuppa(pygame.sprite.Sprite):
     def ani_jump(self):
         """ animate the jump """
         period = 2
-        if self.jmp == False:
-            if (self.cnt >= period * (len(self.jmp_r) -1 )):
-                self.cnt = period * (len(self.jmp_r) -1 )
+        if self.OnGround == False:
+            if (self.cnt >= period * (len(self.OnGround_r) -1 )):
+                self.cnt = period * (len(self.OnGround_r) -1 )
             else:
                 self.cnt += 1
             if self.orientation == 'right':
-                self.image = self.jmp_r[self.cnt//period]
+                self.image = self.OnGround_r[self.cnt//period]
             if self.orientation == 'left':
-                self.image = self.jmp_l[self.cnt//period]
+                self.image = self.OnGround_l[self.cnt//period]
 
 
 
@@ -285,6 +254,3 @@ class Kuppa(pygame.sprite.Sprite):
         # screen.blit(self.image, self.pos,
            # (0, 0, self.image.get_width(), self.image.get_height()))
 
-
-# initialize the player 1 object P1
-P1 = Kuppa()
