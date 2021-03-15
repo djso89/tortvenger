@@ -188,7 +188,7 @@ class Kuppa(pygame.sprite.Sprite):
 
         #touch Cars
         hitC = pygame.sprite.spritecollide(self, Cars, False)
-        self.touchYU(hitC)
+        self.touchYUD(hitC)
 
         # touch Bricks
         hitB = pygame.sprite.spritecollide(self, Bricks, False)

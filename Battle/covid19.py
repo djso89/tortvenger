@@ -38,18 +38,11 @@ class COVID19(pygame.sprite.Sprite):
         # image frame
         self.image = self.ready[0]
         self.rect = self.image.get_rect(topleft=self.pos)
-        self.vel.x = random.randint(2, 6) / 2
+        self.vel.x = random.randint(4, 6) / 2
 
         # action flags
         self.direction = random.randint(0, 1)
-        
-        
-        # if self.direction == 0:
-            # self.pos.x = 0
-            # self.pos.y = 235
-        # if self.direction == 1:
-            # self.pos.x = 500
-            # self.pos.y = 300
+
     
     def place_cell(self, x, y):
         self.pos.x = x
@@ -89,16 +82,14 @@ Cells = pygame.sprite.Group()
 
 def cell_gen():
     for i in range (0, NumCells, 1):
-        x = random.randrange(0, WIN_W - cell.image.get_width())
-        y = random.randrange(0, WIN_H - cell.image.get_height())
+        x = random.randrange(0, WIN_W - 100)
+        y = random.randrange(0, WIN_H - 200)
         cell = COVID19(x, y)
         Cells.add(cell)
     
-# cell_gen()
+#cell_gen()
 
-C19 = COVID19(900, 320)
-#C1 = COVID19()
-#C1.place_cell(900, 20)
-#C19.place_cell(0, 0)
+C19 = COVID19(900, 500)
+C1 = COVID19(400,300)
 Cells.add(C19)
-#Cells.add(C1)
+Cells.add(C1)
