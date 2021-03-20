@@ -9,7 +9,7 @@ from kuppa import *
 
 
 # number of maximum combo you can perform
-MaxCombo = 4
+MaxCombo = 6
 # show one frame per 33ms = cut_frame_period * (1000 / FPS)
 cut_frame_period = 2
 # number of frames for one cut
@@ -49,6 +49,7 @@ class K_Act(Kuppa):
         sprite_sheet_swd_rdy = SpriteSheet("images/k_swd_rdy.png")
         sprite_sheet_swd_cuts = SpriteSheet('images/k_swd_cut.png')
         sprite_sheet_swd_cuts2 = SpriteSheet('images/k_swd_cut2.png')
+        sprite_sheet_swd_cuts3 = SpriteSheet('images/k_swd_cut3.png')
         sprite_sheet_swd_jmp = SpriteSheet('images/k_swd_jmp.png')
 
 
@@ -82,7 +83,18 @@ class K_Act(Kuppa):
             self.swd_cut_r.append(image)
             image = pygame.transform.flip(image, True, False)
             self.swd_cut_l.append(image)
-
+        
+        # combo 5 - 6
+        for i in range(0, 14, 1):
+            ss_swd_cuts3 = sprite_sheet_swd_cuts3.sprite_sheet
+            width = ss_swd_cuts3.get_width()
+            height = ss_swd_cuts3.get_height()
+            image = sprite_sheet_swd_cuts3.get_image(i * width // 14, 0, width // 14, height)
+            self.swd_cut_r.append(image)
+            image = pygame.transform.flip(image, True, False)
+            self.swd_cut_l.append(image)
+        
+        
         # load all the left and right facing for sword drawing
         for i in range(0, 12, 1):
             ss_swd_draw = sprite_sheet_swd_draw.sprite_sheet
@@ -253,8 +265,10 @@ class K_Act(Kuppa):
             self.ani_adj_offset(0, 0)
         elif self.ATK == True and self.atk_comb <= 2:
             self.ani_adj_offset(2, -2)
-        elif self.ATK == True and (self.atk_comb > 2 and self.atk_comb <= MaxCombo):
+        elif self.ATK == True and (self.atk_comb > 2 and self.atk_comb <= 4):
             self.ani_adj_offset(2, 20)
+        elif self.ATK == True and (self.atk_comb > 4 and self.atk_comb <= MaxCombo):
+            self.ani_adj_offset(2, -20)
 
     def ani_action(self):
         self.combo_frame_adj_offset()

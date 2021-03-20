@@ -60,7 +60,7 @@ class Kuppa(pygame.sprite.Sprite):
 
 
         # kinematic factors
-        self.pos = vec((0, 0))
+        self.pos = vec((800, 0))
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
 
@@ -90,7 +90,7 @@ class Kuppa(pygame.sprite.Sprite):
         this just simply sets acceleration
         according to the key presses
         """
-        self.acc = vec(0, 3)
+        self.acc = vec(0, 2.5)
         pressed_keys = pygame.key.get_pressed()
         if pressed_keys[K_LEFT]:
             if not pressed_keys[K_a]:
@@ -118,16 +118,6 @@ class Kuppa(pygame.sprite.Sprite):
             self.OnGround = False
             
     # Kuppa touching the stage objects
-
-    def touchX(self, hits):
-        #touch hits
-        for block in hits:
-            if self.vel.x > 0: #moving right
-                self.rect.right = block.rect.left
-            elif self.vel.x < 0:
-                self.rect.left = block.rect.right
-            self.pos.x = self.rect.x
-
     def touchXR(self, hits):
         #touch hits coming from right side
         for block in hits:
@@ -141,6 +131,7 @@ class Kuppa(pygame.sprite.Sprite):
             if self.vel.x < 0:
                 self.rect.left = block.rect.right
             self.pos.x = self.rect.x
+
 
     def touchYUD(self, hits):
         """ go through the list of collided sprites
@@ -167,17 +158,6 @@ class Kuppa(pygame.sprite.Sprite):
             self.pos.y = self.rect.y
 
 
-    def collisionX(self):
-        """check the collision in X direction """
-
-        # touch bricks
-        hitB = pygame.sprite.spritecollide(self, Bricks, False)
-        self.touchX(hitB)
-
-        #touch Cars
-        hitC = pygame.sprite.spritecollide(self, Cars, False)
-        self.touchX(hitC)
-
     def collisionY(self):
 
         """ check the collision in Y direction """
@@ -188,7 +168,7 @@ class Kuppa(pygame.sprite.Sprite):
 
         #touch Cars
         hitC = pygame.sprite.spritecollide(self, Cars, False)
-        self.touchYUD(hitC)
+        self.touchYU(hitC)
 
         # touch Bricks
         hitB = pygame.sprite.spritecollide(self, Bricks, False)

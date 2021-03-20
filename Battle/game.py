@@ -48,7 +48,7 @@ class Game:
     def attack_event(self):
         cut_period = cut_frame_period * (cut_frame_num)
         cut_len = (cut_period * 1000) / FPS
-        self.Key_a_delay(cut_len, 110 ,34)
+        self.Key_a_delay(cut_len + 100, 90 ,34)
 
     def run_game(self):
         while True:
@@ -99,8 +99,6 @@ class Game:
             cell.move()
             cell.update()
         
-        
-        #P1.touch_cell()
         """ drawing routines """
         # draw the Stage
         ST1.draw(screen, self.SB_toggle)

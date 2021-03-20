@@ -41,6 +41,8 @@ class COVID19(pygame.sprite.Sprite):
         self.vel.x = random.randint(4, 6) / 2
 
         # action flags
+        # 0 - go right
+        # 1 - go left
         self.direction = random.randint(0, 1)
 
     
@@ -92,4 +94,4 @@ def cell_gen():
 C19 = COVID19(900, 500)
 C1 = COVID19(400,300)
 Cells.add(C19)
-Cells.add(C1)
+#Cells.add(C1)
