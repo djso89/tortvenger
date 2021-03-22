@@ -21,7 +21,7 @@ Car1 = Block()
 Car2 = Block()
 
 Car1.newBlock(193, 400, 65, 52, alph)
-Car2.newBlock(830, 362, 105, 50, alph)
+Car2.newBlock(850, 362, 105, 50, alph)
 
 Cars.add(Car1)
 Cars.add(Car2)

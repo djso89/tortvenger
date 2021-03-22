@@ -92,7 +92,7 @@ class Game:
 
         # do the Player 1 routines
         self.player_stuff()
-        #self.show_info()
+        self.show_info()
 
         # do the COVID19 routines
         for cell in Cells:
@@ -146,14 +146,16 @@ class Game:
             print("Point 1: {}".format(pygame.mouse.get_pos()))
                 
     def show_info(self):
-        #self.get_coord()
-        p_rect = P1.rect
-        if (self.prd >= 1):
-            print("player1's image is {}".format(P1.rect))
-            self.print_stat()
-            self.prd = 0;
-
+        if (self.prd >= 10):
+            self.get_coord()
         self.prd += 1
+        #p_rect = P1.rect
+        #if (self.prd >= 1):
+        #    print("player1's image is {}".format(P1.rect))
+        #    self.print_stat()
+        #    self.prd = 0;
+
+        #self.prd += 1
         
     def print_stat(self):
         if (P1.ATK):

@@ -131,6 +131,7 @@ class K_Act(Kuppa):
         self.ATK = False
         self.ATK_DONE = False
         self.atk_comb = 1
+        self.frame_atk = 0
 
         # position of the Action Frames
         self.pos_a = vec((0, 0))
@@ -158,12 +159,12 @@ class K_Act(Kuppa):
         else:
             self.ATK_DONE = False
             combo_i = (self.atk_comb * cut_frame_num) - cut_frame_num
-            frame_i = combo_i + (self.cnt_swd_cut // cut_frame_period)
+            self.frame_atk = combo_i + (self.cnt_swd_cut // cut_frame_period)
             if (self.orientation == 'right'):
-                self.image_a = self.swd_cut_r[frame_i]
+                self.image_a = self.swd_cut_r[self.frame_atk]
             if (self.orientation == 'left'):
-                self.image_a = self.swd_cut_l[frame_i]
-            # print("cut frame index: {} combo: {}".format(frame_i, self.atk_comb))
+                self.image_a = self.swd_cut_l[self.frame_atk]
+            # print("cut frame index: {} combo: {}".format(self.frame_atk, self.atk_comb))
             # print("image rect is {}".format(self.rect_a))
             self.cnt_swd_cut += 1
 

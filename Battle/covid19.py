@@ -44,6 +44,9 @@ class COVID19(pygame.sprite.Sprite):
         # 0 - go right
         # 1 - go left
         self.direction = random.randint(0, 1)
+        
+        # wait flag when cell get hit with player attack
+        self.hitCell = False
 
     
     def place_cell(self, x, y):
@@ -57,12 +60,13 @@ class COVID19(pygame.sprite.Sprite):
         elif self.pos.x >= (WIN_W - self.image.get_width()):
             self.direction = 1
         
-        if self.direction == 0:
-            self.pos.x += self.vel.x
-        if self.direction == 1:
-            self.pos.x -= self.vel.x
-        self.rect.x = self.pos.x
-        self.rect.y = self.pos.y
+        if not self.hitCell:
+            if self.direction == 0:
+                self.pos.x += self.vel.x
+            if self.direction == 1:
+                self.pos.x -= self.vel.x
+            self.rect.x = self.pos.x
+            self.rect.y = self.pos.y
         
     def ani_move(self):
         """ animate the left right movement"""
