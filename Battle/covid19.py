@@ -94,4 +94,4 @@ def cell_gen():
 C19 = COVID19(900, 500)
 C1 = COVID19(400,300)
 Cells.add(C19)
-#Cells.add(C1)
+Cells.add(C1)

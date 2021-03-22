@@ -93,8 +93,6 @@ class K_Act(Kuppa):
             self.swd_cut_r.append(image)
             image = pygame.transform.flip(image, True, False)
             self.swd_cut_l.append(image)
-        
-        
         # load all the left and right facing for sword drawing
         for i in range(0, 12, 1):
             ss_swd_draw = sprite_sheet_swd_draw.sprite_sheet
