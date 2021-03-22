@@ -13,22 +13,19 @@ class K_Battle(K_Act):
         #touch hits
         for block in hits:
             if self.vel.x > 0: #moving right
-                self.rect.right = block.rect.left
-
-            elif self.vel.x < 0:
                 if self.gotHit:
-                    self.rect.right = block.rect.left
-                if self.gotHitBack:
                     self.rect.left = block.rect.right
                 else:
+                    self.rect.right = block.rect.left
+            if self.vel.x < 0:
+                if self.gotHit:
+                    print("here")
+                    self.rect.right = block.rect.left
+                else:
                     self.rect.left = block.rect.right
-                    print('here')
             # set the x coordinate
             self.pos.x = self.rect.x
 
-        # reset the gotHit flag
-        self.gotHit = False
-        self.gotHitBack = False
 
 
 
@@ -42,6 +39,10 @@ class K_Battle(K_Act):
         hitC = pygame.sprite.spritecollide(self, Cars, False)
         self.touchX(hitC)
 
+    def gotHit_reset(self):
+        # reset gotHit flag
+        self.gotHit = False
+
 
     def update(self):
         """
@@ -54,7 +55,7 @@ class K_Battle(K_Act):
         self.pos.x += self.vel.x + 0.5 * self.acc.x
 
         self.touch_cell_X()
-
+        print(self.gotHit)
         # routine when player didn't touch cells
         #left Most boundary of stage. Block the player from
         #moving further
@@ -66,6 +67,7 @@ class K_Battle(K_Act):
 
         self.rect.x = self.pos.x
         self.collisionX()
+        self.gotHit_reset()
         #moving along the y direction
         self.vel.y += self.acc.y
         self.pos.y += self.vel.y + 0.5 * self.acc.y
@@ -74,67 +76,44 @@ class K_Battle(K_Act):
 
         self.collisionY()
 
-    def check_dir_x(self, cell):
-        """
-        function that checks for player's direction
-        and cell's direction for collision
-        """
-
-        # player facing right direction
-        if self.vel.x > 0 and cell.direction == 1:
-            # check for intersection area
-            if self.rect.right >= cell.rect.left + 20:
-                self.pos.x -= 40
-                self.gotHit = True
-                if self.pos.x < 0:
-                    self.pos.x = 0
-        # Player facing right and cell facing right
-        if self.vel.x > 0 and cell.direction == 0:
-            if self.pos.x > cell.pos.x:
-                if self.rect.left <= cell.rect.right + 20:
-                    self.gotHitBack = True
-                    self.pos.x += 40
-                    if self.pos.x > WIN_W - self.rect.width:
-                        self.pos.x = WIN_W - self.rect.width
-            else:
-                # check for intersection area
-                if self.rect.right >= cell.rect.left + 20:
-                    self.pos.x -= 40
-                    self.gotHit = True
-                    if self.pos.x < 0:
-                        self.pos.x = 0
-                #print("")
-        if self.vel.x < 0 and cell.direction == 0:
-            if self.rect.left <= cell.rect.right - 20:
-                self.gotHit = True
-                self.pos.x += 40
-                if self.pos.x > WIN_W - self.rect.width:
-                    self.pos.x = WIN_W - self.rect.width
-                #print("touched from left")
-        if self.vel.x < 0 and cell.direction == 1:
-            if self.pos.x < cell.pos.x:
-                self.gotHitBack = True
-                if self.rect.right >= cell.rect.left - 20:
-                    self.pos.x -= 40
-                    if self.pos.x < 0:
-                        self.pos.x = 0
-            else:
-                if self.rect.left <= cell.rect.right - 20: 
-                    self.pos.x += 40
-                    self.gotHit = True
-                    if self.pos.x > WIN_W - self.rect.width:
-                        self.pos.x = WIN_W - self.rect.width
-
-
     def touch_cell_X(self):
         """ detecting collision between player and cells"""
         hitCells = pygame.sprite.spritecollide(self, Cells, False)
 
         for cell in hitCells:
+            print("made contact with cell")
             #self.gotHit = True
             self.check_dir_x(cell)
             break
-        #self.gotHit = False
+        print("---------------------------------")
+
+
+    def check_dir_x(self, cell):
+        """
+        function that checks for player's direction
+        and cell's direction for collision
+        """
+        if self.vel.x < 0:
+            if cell.direction == 0:
+                print("player facing left and cell facing right")
+                if self.pos.x + 40  <= (cell.pos.x + cell.rect.width):
+                    self.pos.x += 200
+                    self.gotHit = True
+            if cell.direction == 1:
+                print("player facing left and cell facing left")
+                if cell.pos.x >= (self.pos.x + self.rect.width) - 40:
+                    self.pos.x -= 100
+                    print("bam")
+
+        if self.vel.x > 0:
+            if cell.direction == 1:
+                if cell.pos.x >= (self.pos.x + self.rect.width) - 40:
+                    self.pos.x -= 200
+                    self.gotHit = True
+            if cell.direction == 0:
+                if self.pos.x + 40 >= (cell.pos.x + cell.rect.width):
+                    self.pos.x += 100
+
 
 
 P1 = K_Battle()
