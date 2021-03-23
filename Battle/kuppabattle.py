@@ -83,7 +83,31 @@ class K_Battle(K_Act):
             #print("made contact with cell")
             self.check_dir_x(cell)
         print("---------------------------------")
+    
+    def cell_hit_player_l(self, cell):
+        """
+        function that checks for collision between
+        player facing left and cell when player is not attacking
+        """
+        if cell.direction == 0:
+            #print("player facing left and cell facing right")
+            if self.pos.x + 80  <= (cell.pos.x + cell.rect.width):
+                self.pos.x += 200
+                self.gotHit = True
+        if cell.direction == 1:
+            #print("player facing left and cell facing left")
+            if cell.pos.x >= (self.pos.x + self.rect.width) - 80:
+                self.pos.x -= 100
 
+    def cell_hit_player_r(self, cell):
+        if cell.direction == 1:
+            if cell.pos.x >= (self.pos.x + self.rect.width) - 80:
+                self.pos.x -= 200
+                self.gotHit = True
+        if cell.direction == 0:
+            if self.pos.x + 80 >= (cell.pos.x + cell.rect.width):
+                self.pos.x += 100
+        
 
     def check_dir_x(self, cell):
         """
@@ -92,31 +116,21 @@ class K_Battle(K_Act):
         """
         if self.vel.x < 0:
             if not self.ATK:
-                if cell.direction == 0:
-                    #print("player facing left and cell facing right")
-                    if self.pos.x + 80  <= (cell.pos.x + cell.rect.width):
-                        self.pos.x += 200
-                        self.gotHit = True
-                if cell.direction == 1:
-                    #print("player facing left and cell facing left")
-                    if cell.pos.x >= (self.pos.x + self.rect.width) - 80:
-                        self.pos.x -= 100
+                self.cell_hit_player_l(cell)
             else:
                 if cell.direction == 0:
                     if self.pos_a.x <= (cell.pos.x + cell.rect.width) - 40:
-                        if self.frame_atk == (self.atk_comb * 7) - 1:
-                            cell.pos.x -= 80
+                        if self.atk_comb == 1 and self.frame_atk == 6:
+                            cell.pos.x -= 5
+                            cell.hitCell = True
+                        if self.atk_comb > 1 and self.frame_atk == (self.atk_comb * 7) - 1:
+                            cell.pos.x -= 50
                             cell.hitCell = True
                             print("cell got hit")
                             print("Combo#: {} frame attack: {}".format(self.atk_comb, self.frame_atk))
         if self.vel.x > 0:
-            if cell.direction == 1:
-                if cell.pos.x >= (self.pos.x + self.rect.width) - 80:
-                    self.pos.x -= 200
-                    self.gotHit = True
-            if cell.direction == 0:
-                if self.pos.x + 80 >= (cell.pos.x + cell.rect.width):
-                    self.pos.x += 100
+            if not self.ATK:
+                self.cell_hit_player_r(cell)
 
 
 
