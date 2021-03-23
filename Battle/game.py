@@ -97,8 +97,8 @@ class Game:
         # do the COVID19 routines
         for cell in Cells:
             cell.move()
-            cell.update()
-        
+
+
         """ drawing routines """
         # draw the Stage
         ST1.draw(screen, self.SB_toggle)
@@ -116,6 +116,7 @@ class Game:
         #draw the cells
         for cell in Cells:
             cell.animate()
+            cell.pause()
             cell.render()
 
     def player_draw(self):

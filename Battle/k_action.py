@@ -9,7 +9,7 @@ from kuppa import *
 
 
 # number of maximum combo you can perform
-MaxCombo = 6
+MaxCombo = 2
 # show one frame per 33ms = cut_frame_period * (1000 / FPS)
 cut_frame_period = 2
 # number of frames for one cut
