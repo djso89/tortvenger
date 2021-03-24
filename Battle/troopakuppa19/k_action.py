@@ -5,7 +5,7 @@ animating attacks and actions that involve when
 swords are drawn
 """
 import pygame
-from kuppa import *
+from troopakuppa19.kuppa import *
 
 
 # number of maximum combo you can perform

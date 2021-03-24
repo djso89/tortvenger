@@ -2,8 +2,8 @@
 import sys
 import pygame
 from display import *
-from kuppabattle import *
-from fonts.combo_splash import KuppaCombo
+from troopakuppa19.kuppabattle import *
+from fonts.kuppacombo import KuppaCombo
 
 
 
@@ -19,6 +19,7 @@ class Game:
         pygame.init()
         self.clock = pygame.time.Clock()
         self.prd = 0
+        self.cnt_show_comb = False
         self.frames = 0
 
         # toggle flag for displaying Stage Objects
@@ -124,9 +125,12 @@ class Game:
         P1.render()
         P1.render_a()
         # show combo
-        if P1.ATK:
+        if P1.show_comb:
+            if self.cnt_show_comb >= 5:
+                P1.show_comb = False
+                self.cnt_show_comb = 0
             KuppaCombo.update_combo(P1.atk_comb)
-
+            self.cnt_show_comb += 1
     def player_stuff(self):
         P1.move()
         P1.update()

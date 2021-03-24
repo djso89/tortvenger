@@ -1,11 +1,8 @@
 #!/usr/bin/env python3
 import pygame
-from kuppabattle import *
+from troopakuppa19.kuppabattle import *
 from display import screen
 from fonts.bordertext import Borderline_Txt
-
-
-
 
 # color codes
 white = (255, 255, 255)

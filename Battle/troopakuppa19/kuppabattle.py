@@ -1,12 +1,12 @@
 import pygame
-from k_action import *
+from troopakuppa19.k_action import *
 from covid19 import Cells
 
 class K_Battle(K_Act):
     def __init__(self):
         super().__init__()
         self.gotHit = False
-        self.gotHitBack = False
+        self.show_comb = False
 
 
     def touchX(self, hits):
@@ -84,7 +84,7 @@ class K_Battle(K_Act):
             self.check_dir_x(cell)
         print("---------------------------------")
     
-    def cell_hit_player_l(self, cell):
+    def cell_hit_player_xl(self, cell):
         """
         function that checks for collision between
         player facing left and cell when player is not attacking
@@ -99,7 +99,7 @@ class K_Battle(K_Act):
             if cell.pos.x >= (self.pos.x + self.rect.width) - 80:
                 self.pos.x -= 100
 
-    def cell_hit_player_r(self, cell):
+    def cell_hit_player_xr(self, cell):
         if cell.direction == 1:
             if cell.pos.x >= (self.pos.x + self.rect.width) - 80:
                 self.pos.x -= 200
@@ -116,21 +116,25 @@ class K_Battle(K_Act):
         """
         if self.vel.x < 0:
             if not self.ATK:
-                self.cell_hit_player_l(cell)
+                self.cell_hit_player_xl(cell)
             else:
                 if cell.direction == 0:
                     if self.pos_a.x <= (cell.pos.x + cell.rect.width) - 40:
-                        if self.atk_comb == 1 and self.frame_atk == 6:
-                            cell.pos.x -= 5
+                        if self.atk_comb < 2:
+                            self.show_comb = True
+                            cell.pos.x -= 2
                             cell.hitCell = True
-                        if self.atk_comb > 1 and self.frame_atk == (self.atk_comb * 7) - 1:
+                        if self.atk_comb >= 2 and self.frame_atk == (self.atk_comb * 7) - 1:
+                            self.show_comb = True
                             cell.pos.x -= 50
                             cell.hitCell = True
-                            print("cell got hit")
-                            print("Combo#: {} frame attack: {}".format(self.atk_comb, self.frame_atk))
+                            # print("cell got hit")
+                            # print("Combo#: {} frame attack: {}".format(self.atk_comb, self.frame_atk))
+                #if cell.direction == 1:
+                #    if self.pos_a.x 
         if self.vel.x > 0:
             if not self.ATK:
-                self.cell_hit_player_r(cell)
+                self.cell_hit_player_xr(cell)
 
 
 
