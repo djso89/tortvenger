@@ -47,6 +47,7 @@ class Game:
                         P1.atk_comb += 1
 
     def attack_event(self):
+        """attacking routine of player """
         cut_period = cut_frame_period * (cut_frame_num)
         cut_len = (cut_period * 1000) / FPS
         self.Key_a_delay(cut_len + 100, 90 ,34)
@@ -82,7 +83,6 @@ class Game:
             if (event.type == pygame.KEYUP):
                 if event.key == pygame.K_a:
                     self.a_key_cnt = pygame.time.get_ticks()
-                    #P1.atk_comb = 1
                 if event.key == pygame.K_s:
                     self.SB_toggle = not self.SB_toggle
 
@@ -126,11 +126,12 @@ class Game:
         P1.render_a()
         # show combo
         if P1.show_comb:
-            if self.cnt_show_comb >= 5:
+            if self.cnt_show_comb >= 10:
                 P1.show_comb = False
                 self.cnt_show_comb = 0
             KuppaCombo.update_combo(P1.atk_comb)
             self.cnt_show_comb += 1
+
     def player_stuff(self):
         P1.move()
         P1.update()
@@ -151,7 +152,7 @@ class Game:
             print("Point 1: {}".format(pygame.mouse.get_pos()))
                 
     def show_info(self):
-        if (self.prd >= 10):
+        if (self.prd >= 13):
             self.get_coord()
         self.prd += 1
         #p_rect = P1.rect

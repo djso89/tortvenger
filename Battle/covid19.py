@@ -48,7 +48,7 @@ class COVID19(pygame.sprite.Sprite):
         # image frame
         self.image = self.ready[0]
         self.rect = self.image.get_rect(topleft=self.pos)
-        self.vel.x = random.randint(4, 6) / 2
+        self.vel.x = random.randint(1, 10) / 2 
 
         # action flags
         # 0 - go right
