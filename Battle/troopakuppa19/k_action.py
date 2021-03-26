@@ -18,6 +18,7 @@ cut_frame_num = 7
 OFF_SET_X = 2
 OFF_SET_Y = 5
 
+black = (0, 0, 0)
 
 class K_Act(Kuppa):
     """ Kuppa action class
@@ -45,12 +46,12 @@ class K_Act(Kuppa):
 
     def load_images(self):
         """ load the images from sprite sheets """
-        sprite_sheet_swd_draw = SpriteSheet("images/k_swd_d.png")
-        sprite_sheet_swd_rdy = SpriteSheet("images/k_swd_rdy.png")
-        sprite_sheet_swd_cuts = SpriteSheet('images/k_swd_cut.png')
-        sprite_sheet_swd_cuts2 = SpriteSheet('images/k_swd_cut2.png')
-        sprite_sheet_swd_cuts3 = SpriteSheet('images/k_swd_cut3.png')
-        sprite_sheet_swd_jmp = SpriteSheet('images/k_swd_jmp.png')
+        sprite_sheet_swd_draw = SpriteSheet("images/k_swd_d.png", black)
+        sprite_sheet_swd_rdy = SpriteSheet("images/k_swd_rdy.png", black)
+        sprite_sheet_swd_cuts = SpriteSheet('images/k_swd_cut.png', black)
+        sprite_sheet_swd_cuts2 = SpriteSheet('images/k_swd_cut2.png', black)
+        sprite_sheet_swd_cuts3 = SpriteSheet('images/k_swd_cut3.png', black)
+        sprite_sheet_swd_jmp = SpriteSheet('images/k_swd_jmp.png', black)
 
 
         # load all the L/R frames for jumping with swords held

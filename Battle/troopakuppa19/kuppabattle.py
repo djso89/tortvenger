@@ -82,7 +82,7 @@ class K_Battle(K_Act):
             #print("made contact with cell")
             self.check_dir_x(cell)
         #print("---------------------------------")
-    
+
     def cell_hit_player_xl(self, cell):
         """
         function that checks for collision between
@@ -108,9 +108,9 @@ class K_Battle(K_Act):
         if cell.direction == 0:
             if self.pos.x + 80 >= (cell.pos.x + cell.rect.width):
                 self.pos.x += 100
-                
-    def player_attack(self, cell,knock_back, combo_knock_back):
-        """ 
+
+    def player_attack(self, cell, knock_back, combo_knock_back):
+        """
         function that executes cell getting knock_back
         when player attacks cell
         """
@@ -122,8 +122,8 @@ class K_Battle(K_Act):
             self.show_comb = True
             cell.pos.x += combo_knock_back
             cell.hitCell = True
-        
-                
+
+
     def player_hit_cell_xl(self, cell):
         """
         function that checks for collision between player
@@ -134,34 +134,18 @@ class K_Battle(K_Act):
                 self.player_attack(cell, -2, -50)
         if cell.direction == 1:
             if self.pos_a.x <= (cell.pos.x + cell.rect.width) - 20:
-                if self.atk_comb < 2:
-                    self.show_comb = True
-                    cell.pos.x -= 2
-                    cell.hitCell = True
-                if self.atk_comb >= 2 and self.frame_atk == (self.atk_comb * 7) - 1:
-                    self.show_comb = True
-                    cell.pos.x -= 25
-                    cell.hitCell = True
-                    
+                self.player_attack(cell, -2, -25)
+
     def player_hit_cell_xr(self, cell):
         """
         function that checks for collision between player
         facing right and cell when player is attacking
         """
         if cell.direction == 1:
-            if self.pos_a.x + self.rect_a.width - 40 >= cell.pos.x:
-                if self.atk_comb < 2:
-                    self.show_comb = True
-                    cell.pos.x += 2
-                    cell.hitCell = True
-                if self.atk_comb >= 2 and self.frame_atk == (self.atk_comb * 7) - 1:
-                    self.show_comb = True
-                    cell.pos.x += 50
-                    cell.hitCell = True
-        #if cell.direction == 0:
-        #    if self.pos.x + 80 >= (cell.pos.x + cell.rect.width): 
-
-        
+            self.player_attack(cell, 2, 50)
+        if cell.direction == 0:
+            if self.pos.x + 80 >= (cell.pos.x + cell.rect.width):
+                pass
 
     def check_dir_x(self, cell):
         """
@@ -178,8 +162,6 @@ class K_Battle(K_Act):
                 self.cell_hit_player_xl(cell)
             else:
                 self.player_hit_cell_xl(cell)
-                            
-        
 
 
 

@@ -8,14 +8,15 @@ import random
 from spritesheet import SpriteSheet
 
 NumCells = 3
+black = (0, 0, 0)
 
 class COVID19(pygame.sprite.Sprite):
     """COVID19 Class """
     def __init__(self, x, y):
         """ initialize COVID19 Cell """
         super().__init__()
-        sprite_sheet = SpriteSheet("images/C19_rdy.png")
-        sprite_sheet_dmg_cut = SpriteSheet("images/C19_dmg_cut.png")
+        sprite_sheet = SpriteSheet("images/C19_rdy.png", black)
+        sprite_sheet_dmg_cut = SpriteSheet("images/C19_dmg_cut.png", black)
         ss = sprite_sheet.sprite_sheet
         ss_dmg_cut = sprite_sheet_dmg_cut.sprite_sheet
 

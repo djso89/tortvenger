@@ -13,8 +13,8 @@ class Kuppa(pygame.sprite.Sprite):
 
     def loadimages(self):
         """ load all the kuppa action frames """
-        sprite_sheet = SpriteSheet("images/krdy.png")
-        sprite_sheetjmp = SpriteSheet("images/kjmp.png")
+        sprite_sheet = SpriteSheet("images/krdy.png", (0, 0, 0))
+        sprite_sheetjmp = SpriteSheet("images/kjmp.png", (0, 0, 0))
 
         ss = sprite_sheet.sprite_sheet
         ss_jmp = sprite_sheetjmp.sprite_sheet
