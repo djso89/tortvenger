@@ -78,7 +78,7 @@ class COVID19(pygame.sprite.Sprite):
         """Make the cell move by itself """
         if self.pos.x <= 0:
             self.direction = 0
-        elif self.pos.x >= (WIN_W - self.image.get_width()):
+        elif self.pos.x >= 800:#WIN_W - self.image.get_width(): # (800):#
             self.direction = 1
 
         if not self.hitCell:

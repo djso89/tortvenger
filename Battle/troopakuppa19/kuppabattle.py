@@ -17,9 +17,8 @@ class K_Battle(K_Act):
                     self.rect.left = block.rect.right
                 else:
                     self.rect.right = block.rect.left
-            if self.vel.x < 0:
+            if self.vel.x < 0: #moving left
                 if self.gotHit:
-                    print("here")
                     self.rect.right = block.rect.left
                 else:
                     self.rect.left = block.rect.right
@@ -104,12 +103,26 @@ class K_Battle(K_Act):
         """
         if cell.direction == 1:
             if (self.pos.x + self.rect.width - 80) >= cell.pos.x:
-                print('here')
                 self.pos.x -= 200
                 self.gotHit = True
         if cell.direction == 0:
             if self.pos.x + 80 >= (cell.pos.x + cell.rect.width):
                 self.pos.x += 100
+                
+    def player_attack(self, cell,knock_back, combo_knock_back):
+        """ 
+        function that executes cell getting knock_back
+        when player attacks cell
+        """
+        if self.atk_comb < 2:
+            self.show_comb = True
+            cell.pos.x += knock_back
+            cell.hitCell = True
+        if self.atk_comb >= 2 and self.frame_atk == (self.atk_comb * 7) - 1:
+            self.show_comb = True
+            cell.pos.x += combo_knock_back
+            cell.hitCell = True
+        
                 
     def player_hit_cell_xl(self, cell):
         """
@@ -118,14 +131,7 @@ class K_Battle(K_Act):
         """
         if cell.direction == 0:
             if self.pos_a.x <= (cell.pos.x + cell.rect.width) - 40:
-                if self.atk_comb < 2:
-                    self.show_comb = True
-                    cell.pos.x -= 2
-                    cell.hitCell = True
-                if self.atk_comb >= 2 and self.frame_atk == (self.atk_comb * 7) - 1:
-                    self.show_comb = True
-                    cell.pos.x -= 50
-                    cell.hitCell = True
+                self.player_attack(cell, -2, -50)
         if cell.direction == 1:
             if self.pos_a.x <= (cell.pos.x + cell.rect.width) - 20:
                 if self.atk_comb < 2:
@@ -151,7 +157,9 @@ class K_Battle(K_Act):
                 if self.atk_comb >= 2 and self.frame_atk == (self.atk_comb * 7) - 1:
                     self.show_comb = True
                     cell.pos.x += 50
-                    cell.hitCell = True        
+                    cell.hitCell = True
+        #if cell.direction == 0:
+        #    if self.pos.x + 80 >= (cell.pos.x + cell.rect.width): 
 
         
 

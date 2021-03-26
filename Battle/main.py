@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from game import *
+from troopakuppa19.kuppagame import *
 
 
 if __name__ == '__main__':
