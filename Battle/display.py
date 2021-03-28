@@ -6,7 +6,7 @@ vec = pygame.math.Vector2
 
 setting = Settings()
 
-ACC = 0.5
+ACC = 0.6
 FRIC = -0.12
 FPS = 60
 
