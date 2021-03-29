@@ -126,7 +126,7 @@ class Game:
         P1.render_a()
         # show combo
         if P1.show_comb:
-            if self.cnt_show_comb >= 10:
+            if self.cnt_show_comb >= 20:
                 P1.show_comb = False
                 self.cnt_show_comb = 0
             KuppaCombo.update_combo(P1.atk_comb)
