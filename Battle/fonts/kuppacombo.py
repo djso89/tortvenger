@@ -39,10 +39,10 @@ class K_Comb(pygame.sprite.Sprite):
         self.ComboTxt = Borderline_Txt(text, self.ComboFont, self.Txtclr, black, 4)
         # check the player frame's orientation
         if P1.orientation == 'left':
-            self.ComboRect.center = (P1.pos.x - 220, P1.pos.y - 30)
+            self.ComboRect.center = (P1.pos.x - 70, P1.pos.y - 30)
             self.ComboTxt = pygame.transform.rotate(self.ComboTxt, -45)    
         if P1.orientation == 'right':
-            self.ComboRect.center = (P1.pos.x + 220, P1.pos.y - 30)
+            self.ComboRect.center = (P1.pos.x + 70, P1.pos.y - 30)
             self.ComboTxt = pygame.transform.rotate(self.ComboTxt, 45)
         
 

@@ -7,7 +7,7 @@ from stage import *
 import random
 from spritesheet import SpriteSheet
 
-NumCells = 3
+NumCells = 10
 black = (0, 0, 0)
 
 class COVID19(pygame.sprite.Sprite):
@@ -108,14 +108,14 @@ class COVID19(pygame.sprite.Sprite):
 
 Cells = pygame.sprite.Group()
 
-def cell_gen():
-    for i in range (0, NumCells, 1):
+def cell_gen(numcells):
+    for i in range (0, numcells, 1):
         x = random.randrange(0, WIN_W - 100)
         y = random.randrange(0, WIN_H - 200)
         cell = COVID19(x, y)
         Cells.add(cell)
     
-#cell_gen()
+cell_gen(NumCells)
 
 C19 = COVID19(900, 500)
 C1 = COVID19(400,300)
