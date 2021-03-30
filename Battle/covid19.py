@@ -123,7 +123,7 @@ def cell_gen(numcells):
     for i in range (0, numcells, 1):
         cp = random.choice(cell_plats.sprites())
         x = random.randint(cp.rect.left, cp.rect.right)
-        x_ext_l = random.randrange(-200, 200, 25)
+        x_ext_l = random.randrange(-200, 0, 25)
         x_ext_r = random.randrange(0, 200, 25)
         y = cp.rect.y
         cell = COVID19(x, y)
