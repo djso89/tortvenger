@@ -88,7 +88,7 @@ class COVID19(pygame.sprite.Sprite):
             self.direction = 0
         if self.pos.x <= self.start_x:
             self.direction = 0
-        if self.pos.x >= self.end_x - self.rect.width : # (800):#
+        if self.pos.x >= self.end_x - self.rect.width:
             self.direction = 1
         if self.pos.x >= WIN_W - self.rect.width:
             self.direction = 1
