@@ -60,7 +60,7 @@ class Kuppa(pygame.sprite.Sprite):
 
 
         # kinematic factors
-        self.pos = vec((800, 0))
+        self.pos = vec((0, 0))
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
 

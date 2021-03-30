@@ -37,6 +37,10 @@ class K_Battle(K_Act):
         #touch Cars
         hitC = pygame.sprite.spritecollide(self, Cars, False)
         self.touchX(hitC)
+        
+        # touch Plat
+        hitP = pygame.sprite.spritecollide(self, Plats, False)
+        self.touchX(hitP)
 
     def gotHit_reset(self):
         # reset gotHit flag
@@ -120,7 +124,7 @@ class K_Battle(K_Act):
             cell.hitCell = True
         if self.atk_comb >= 2 and self.frame_atk == (self.atk_comb * 7) - 1:
             self.show_comb = True
-            if self.atk_comb == 8:
+            if self.atk_comb == 9:
                 self.pos.x += shadow_cut_dash
             cell.pos.x += combo_knock_back
             cell.hitCell = True

@@ -75,7 +75,8 @@ class Game:
                 if event.key == pygame.K_d:
                     P1.draw_the_swrd()
                 if event.key == pygame.K_s:
-                    self.SB_toggle = not self.SB_toggle
+                    if not P1.swd_on:
+                        self.SB_toggle = True
                 if event.key == pygame.K_a:
                     self.attack_event()
                 if event.key == pygame.K_UP:
@@ -84,7 +85,7 @@ class Game:
                 if event.key == pygame.K_a:
                     self.a_key_cnt = pygame.time.get_ticks()
                 if event.key == pygame.K_s:
-                    self.SB_toggle = not self.SB_toggle
+                    self.SB_toggle = False
 
 
     def _update_screen(self):

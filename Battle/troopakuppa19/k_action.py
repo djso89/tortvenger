@@ -10,7 +10,7 @@ from troopakuppa19.kuppa import *
 black = (0, 0, 0)
 
 # number of maximum combo you can perform
-MaxCombo = 8
+MaxCombo = 3
 # show one frame per 33ms = cut_frame_period * (1000 / FPS)
 cut_frame_period = 2
 # number of frames for one cut
@@ -53,6 +53,7 @@ class K_Act(Kuppa):
         sprite_sheet_swd_cuts3 = SpriteSheet('images/k_swd_cut3.png', black)
         sprite_sheet_swd_cuts4 = SpriteSheet('images/k_swd_cut4.png', black)
         sprite_sheet_swd_cuts5 = SpriteSheet('images/k_swd_cut5.png', black)        
+        sprite_sheet_swd_cuts6 = SpriteSheet('images/k_swd_cut6.png', black)  
         sprite_sheet_swd_jmp = SpriteSheet('images/k_swd_jmp.png', black)
 
 
@@ -106,8 +107,20 @@ class K_Act(Kuppa):
             self.swd_cut_r.append(image)
             image = pygame.transform.flip(image, True, False)
             self.swd_cut_l.append(image)
-            
+        
         # combo 8
+        for i in range(0, 7, 1):
+            ss_swd_cuts6 = sprite_sheet_swd_cuts6.sprite_sheet
+            width = ss_swd_cuts6.get_width()
+            height = ss_swd_cuts6.get_height()
+            image = sprite_sheet_swd_cuts6.get_image(i * width // 7, 0, width // 7, height)
+            self.swd_cut_r.append(image)
+            image = pygame.transform.flip(image, True, False)
+            self.swd_cut_l.append(image)       
+
+
+        
+        # combo 9
         for i in range(0, 7, 1):
             ss_swd_cuts5 = sprite_sheet_swd_cuts5.sprite_sheet
             width = ss_swd_cuts5.get_width()
