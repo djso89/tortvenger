@@ -8,7 +8,7 @@ import random
 from spritesheet import SpriteSheet
 from stageobject import *
 
-NumCells = 3
+NumCells = 5
 black = (0, 0, 0)
 
 class COVID19(pygame.sprite.Sprite):
