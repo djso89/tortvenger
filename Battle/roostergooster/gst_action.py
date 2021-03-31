@@ -203,7 +203,7 @@ class GST_Act(Gooster):
             h = self.image.get_height()
             screen.blit(self.image, self.pos, (0, 0,w ,h))
 
-P1 = GST_Act()
+#P1 = GST_Act()
 
 
 

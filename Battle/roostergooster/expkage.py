@@ -42,6 +42,8 @@ class EXP_K(pygame.sprite.Sprite):
         
         self.orientation = orientation
         
+        self.hitlanded = False
+        
         
     def move(self):
         if self.orientation == 'right':
@@ -50,6 +52,9 @@ class EXP_K(pygame.sprite.Sprite):
                 self.kill()
             if self.pos.x >= WIN_W - self.rect.width:
                 self.kill()
+            if self.hitlanded:
+                self.hitlanded = False
+                self.kill()
         if self.orientation == 'left':
             self.pos.x -= self.vel.x
             if self.pos.x < 0:
@@ -57,7 +62,9 @@ class EXP_K(pygame.sprite.Sprite):
                 self.kill()
             if self.pos.x <= self.endpt_xl:
                 self.kill()
-        
+            if self.hitlanded:
+                self.hitlanded = False
+                self.kill()
         self.rect.x = self.pos.x
         self.rect.y = self.pos.y
         

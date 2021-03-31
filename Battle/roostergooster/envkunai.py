@@ -42,7 +42,7 @@ class ENV_K(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft=self.pos)
         
         self.orientation = orientation
-        
+        self.hitlanded = False
         
     def move(self):
         if self.orientation == 'right':
@@ -51,12 +51,18 @@ class ENV_K(pygame.sprite.Sprite):
                 self.kill()
             if self.pos.x >= WIN_W - self.rect.width:
                 self.kill()
+            if self.hitlanded == True:
+                self.hitlanded = False
+                self.kill()
         if self.orientation == 'left':
             self.pos.x -= self.vel.x
             if self.pos.x < 0:
                 self.pos.x = 0
                 self.kill()
             if self.pos.x <= self.endpt_xl:
+                self.kill()
+            if self.hitlanded == True:
+                self.hitlanded = False
                 self.kill()
         
         self.rect.x = self.pos.x
