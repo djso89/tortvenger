@@ -10,7 +10,7 @@ from troopakuppa19.kuppa import *
 black = (0, 0, 0)
 
 # number of maximum combo you can perform
-MaxCombo = 3
+MaxCombo = 9
 # show one frame per 33ms = cut_frame_period * (1000 / FPS)
 cut_frame_period = 2
 # number of frames for one cut

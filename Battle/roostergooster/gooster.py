@@ -92,43 +92,43 @@ class Gooster(pygame.sprite.Sprite):
             self.vel.y = -25
             self.OnGround = False
             
-    def update(self):
-        """
-        function that calculates position
-        and check collision
-        """
-        # move along the x direction
-        self.acc.x += self.vel.x * FRIC
-        self.vel.x += self.acc.x
-        self.pos.x += self.vel.x + 0.5 * self.acc.x
+    # def update(self):
+        # """
+        # function that calculates position
+        # and check collision
+        # """
+        # # move along the x direction
+        # self.acc.x += self.vel.x * FRIC
+        # self.vel.x += self.acc.x
+        # self.pos.x += self.vel.x + 0.5 * self.acc.x
 
-        #left Most boundary of stage. Block the player from
-        #moving further
-        if self.pos.x < 0:
-            self.pos.x = 0
+        # #left Most boundary of stage. Block the player from
+        # #moving further
+        # if self.pos.x < 0:
+            # self.pos.x = 0
 
-        if self.pos.x > WIN_W - self.rect.width:
-            self.pos.x = WIN_W - self.rect.width
+        # if self.pos.x > WIN_W - self.rect.width:
+            # self.pos.x = WIN_W - self.rect.width
 
-        self.rect.x = self.pos.x
-        self.collisionX()
-        #moving along the y direction
-        self.vel.y += self.acc.y
-        self.pos.y += self.vel.y + 0.5 * self.acc.y
-        # assign the y coordinate to frame's y
-        self.rect.y = self.pos.y
+        # self.rect.x = self.pos.x
+        # self.collisionX()
+        # #moving along the y direction
+        # self.vel.y += self.acc.y
+        # self.pos.y += self.vel.y + 0.5 * self.acc.y
+        # # assign the y coordinate to frame's y
+        # self.rect.y = self.pos.y
 
-        self.collisionY()
+        # self.collisionY()
         
-    def touchX(self, hits):
-        #touch hits
-        for block in hits:
-            if self.vel.x > 0: #moving right
-                self.rect.right = block.rect.left
-            if self.vel.x < 0: #moving left
-                self.rect.left = block.rect.right
-            # set the x coordinate
-            self.pos.x = self.rect.x
+    # def touchX(self, hits):
+        # #touch hits
+        # for block in hits:
+            # if self.vel.x > 0: #moving right
+                # self.rect.right = block.rect.left
+            # if self.vel.x < 0: #moving left
+                # self.rect.left = block.rect.right
+            # # set the x coordinate
+            # self.pos.x = self.rect.x
             
     # gooster touching the stage objects
     def touchXR(self, hits):
@@ -171,18 +171,7 @@ class Gooster(pygame.sprite.Sprite):
             self.pos.y = self.rect.y
 
 
-    def collisionX(self):
-        """check the collision in X direction """
-        # touch bricks
-        hitB = pygame.sprite.spritecollide(self, Bricks, False)
-        self.touchX(hitB)
 
-        #touch Cars
-        hitC = pygame.sprite.spritecollide(self, Cars, False)
-        self.touchX(hitC)
-        
-        hitP = pygame.sprite.spritecollide(self, Plats, False)
-        self.touchX(hitP)
 
     def collisionY(self):
 

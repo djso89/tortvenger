@@ -8,7 +8,7 @@ import random
 from spritesheet import SpriteSheet
 from stageobject import *
 
-NumCells = 10
+NumCells = 3
 black = (0, 0, 0)
 
 class COVID19(pygame.sprite.Sprite):
@@ -18,8 +18,13 @@ class COVID19(pygame.sprite.Sprite):
         super().__init__()
         sprite_sheet = SpriteSheet("images/C19_rdy.png", black)
         sprite_sheet_dmg_cut = SpriteSheet("images/C19_dmg_cut.png", black)
+        sprite_sheet_dmg_envk = SpriteSheet("images/C19_dmg_envk.png", black)
+        sprite_sheet_dmg_expk = SpriteSheet("images/C19_dmg_expk.png", black)
+        
         ss = sprite_sheet.sprite_sheet
         ss_dmg_cut = sprite_sheet_dmg_cut.sprite_sheet
+        ss_dmg_envk = sprite_sheet_dmg_envk.sprite_sheet
+        ss_dmg_expk = sprite_sheet_dmg_expk.sprite_sheet
 
         # frame counter
         self.cnt = 0
@@ -27,7 +32,10 @@ class COVID19(pygame.sprite.Sprite):
         # action frames
         self.ready = []
         self.dmg_cut = []
-
+        self.dmg_envk = []
+        self.dmg_expk = []
+        
+        
         #load all the ready images
         for i in range (0, 6, 1):
             width = ss_dmg_cut.get_width()
@@ -35,6 +43,21 @@ class COVID19(pygame.sprite.Sprite):
             image = sprite_sheet_dmg_cut.get_image((width / 6) * i, 0,
                                                    (width / 6), height)
             self.dmg_cut.append(image)
+
+        for i in range (0, 6, 1):
+            width = ss_dmg_envk.get_width()
+            height = ss_dmg_envk.get_height()
+            image = sprite_sheet_dmg_envk.get_image((width / 6) * i, 0,
+                                                   (width / 6), height)
+            self.dmg_envk.append(image)
+            
+            
+        for i in range (0, 6, 1):
+            width = ss_dmg_expk.get_width()
+            height = ss_dmg_expk.get_height()
+            image = sprite_sheet_dmg_expk.get_image((width / 6) * i, 0,
+                                                   (width / 6), height)
+            self.dmg_expk.append(image)    
 
         for i in range (0, 14, 1):
             width = ss.get_width()
@@ -61,6 +84,8 @@ class COVID19(pygame.sprite.Sprite):
 
         # wait flag when cell get hit with player attack
         self.hitCell = False
+        self.hitCell_envk = False
+        self.hitCell_expk = False
         self.cnt_hc = 0
         
     def set_range(self, start_x, end_x):
@@ -70,17 +95,42 @@ class COVID19(pygame.sprite.Sprite):
     def place_cell(self, x, y):
         self.pos.x = x
         self.pos.y = y
+        
+    def ani_dmg_cut(self):
+        period = 9    
+        if self.cnt_hc >= period * (len(self.dmg_cut) - 1) :
+            self.cnt_hc = 0
+            self.hitCell = False
+        else:
+            self.image = self.dmg_cut[self.cnt_hc // period]
+            self.cnt_hc += 1
+            
+    def ani_dmg_envk(self):
+        period = 9
+        if self.cnt_hc >= period * (len(self.dmg_envk) - 1):
+            self.cnt_hc = 0
+            self.hitCell_envk = False
+        else:
+            self.image = self.dmg_envk[self.cnt_hc // period]
+            self.cnt_hc += 1
+
+    def ani_dmg_expk(self):
+        period = 9
+        if self.cnt_hc >= period * (len(self.dmg_expk) - 1):
+            self.cnt_hc = 0
+            self.hitCell_expk = False
+        else:
+            self.image = self.dmg_expk[self.cnt_hc // period]
+            self.cnt_hc += 1
+
 
     def pause(self):
-        period = 9
         if self.hitCell:
-            if self.cnt_hc >= period * (len(self.dmg_cut) - 1) :
-                self.cnt_hc = 0
-                self.hitCell = False
-            else:
-                self.image = self.dmg_cut[self.cnt_hc // period]
-                self.cnt_hc += 1
-                
+            self.ani_dmg_cut()
+        if self.hitCell_envk:
+            self.ani_dmg_envk()
+        if self.hitCell_expk:
+            self.ani_dmg_expk()
 
     def move(self):
         """Make the cell move by itself """
@@ -88,12 +138,12 @@ class COVID19(pygame.sprite.Sprite):
             self.direction = 0
         if self.pos.x <= self.start_x:
             self.direction = 0
-        if self.pos.x >= self.end_x - self.rect.width:
+        if self.pos.x >= self.end_x - self.rect.width : # (800):#
             self.direction = 1
         if self.pos.x >= WIN_W - self.rect.width:
             self.direction = 1
 
-        if not self.hitCell:
+        if not (self.hitCell or self.hitCell_envk or self.hitCell_expk):
             if self.direction == 0:
                 self.pos.x += self.vel.x
             if self.direction == 1:
@@ -123,8 +173,8 @@ def cell_gen(numcells):
     for i in range (0, numcells, 1):
         cp = random.choice(cell_plats.sprites())
         x = random.randint(cp.rect.left, cp.rect.right)
-        x_ext_l = random.randrange(-200, 0, 25)
-        x_ext_r = random.randrange(0, 200, 25)
+        x_ext_l = random.randrange(-200, 200, 25)
+        x_ext_r = random.randrange(100, 200, 25)
         y = cp.rect.y
         cell = COVID19(x, y)
         cell.place_cell(x, y - cell.image.get_height())

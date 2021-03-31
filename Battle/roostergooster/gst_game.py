@@ -2,7 +2,7 @@
 import sys
 import pygame
 from display import *
-from roostergooster.gst_action import *
+from roostergooster.gst_battle import *
 from roostergooster.envkunai import *
 from roostergooster.expkage import *
 
@@ -65,7 +65,7 @@ class Game:
                     P1.go_exp_k = True
                     # P1.draw_the_swrd()
                 if event.key == pygame.K_a:
-                     self.attack_event()
+                    self.attack_event()
                 if event.key == pygame.K_UP:
                     P1.jump()
             if (event.type == pygame.KEYUP):

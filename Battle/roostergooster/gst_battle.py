@@ -1,8 +1,11 @@
 import pygame
 from covid19 import Cells
 from roostergooster.gst_action import *
+from roostergooster.expkage import expk_bullets
+from roostergooster.envkunai import envk_bullets
 
-class GST_Battle(Gooster):
+
+class GST_Battle(GST_Act):
     def __init__(self):
         super().__init__()
         self.gotHit = False
@@ -37,6 +40,9 @@ class GST_Battle(Gooster):
         #touch Cars
         hitC = pygame.sprite.spritecollide(self, Cars, False)
         self.touchX(hitC)
+        
+        hitP = pygame.sprite.spritecollide(self, Plats, False)
+        self.touchX(hitP)
 
     def gotHit_reset(self):
         # reset gotHit flag
@@ -54,7 +60,8 @@ class GST_Battle(Gooster):
         self.pos.x += self.vel.x + 0.5 * self.acc.x
 
         self.touch_cell_X()
-
+        self.envk_hit_cell()
+        self.expk_hit_cell()
         # routine when player didn't touch cells
         #left Most boundary of stage. Block the player from
         #moving further
@@ -89,11 +96,11 @@ class GST_Battle(Gooster):
         player facing left and cell when player is not attacking
         """
         if cell.direction == 0:
-            if self.pos.x + 80  <= (cell.pos.x + cell.rect.width):
+            if self.pos.x  <= (cell.pos.x + cell.rect.width) - 20:
                 self.pos.x += 200
                 self.gotHit = True
         if cell.direction == 1:
-            if cell.pos.x >= (self.pos.x + self.rect.width) - 80:
+            if cell.pos.x >= (self.pos.x + self.rect.width) - 20:
                 self.pos.x -= 100
 
     def cell_hit_player_xr(self, cell):
@@ -102,80 +109,61 @@ class GST_Battle(Gooster):
         facing right and cell when player is not attacking
         """
         if cell.direction == 1:
-            if (self.pos.x + self.rect.width - 80) >= cell.pos.x:
+            if (self.pos.x + self.rect.width - 20) >= cell.pos.x:
                 self.pos.x -= 200
                 self.gotHit = True
         if cell.direction == 0:
-            if self.pos.x + 80 >= (cell.pos.x + cell.rect.width):
+            if self.pos.x + 20 >= (cell.pos.x + cell.rect.width):
                 self.pos.x += 100
                 
-    def player_attack(self, cell,knock_back, combo_knock_back):
-        """ 
-        function that executes cell getting knock_back
-        when player attacks cell
-        """
-        if self.atk_comb < 2:
-            self.show_comb = True
-            cell.pos.x += knock_back
-            cell.hitCell = True
-        if self.atk_comb >= 2 and self.frame_atk == (self.atk_comb * 7) - 1:
-            self.show_comb = True
-            cell.pos.x += combo_knock_back
-            cell.hitCell = True
-        
                 
-    def player_hit_cell_xl(self, cell):
+    def envk_hit_cell(self):
         """
-        function that checks for collision between player
-        facing left and cell when player is attacking
+        function that checks collision between
+        envelope kunai bullets and cells
         """
-        if cell.direction == 0:
-            if self.pos_a.x <= (cell.pos.x + cell.rect.width) - 40:
-                self.player_attack(cell, -2, -50)
-        if cell.direction == 1:
-            if self.pos_a.x <= (cell.pos.x + cell.rect.width) - 20:
-                if self.atk_comb < 2:
-                    self.show_comb = True
-                    cell.pos.x -= 2
-                    cell.hitCell = True
-                if self.atk_comb >= 2 and self.frame_atk == (self.atk_comb * 7) - 1:
-                    self.show_comb = True
-                    cell.pos.x -= 25
-                    cell.hitCell = True
-                    
-    def player_hit_cell_xr(self, cell):
-        """
-        function that checks for collision between player
-        facing right and cell when player is attacking
-        """
-        if cell.direction == 1:
-            if self.pos_a.x + self.rect_a.width - 40 >= cell.pos.x:
-                if self.atk_comb < 2:
-                    self.show_comb = True
-                    cell.pos.x += 2
-                    cell.hitCell = True
-                if self.atk_comb >= 2 and self.frame_atk == (self.atk_comb * 7) - 1:
-                    self.show_comb = True
-                    cell.pos.x += 50
-                    cell.hitCell = True
-        #if cell.direction == 0:
-        #    if self.pos.x + 80 >= (cell.pos.x + cell.rect.width): 
+        for bullet in envk_bullets:
+            hitCells = pygame.sprite.spritecollide(bullet, Cells, False)
+            for cell in hitCells:
+                bullet.hitlanded = True
+                cell.hitCell_envk = True
+                if bullet.orientation == 'right' and cell.direction == 0:
+                    cell.pos.x += 20
+                if bullet.orientation == 'right' and cell.direction == 1:
+                    cell.pos.x += 20
+                if bullet.orientation == 'left' and cell.direction == 0:
+                    cell.pos.x -= 20
+                if bullet.orientation == 'left' and cell.direction == 1:
+                    cell.pos.x -= 20
+                
+    def expk_hit_cell(self):
+        for bullet in expk_bullets:
+            hitCells = pygame.sprite.spritecollide(bullet, Cells, False)
+            for cell in hitCells:
+                bullet.hitlanded = True
+                cell.hitCell_expk = True
+                if bullet.orientation == 'right' and cell.direction == 0:
+                    cell.pos.x += 200
+                if bullet.orientation == 'right' and cell.direction == 1:
+                    cell.pos.x += 200
+                if bullet.orientation == 'left' and cell.direction == 0:
+                    cell.pos.x -= 200
+                if bullet.orientation == 'left' and cell.direction == 1:
+                    cell.pos.x -= 200
 
-        
 
     def check_dir_x(self, cell):
         """
         function that checks for player's direction
         and cell's direction for collision
         """
-        if self.vel.x > 0
-            if not self.ATK:
-                self.cell_hit_player_xr(cell)
+        if self.vel.x > 0:
+            self.cell_hit_player_xr(cell)
         if self.vel.x < 0:
-            if not self.ATK:
-                self.cell_hit_player_xl(cell)
+            self.cell_hit_player_xl(cell)
+            
                             
         
 
-
+P1 = GST_Battle()
 
