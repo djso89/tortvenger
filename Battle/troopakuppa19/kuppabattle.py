@@ -124,7 +124,7 @@ class K_Battle(K_Act):
             cell.hitCell = True
         if self.atk_comb >= 2 and self.frame_atk == (self.atk_comb * 7) - 1:
             self.show_comb = True
-            if self.atk_comb == 9:
+            if self.atk_comb == 10:
                 self.pos.x += shadow_cut_dash
             cell.pos.x += combo_knock_back
             cell.hitCell = True
