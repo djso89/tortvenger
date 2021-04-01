@@ -98,27 +98,15 @@ class K_Act(Kuppa):
             image = pygame.transform.flip(image, True, False)
             self.swd_cut_l.append(image)
             
-        # combo 7
-        for i in range(0, 7, 1):
+        # combo 7 - 8
+        for i in range(0, 14, 1):
             ss_swd_cuts4 = sprite_sheet_swd_cuts4.sprite_sheet
             width = ss_swd_cuts4.get_width()
             height = ss_swd_cuts4.get_height()
-            image = sprite_sheet_swd_cuts4.get_image(i * width // 7, 0, width // 7, height)
+            image = sprite_sheet_swd_cuts4.get_image(i * width // 14, 0, width // 14, height)
             self.swd_cut_r.append(image)
             image = pygame.transform.flip(image, True, False)
             self.swd_cut_l.append(image)
-        
-        # combo 8
-        for i in range(0, 7, 1):
-            ss_swd_cuts6 = sprite_sheet_swd_cuts6.sprite_sheet
-            width = ss_swd_cuts6.get_width()
-            height = ss_swd_cuts6.get_height()
-            image = sprite_sheet_swd_cuts6.get_image(i * width // 7, 0, width // 7, height)
-            self.swd_cut_r.append(image)
-            image = pygame.transform.flip(image, True, False)
-            self.swd_cut_l.append(image)       
-
-
         
         # combo 9
         for i in range(0, 7, 1):
@@ -126,6 +114,18 @@ class K_Act(Kuppa):
             width = ss_swd_cuts5.get_width()
             height = ss_swd_cuts5.get_height()
             image = sprite_sheet_swd_cuts5.get_image(i * width // 7, 0, width // 7, height)
+            self.swd_cut_r.append(image)
+            image = pygame.transform.flip(image, True, False)
+            self.swd_cut_l.append(image)       
+
+
+        
+        # combo 10
+        for i in range(0, 7, 1):
+            ss_swd_cuts6 = sprite_sheet_swd_cuts5.sprite_sheet
+            width = ss_swd_cuts6.get_width()
+            height = ss_swd_cuts6.get_height()
+            image = sprite_sheet_swd_cuts6.get_image(i * width // 7, 0, width // 7, height)
             self.swd_cut_r.append(image)
             image = pygame.transform.flip(image, True, False)
             self.swd_cut_l.append(image)
