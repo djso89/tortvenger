@@ -10,7 +10,7 @@ from troopakuppa19.kuppa import *
 black = (0, 0, 0)
 
 # number of maximum combo you can perform
-MaxCombo = 10
+MaxCombo = 11
 # show one frame per 33ms = cut_frame_period * (1000 / FPS)
 cut_frame_period = 2
 # number of frames for one cut
@@ -52,9 +52,9 @@ class K_Act(Kuppa):
         sprite_sheet_swd_cuts2 = SpriteSheet('images/k_swd_cut2.png', black)
         sprite_sheet_swd_cuts3 = SpriteSheet('images/k_swd_cut3.png', black)
         sprite_sheet_swd_cuts4 = SpriteSheet('images/k_swd_cut4.png', black)
-        sprite_sheet_swd_cuts5 = SpriteSheet('images/k_swd_cut5.png', black)        
+        sprite_sheet_swd_cuts5 = SpriteSheet('images/k_swd_cut5.png', black)
         sprite_sheet_swd_cuts6 = SpriteSheet('images/k_swd_cut6.png', black)
-        sprite_sheet_swd_cuts7 = SpriteSheet('images/k_swd_cut7.png', black)        
+        sprite_sheet_swd_cuts7 = SpriteSheet('images/k_swd_cut7.png', black)
         sprite_sheet_swd_jmp = SpriteSheet('images/k_swd_jmp.png', black)
 
 

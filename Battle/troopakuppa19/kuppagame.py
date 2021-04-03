@@ -34,9 +34,12 @@ class Game:
         # print("you release key a for " + str(self.a_key_cnt) + "ms")
         if P1.swd_on:
             P1.ATK = True
-            if self.a_key_cnt >= cnt_h or (self.a_key_cnt <= cnt_btnM_h and self.a_key_cnt > cnt_btnM_l):
+            if self.a_key_cnt >= cnt_h:
                 P1.atk_comb = 1
                 P1.cnt_swd_cut = 0
+            elif (self.a_key_cnt <= cnt_btnM_h and self.a_key_cnt > cnt_btnM_l):
+                P1.atk_comb = 1
+                P1.btn_mash += 1
             else:
                 #check if current attack combo reached MaxCombo
                 if P1.atk_comb == MaxCombo:

@@ -54,7 +54,7 @@ Plat1.newBlock(503, 250, 233, 8, alph)
 Plats.add(Plat1)
 
 Plat2 = Block()
-Plat2.newBlock(719, 410, 500, 4, alph)
+Plat2.newBlock(145, 534, 100, 50, alph)
 
 
 

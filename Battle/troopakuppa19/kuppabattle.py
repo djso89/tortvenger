@@ -9,7 +9,7 @@ class K_Battle(K_Act):
         super().__init__()
         self.gotHit = False
         self.show_comb = False
-        self.num = 0
+        self.btn_mash = 0
 
     def touchX(self, hits):
         #touch hits
@@ -47,7 +47,7 @@ class K_Battle(K_Act):
     def gotHit_reset(self):
         # reset gotHit flag
         self.gotHit = False
-
+        self.gotHitBack = False
 
     def update(self):
         """
@@ -84,7 +84,6 @@ class K_Battle(K_Act):
     def touch_cell_X(self):
         """ detecting collision between player and cells"""
         hitCells = pygame.sprite.spritecollide(self, Cells, False)
-        self.num = 0
         for cell in hitCells:
             #print("made contact with cell")
             self.check_dir_x(cell)
@@ -100,12 +99,13 @@ class K_Battle(K_Act):
                 self.pos.x += 200
                 self.gotHit = True
         if cell.direction == 1:  # cell direction left
-            if self.pos.x < cell.pos.x:
+            if self.pos.x < cell.pos.x: # the cell is behind the player
                 if cell.pos.x <= (self.pos.x + self.rect.width) - 80:
                     self.pos.x -= 100
-            else:
+            else: # the cell is front of the player
                 if self.pos.x <= (cell.pos.x + cell.rect.width - 80):
-                    self.pos.x += 100
+                    self.pos.x += 100 # bounce to right
+                    self.gotHit = True
 
 
     def cell_hit_player_xr(self, cell):
@@ -124,17 +124,27 @@ class K_Battle(K_Act):
             else:
                 if self.pos.x + self.rect.width >= cell.pos.x + 80:
                     self.pos.x -= 100
+                    self.gotHit = True
 
-    def player_attack(self, cell,knock_back, combo_knock_back, shadow_cut_dash):
+    def player_attack(self, cell, knock_back, combo_knock_back, shadow_cut_dash):
         """
         function that executes cell getting knock_back
         when player attacks cell
         """
+        cut_finish = cut_frame_num * cut_frame_period - 1
         if self.atk_comb < 2:
             self.show_comb = True
-            cell.pos.x += knock_back
+            print("button mash number: {}".format(self.btn_mash))
+            if (self.btn_mash >= 10):
+                print("here")
+                self.pos.x -= 50 * knock_back
+                self.gotHit = True
+                self.btn_mash = 0
+            else:
+                cell.pos.x += knock_back
             cell.hitCell = True
-        if self.atk_comb >= 2 and self.frame_atk == (self.atk_comb * 7) - 1:
+        if self.atk_comb >= 2 and self.cnt_swd_cut == cut_finish:
+            self.btn_mash = 0
             self.show_comb = True
             if self.atk_comb == 11:
                 self.pos.x += shadow_cut_dash
@@ -153,7 +163,7 @@ class K_Battle(K_Act):
         if cell.direction == 1:
             if self.pos_a.x <= (cell.pos.x + cell.rect.width) - 20:
                 if self.pos.x > cell.pos.x:
-                    self.player_attack(cell, -2, -50, -500)
+                    self.player_attack(cell, -2, -50, -400)
                 else:
                     if self.atk_comb == 4 or self.atk_comb == 10:
                         if self.cnt_swd_cut == cut_finish:

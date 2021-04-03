@@ -50,14 +50,14 @@ class COVID19(pygame.sprite.Sprite):
             image = sprite_sheet_dmg_envk.get_image((width / 6) * i, 0,
                                                    (width / 6), height)
             self.dmg_envk.append(image)
-            
-            
+
+
         for i in range (0, 6, 1):
             width = ss_dmg_expk.get_width()
             height = ss_dmg_expk.get_height()
             image = sprite_sheet_dmg_expk.get_image((width / 6) * i, 0,
                                                    (width / 6), height)
-            self.dmg_expk.append(image)    
+            self.dmg_expk.append(image)
 
         for i in range (0, 14, 1):
             width = ss.get_width()
@@ -87,7 +87,7 @@ class COVID19(pygame.sprite.Sprite):
         self.hitCell_envk = False
         self.hitCell_expk = False
         self.cnt_hc = 0
-        
+
     def set_range(self, start_x, end_x):
         self.start_x = start_x
         self.end_x = end_x
@@ -95,16 +95,16 @@ class COVID19(pygame.sprite.Sprite):
     def place_cell(self, x, y):
         self.pos.x = x
         self.pos.y = y
-        
+
     def ani_dmg_cut(self):
-        period = 9    
+        period = 9
         if self.cnt_hc >= period * (len(self.dmg_cut) - 1) :
             self.cnt_hc = 0
             self.hitCell = False
         else:
             self.image = self.dmg_cut[self.cnt_hc // period]
             self.cnt_hc += 1
-            
+
     def ani_dmg_envk(self):
         period = 9
         if self.cnt_hc >= period * (len(self.dmg_envk) - 1):
@@ -181,11 +181,11 @@ def cell_gen(numcells):
         cell.set_range(cp.rect.left + x_ext_l, cp.rect.right + x_ext_r)
         Cells.add(cell)
 
-#cell_gen(NumCells)
+cell_gen(NumCells)
 
 C19 = COVID19(900, 500)
-C19.set_range(200, 900)
+C19.set_range(300, 1200)
 C1 = COVID19(400,300)
-C1.set_range(400, 1000)
-Cells.add(C19)
+C1.set_range(500, 1200)
+#Cells.add(C19)
 #Cells.add(C1)
