@@ -78,7 +78,7 @@ class K_Act(Kuppa):
             self.swd_cut_r.append(image)
             image = pygame.transform.flip(image, True, False)
             self.swd_cut_l.append(image)
-            
+
         # combo 3 - 4
         for i in range(0, 14, 1):
             ss_swd_cuts2 = sprite_sheet_swd_cuts2.sprite_sheet
@@ -88,7 +88,7 @@ class K_Act(Kuppa):
             self.swd_cut_r.append(image)
             image = pygame.transform.flip(image, True, False)
             self.swd_cut_l.append(image)
-        
+
         # combo 5 - 6
         for i in range(0, 14, 1):
             ss_swd_cuts3 = sprite_sheet_swd_cuts3.sprite_sheet
@@ -98,7 +98,7 @@ class K_Act(Kuppa):
             self.swd_cut_r.append(image)
             image = pygame.transform.flip(image, True, False)
             self.swd_cut_l.append(image)
-            
+
         # combo 7 - 8
         for i in range(0, 14, 1):
             ss_swd_cuts4 = sprite_sheet_swd_cuts4.sprite_sheet
@@ -108,7 +108,7 @@ class K_Act(Kuppa):
             self.swd_cut_r.append(image)
             image = pygame.transform.flip(image, True, False)
             self.swd_cut_l.append(image)
-        
+
         # combo 9
         for i in range(0, 7, 1):
             ss_swd_cuts5 = sprite_sheet_swd_cuts5.sprite_sheet
@@ -117,10 +117,8 @@ class K_Act(Kuppa):
             image = sprite_sheet_swd_cuts5.get_image(i * width // 7, 0, width // 7, height)
             self.swd_cut_r.append(image)
             image = pygame.transform.flip(image, True, False)
-            self.swd_cut_l.append(image)       
+            self.swd_cut_l.append(image)
 
-
-        
         # combo 10
         for i in range(0, 7, 1):
             ss_swd_cuts6 = sprite_sheet_swd_cuts6.sprite_sheet
@@ -130,7 +128,7 @@ class K_Act(Kuppa):
             self.swd_cut_r.append(image)
             image = pygame.transform.flip(image, True, False)
             self.swd_cut_l.append(image)
-            
+
         # combo 11
         for i in range(0, 7, 1):
             ss_swd_cuts7 = sprite_sheet_swd_cuts7.sprite_sheet
@@ -192,9 +190,8 @@ class K_Act(Kuppa):
         self.image_a = Surface((self.rect_a.width, self.rect_a.height), flags = SRCALPHA)
         self.image_a.fill((0, 0, 0, 0))
 
-
     def ani_cut(self):
-        """ animate sword cutting combo 1 ~ 2 """
+        """ animate sword cutting combo 1 ~ 2"""
         # one cut length
         cut_period = cut_frame_period * ((cut_frame_num))
         """Combo Routine"""
@@ -212,8 +209,6 @@ class K_Act(Kuppa):
                 self.image_a = self.swd_cut_r[self.frame_atk]
             if (self.orientation == 'left'):
                 self.image_a = self.swd_cut_l[self.frame_atk]
-            # print("cut frame index: {} combo: {}".format(self.frame_atk, self.atk_comb))
-            # print("image rect is {}".format(self.rect_a))
             self.cnt_swd_cut += 1
 
 
@@ -292,7 +287,6 @@ class K_Act(Kuppa):
                 self.image_a = self.swd_jmp_l[self.cnt_swd_jmp // period]
         else:
             self.cnt_swd_jmp = 0
-
 
 
     def ani_adj_offset(self, x_off, y_off):

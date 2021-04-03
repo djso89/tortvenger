@@ -8,7 +8,7 @@ import random
 from spritesheet import SpriteSheet
 from stageobject import *
 
-NumCells = 5
+NumCells = 7
 black = (0, 0, 0)
 
 class COVID19(pygame.sprite.Sprite):
@@ -20,7 +20,7 @@ class COVID19(pygame.sprite.Sprite):
         sprite_sheet_dmg_cut = SpriteSheet("images/C19_dmg_cut.png", black)
         sprite_sheet_dmg_envk = SpriteSheet("images/C19_dmg_envk.png", black)
         sprite_sheet_dmg_expk = SpriteSheet("images/C19_dmg_expk.png", black)
-        
+
         ss = sprite_sheet.sprite_sheet
         ss_dmg_cut = sprite_sheet_dmg_cut.sprite_sheet
         ss_dmg_envk = sprite_sheet_dmg_envk.sprite_sheet
@@ -75,7 +75,7 @@ class COVID19(pygame.sprite.Sprite):
         # image frame
         self.image = self.ready[0]
         self.rect = self.image.get_rect(topleft=self.pos)
-        self.vel.x = random.randint(1, 10) / 2 
+        self.vel.x = random.randint(1, 10) / 2
 
         # action flags
         # 0 - go right
@@ -180,10 +180,12 @@ def cell_gen(numcells):
         cell.place_cell(x, y - cell.image.get_height())
         cell.set_range(cp.rect.left + x_ext_l, cp.rect.right + x_ext_r)
         Cells.add(cell)
-    
-cell_gen(NumCells)
+
+#cell_gen(NumCells)
 
 C19 = COVID19(900, 500)
+C19.set_range(200, 900)
 C1 = COVID19(400,300)
-#Cells.add(C19)
+C1.set_range(400, 1000)
+Cells.add(C19)
 #Cells.add(C1)

@@ -2,12 +2,14 @@ import pygame
 from troopakuppa19.k_action import *
 from covid19 import Cells
 
+
+
 class K_Battle(K_Act):
     def __init__(self):
         super().__init__()
         self.gotHit = False
         self.show_comb = False
-
+        self.num = 0
 
     def touchX(self, hits):
         #touch hits
@@ -37,7 +39,7 @@ class K_Battle(K_Act):
         #touch Cars
         hitC = pygame.sprite.spritecollide(self, Cars, False)
         self.touchX(hitC)
-        
+
         # touch Plat
         hitP = pygame.sprite.spritecollide(self, Plats, False)
         self.touchX(hitP)
@@ -82,23 +84,29 @@ class K_Battle(K_Act):
     def touch_cell_X(self):
         """ detecting collision between player and cells"""
         hitCells = pygame.sprite.spritecollide(self, Cells, False)
+        self.num = 0
         for cell in hitCells:
             #print("made contact with cell")
             self.check_dir_x(cell)
-        #print("---------------------------------")
-    
+        print("+++++++++++++++")
+
     def cell_hit_player_xl(self, cell):
         """
         function that checks for collision between
         player facing left and cell when player is not attacking
         """
-        if cell.direction == 0:
+        if cell.direction == 0: # cell direction right
             if self.pos.x + 80  <= (cell.pos.x + cell.rect.width):
                 self.pos.x += 200
                 self.gotHit = True
-        if cell.direction == 1:
-            if cell.pos.x >= (self.pos.x + self.rect.width) - 80:
-                self.pos.x -= 100
+        if cell.direction == 1:  # cell direction left
+            if self.pos.x < cell.pos.x:
+                if cell.pos.x <= (self.pos.x + self.rect.width) - 80:
+                    self.pos.x -= 100
+            else:
+                if self.pos.x <= (cell.pos.x + cell.rect.width - 80):
+                    self.pos.x += 100
+
 
     def cell_hit_player_xr(self, cell):
         """
@@ -110,11 +118,15 @@ class K_Battle(K_Act):
                 self.pos.x -= 200
                 self.gotHit = True
         if cell.direction == 0:
-            if self.pos.x + 80 >= (cell.pos.x + cell.rect.width):
-                self.pos.x += 100
-                
+            if self.pos.x > cell.pos.x:
+                if self.pos.x + 80 <= (cell.pos.x + cell.rect.width):
+                    self.pos.x += 100
+            else:
+                if self.pos.x + self.rect.width >= cell.pos.x + 80:
+                    self.pos.x -= 100
+
     def player_attack(self, cell,knock_back, combo_knock_back, shadow_cut_dash):
-        """ 
+        """
         function that executes cell getting knock_back
         when player attacks cell
         """
@@ -128,32 +140,56 @@ class K_Battle(K_Act):
                 self.pos.x += shadow_cut_dash
             cell.pos.x += combo_knock_back
             cell.hitCell = True
-        
-                
+
     def player_hit_cell_xl(self, cell):
         """
         function that checks for collision between player
         facing left and cell when player is attacking
         """
+        cut_finish = cut_frame_num * cut_frame_period - 1
         if cell.direction == 0:
             if self.pos_a.x <= (cell.pos.x + cell.rect.width) - 40:
                 self.player_attack(cell, -2, -50, -400)
         if cell.direction == 1:
             if self.pos_a.x <= (cell.pos.x + cell.rect.width) - 20:
-                self.player_attack(cell, -2, -50, -500)
-                    
+                if self.pos.x > cell.pos.x:
+                    self.player_attack(cell, -2, -50, -500)
+                else:
+                    if self.atk_comb == 4 or self.atk_comb == 10:
+                        if self.cnt_swd_cut == cut_finish:
+                            self.show_comb = True
+                            cell.pos.x += 100
+                            cell.hitCell = True
+                    else:
+                        self.pos.x += 400
+
+
     def player_hit_cell_xr(self, cell):
         """
         function that checks for collision between player
         facing right and cell when player is attacking
         """
+        cut_finish = cut_frame_num * cut_frame_period - 1
         if cell.direction == 1:
             if self.pos_a.x + self.rect_a.width - 40 >= cell.pos.x:
                 self.player_attack(cell, 2, 50, 400)
         if cell.direction == 0:
-            if self.pos_a.x +self.rect_a.width >= (cell.pos.x + 40): 
-                self.player_attack(cell, 2, 50, 500)
-        
+            if self.rect_a.left + self.rect_a.width >= (cell.rect.left + 40):
+                if self.pos.x < cell.pos.x:
+                    self.player_attack(cell, 2, 50, 500)
+                else:
+                    #cell do the damage so watch your back
+                    #cell knocks you back to the left
+                    if self.atk_comb == 4 or self.atk_comb == 10:
+                        if self.cnt_swd_cut == cut_finish:
+                            self.show_comb = True
+                            print("-------------------")
+                            print("cell pos x before {}".format(cell.pos.x))
+                            cell.pos.x -= 100
+                            cell.hitCell = True
+                    else:
+                        self.pos.x -= 400
+
 
     def check_dir_x(self, cell):
         """
@@ -170,8 +206,7 @@ class K_Battle(K_Act):
                 self.cell_hit_player_xl(cell)
             else:
                 self.player_hit_cell_xl(cell)
-                            
-        
+
 
 
 
