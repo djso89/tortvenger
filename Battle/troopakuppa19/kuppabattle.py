@@ -97,14 +97,17 @@ class K_Battle(K_Act):
         if cell.direction == 0: # cell direction right
             if self.pos.x + 80  <= (cell.pos.x + cell.rect.width):
                 self.pos.x += 200
+                self.cell_atk_k = True
                 self.gotHit = True
         if cell.direction == 1:  # cell direction left
             if self.pos.x < cell.pos.x: # the cell is behind the player
                 if cell.pos.x <= (self.pos.x + self.rect.width) - 80:
                     self.pos.x -= 100
+                    self.cell_atk_k = True
             else: # the cell is front of the player
                 if self.pos.x <= (cell.pos.x + cell.rect.width - 80):
                     self.pos.x += 100 # bounce to right
+                    self.cell_atk_k = True
                     self.gotHit = True
 
 
@@ -116,14 +119,17 @@ class K_Battle(K_Act):
         if cell.direction == 1:
             if (self.pos.x + self.rect.width - 80) >= cell.pos.x:
                 self.pos.x -= 200
+                self.cell_atk_k = True
                 self.gotHit = True
         if cell.direction == 0:
             if self.pos.x > cell.pos.x:
                 if self.pos.x + 80 <= (cell.pos.x + cell.rect.width):
                     self.pos.x += 100
+                    self.cell_atk_k = True
             else:
                 if self.pos.x + self.rect.width >= cell.pos.x + 80:
                     self.pos.x -= 100
+                    self.cell_atk_k = True
                     self.gotHit = True
 
     def player_attack(self, cell, knock_back, combo_knock_back, shadow_cut_dash):
@@ -134,9 +140,7 @@ class K_Battle(K_Act):
         cut_finish = cut_frame_num * cut_frame_period - 1
         if self.atk_comb < 2:
             self.show_comb = True
-            print("button mash number: {}".format(self.btn_mash))
             if (self.btn_mash >= 10):
-                print("here")
                 self.pos.x -= 50 * knock_back
                 self.gotHit = True
                 self.btn_mash = 0
@@ -171,7 +175,9 @@ class K_Battle(K_Act):
                             cell.pos.x += 100
                             cell.hitCell = True
                     else:
-                        self.pos.x += 400
+                        if not self.dmg_blinking:
+                            self.pos.x += 400
+                            self.cell_atk_k = True
 
 
     def player_hit_cell_xr(self, cell):
@@ -196,7 +202,9 @@ class K_Battle(K_Act):
                             cell.pos.x -= 100
                             cell.hitCell = True
                     else:
-                        self.pos.x -= 400
+                        if not self.dmg_blinking:
+                            self.pos.x -= 400
+                            self.cell_atk_k = True
 
 
     def check_dir_x(self, cell):
@@ -206,12 +214,14 @@ class K_Battle(K_Act):
         """
         if self.vel.x > 0:
             if not self.ATK:
-                self.cell_hit_player_xr(cell)
+                if not self.dmg_blinking:
+                    self.cell_hit_player_xr(cell)
             else:
                 self.player_hit_cell_xr(cell)
         if self.vel.x < 0:
             if not self.ATK:
-                self.cell_hit_player_xl(cell)
+                if not self.dmg_blinking:
+                    self.cell_hit_player_xl(cell)
             else:
                 self.player_hit_cell_xl(cell)
 

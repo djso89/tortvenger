@@ -184,8 +184,8 @@ def cell_gen(numcells):
 cell_gen(NumCells)
 
 C19 = COVID19(900, 500)
-C19.set_range(300, 1200)
+C19.set_range(0, 1200)
 C1 = COVID19(400,300)
-C1.set_range(500, 1200)
-#Cells.add(C19)
+C1.set_range(0, 1200)
+Cells.add(C19)
 #Cells.add(C1)

@@ -10,7 +10,7 @@ from troopakuppa19.kuppa import *
 black = (0, 0, 0)
 
 # number of maximum combo you can perform
-MaxCombo = 11
+MaxCombo = 3
 # show one frame per 33ms = cut_frame_period * (1000 / FPS)
 cut_frame_period = 2
 # number of frames for one cut
@@ -172,6 +172,8 @@ class K_Act(Kuppa):
         self.cnt_swrd_draw = 0
         self.cnt_swd_jmp = 0
         self.cnt_swd_cut = 0
+        self.cnt_got_dmg = 0
+        self.num_blinks = 0
 
         # sword cut flag and combo count
         self.ATK = False
@@ -179,11 +181,27 @@ class K_Act(Kuppa):
         self.atk_comb = 1
         self.frame_atk = 0
 
+
         # position of the Action Frames
         self.pos_a = vec((0, 0))
         self.image_a = self.swrd_draw_r[0]
         self.rect_a = self.image_a.get_rect(topleft=self.pos_a)
 
+    def ani_dmg_blink(self):
+        period = 2
+        if self.cell_atk_k:
+            if self.cnt_got_dmg >= period:
+                self.ani_turn_off()
+                self.cnt_got_dmg = 0
+                if self.num_blinks == 15:
+                    self.cell_atk_k = False
+                    self.dmg_blinking = False
+                    self.num_blinks = 0
+                else:
+                    self.num_blinks += 1
+            else:
+                self.cnt_got_dmg += 1
+                self.dmg_blinking = True
 
     def ani_turn_off(self):
         """ turn off the action frame """
@@ -252,7 +270,7 @@ class K_Act(Kuppa):
 
     def ani_swd_in(self):
         """ animate drawing back the sword """
-        period = 2
+        period = 5
         max_period = period * (len(self.swrd_draw_r) - 1)
         if (self.cnt_swrd_draw <= 0):
             self.cnt_swrd_draw = 0
@@ -318,6 +336,7 @@ class K_Act(Kuppa):
         self.ani_swd_move()
         self.ani_swd_jmp()
         self.attack()
+        self.ani_dmg_blink()
 
     def render_a(self):
         self.ani_action()

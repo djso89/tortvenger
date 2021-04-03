@@ -47,7 +47,7 @@ class Kuppa(pygame.sprite.Sprite):
         #counter for animating jumping
         self.cnt = 0
         self.cnt_swrd_draw = 0
-
+        self.cnt_dmg = 0
         # action frames
         self.ready_r = []
         self.ready_l = []
@@ -74,7 +74,28 @@ class Kuppa(pygame.sprite.Sprite):
 
         self.swd_on = False
         self.swd_drwn = False
-        
+
+        self.cell_atk_k = False
+        self.dmg_blinking = False
+        self.n_blinks = 0
+
+    def no_swd_dmg_blink(self):
+        period = 2
+        if self.cell_atk_k:
+            if self.cnt_dmg >= period:
+                self.image = Surface((self.rect.width, self.rect.height), flags = SRCALPHA)
+                self.image.fill((0, 0, 0, 0))
+                self.cnt_dmg = 0
+                if self.n_blinks == 15:
+                    self.cell_atk_k = False
+                    self.dmg_blinking = False
+                    self.n_blinks = 0
+                else:
+                    self.n_blinks += 1
+            else:
+                self.cnt_dmg += 1
+                self.dmg_blinking = True
+
     def get_rect(self):
         return self.image.get_rect()
 
@@ -185,7 +206,7 @@ class Kuppa(pygame.sprite.Sprite):
         #touch Steps
         hitSt = pygame.sprite.spritecollide(self, Steps, False)
         self.touchYUD(hitSt)
-        
+
 
     """ animation functions """
 
@@ -222,6 +243,7 @@ class Kuppa(pygame.sprite.Sprite):
         """animate the player. """
         self.ani_move()
         self.ani_jump()
+        self.no_swd_dmg_blink()
 
     def render(self):
         """ paste the player object into screen """
@@ -230,7 +252,6 @@ class Kuppa(pygame.sprite.Sprite):
         h = self.image.get_height()
         # check for action flags
         if not self.swd_drwn:
-            screen.blit(self.image, self.pos, (0, 0,w ,h))
+            screen.blit(self.image, self.pos, (0, 0, w ,h))
         # screen.blit(self.image, self.pos,
            # (0, 0, self.image.get_width(), self.image.get_height()))
-
