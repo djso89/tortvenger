@@ -88,7 +88,7 @@ class K_Battle(K_Act):
         for cell in hitCells:
             #print("made contact with cell")
             self.check_dir_x(cell)
-        print("+++++++++++++++")
+
 
     def cell_hit_player_xl(self, cell):
         """
@@ -183,8 +183,6 @@ class K_Battle(K_Act):
                     if self.atk_comb == 4 or self.atk_comb == 10:
                         if self.cnt_swd_cut == cut_finish:
                             self.show_comb = True
-                            print("-------------------")
-                            print("cell pos x before {}".format(cell.pos.x))
                             cell.pos.x -= 100
                             cell.hitCell = True
                     else:
