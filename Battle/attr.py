@@ -12,7 +12,14 @@ class Attr():
         self.dexterity = dexterity
         self.luck = luck
         self.expr = expr
-
+        
+        
+class C19_Attr(Attr):
+    def __init__(self):
+        Attr.__init__(self, 1, 36, 20, 10, 15, 15, 0)
+        self.curr_hp = self.HP
+        
+        
 class K_Attr(Attr):
     """ Kuppa's attribute class"""
     def __init__(self):
@@ -32,8 +39,16 @@ class K_Attr(Attr):
 
     def get_expr(self, expr_pts):
         self.curr_exp -= expr_pts
-
-
+        
+    def get_dmg(self, e_defen, e_luck):
+        dmg = (self.attack ** 2) / (self.attack + e_defen)
+        if self.luck < e_luck:
+            dmg_factor = random.randint(e_luck - self.luck, e_luck) / e_luck
+        else:
+            dmg_factor = 1 + (random.randint(self.luck - e_luck, self.luck) / self.luck)
+            
+        return (round((dmg * dmg_factor) / 10))
+    
     def level_up(self):
         self.LV += 1
         self.attack += random.randint(4, 8)
