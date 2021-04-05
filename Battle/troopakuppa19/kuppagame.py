@@ -94,9 +94,9 @@ class Game:
     def _update_screen(self):
         """this function updates
         objects on the screen"""
-        
-        
-        kuppainfo.curr_hp = 40
+
+
+        kuppainfo.curr_hp = 30
         # do the Player 1 routines
         self.player_stuff()
         self.show_info()
@@ -113,7 +113,7 @@ class Game:
         # draw the cells and player
         self.cell_draw()
         self.player_draw()
-        
+
         kuppainfo.show_gauge()
 
         """refresh the page per (1000/FPS) ms """
