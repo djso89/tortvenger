@@ -3,15 +3,16 @@ import pygame
 from fonts.bordertext import Borderline_Txt
 from display import screen
 from troopakuppa19.kuppabattle import P1
+from gauge_imgs import *
 
 class K_Gauge(K_Attr):
     def __init__(self):
         super().__init__()
-        self.image_pf = pygame.image.load("images/kuppa_gauge/profile_frame_1.png")
-        self.image_hp = pygame.image.load("images/kuppa_gauge/hpbar.png")
-        self.image_ki = pygame.image.load("images/kuppa_gauge/kibar.png")
-        self.image_kp = pygame.image.load("images/kuppa_gauge/kuppa_profile_1.png")
-        self.image_keh = pygame.image.load("images/kuppa_gauge/k_hp_empty_1.png")
+        self.image_pf = pygame.image.load(pf_dir)
+        self.image_hp = pygame.image.load(hp_dir).convert()
+        self.image_ki = pygame.image.load(ki_dir).convert()
+        self.image_kp = pygame.image.load(kp_dir)
+        self.image_keh = pygame.image.load(keh_dir).convert()
 
         self.surf = pygame.Surface((1000, 600), pygame.SRCALPHA, 32)
         self.surf = self.surf.convert_alpha()
@@ -19,10 +20,10 @@ class K_Gauge(K_Attr):
         self.fonth = pygame.font.Font('fonts/aileron_regular.otf', 80)
         self.fontk = pygame.font.Font('fonts/aileron_regular.otf', 80)
 
-        self.pf = pygame.Surface((453, 500), pygame.SRCALPHA, 32)
+        self.pf = pygame.Surface((453, 500)).convert()
         self.pf.blit(self.image_pf, (0, 0))
         self.pf.blit(self.image_kp, (0, 0))
-        self.pf.convert()
+        self.pf.set_colorkey((0, 0, 0))
 
 
         self.surf.blit(self.image_keh, (453, 100))
