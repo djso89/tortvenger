@@ -4,6 +4,10 @@ from fonts.bordertext import Borderline_Txt
 from display import screen
 from gauge_imgs import *
 
+black = (0, 0, 0)
+white = (255, 255, 255)
+
+
 class K_Gauge(K_Attr):
     def __init__(self):
         super().__init__()
@@ -29,10 +33,13 @@ class K_Gauge(K_Attr):
         self.hp_bar_w = self.image_hp.get_width()
         self.width_per_hp = self.hp_bar_w / self.HP
 
-        self.surf.blit(self.image_hp, (485, 133), (0, 0, (self.curr_hp / self. HP)* self.hp_bar_w, self.image_hp.get_height()))
+        self.chw =  (self.curr_hp / self. HP) * self.hp_bar_w
+        self.hp_h =  self.image_hp.get_height()
+
+        self.surf.blit(self.image_hp, (485, 133), (0, 0, self.chw, self.hp_h))
 
         self.hpstring = 'H P :  ' + str(self.curr_hp) + "  /  " + str(self.HP)
-        self.hp_text = Borderline_Txt(self.hpstring, self.fonth, (0, 0, 0), (255, 255, 255), 5)
+        self.hp_text = Borderline_Txt(self.hpstring, self.fonth, black, white, 5)
         self.surf.blit(self.hp_text, (500, 0))
 
 
@@ -45,26 +52,27 @@ class K_Gauge(K_Attr):
 
 
         self.kistring = 'K I :  ' + str(self.curr_ki) +'  /  ' + str(self.KI)
-        self.ki_text = Borderline_Txt(self.kistring, self.fontk, (0, 0, 0), (255, 255, 255), 5)
+        self.ki_text = Borderline_Txt(self.kistring, self.fontk, black, white, 5)
         self.surf.blit(self.ki_text, (500, 220))
 
 
     def show_profile(self):
         self.pf = pygame.transform.scale(self.pf, (140, 150))
 
-    def update_bars(self):
-        self.surf = pygame.Surface((1000, 600), pygame.SRCALPHA, 32)
-        self.surf = self.surf.convert_alpha()
+    def update_hp_bar(self):
         self.surf.blit(self.image_keh, (453, 100))
         self.hp_bar_w = self.image_hp.get_width()
         self.width_per_hp = self.hp_bar_w / self.HP
 
-        self.surf.blit(self.image_hp, (485, 133), (0, 0, (self.curr_hp / self. HP)* self.hp_bar_w, self.image_hp.get_height()))
+        self.chw =  (self.curr_hp / self. HP) * self.hp_bar_w
+        self.hp_h =  self.image_hp.get_height()
+        self.surf.blit(self.image_hp, (485, 133), (0, 0, self.chw, self.hp_h))
 
         self.hpstring = 'H P :  ' + str(self.curr_hp) + "  /  " + str(self.HP)
-        self.hp_text = Borderline_Txt(self.hpstring, self.fonth, (0, 0, 0), (255, 255, 255), 5)
+        self.hp_text = Borderline_Txt(self.hpstring, self.fonth, black, white, 5)
         self.surf.blit(self.hp_text, (500, 0))
 
+    def update_ki_bar(self):
         self.surf.blit(self.image_keh, (453, 328))
         self.ki_bar_w = self.image_ki.get_width()
         self.width_per_ki = self.ki_bar_w / self.KI
@@ -75,6 +83,12 @@ class K_Gauge(K_Attr):
         self.kistring = 'K I :  ' + str(self.curr_ki) +'  /  ' + str(self.KI)
         self.ki_text = Borderline_Txt(self.kistring, self.fontk, (0, 0, 0), (255, 255, 255), 5)
         self.surf.blit(self.ki_text, (500, 220))
+
+    def update_bars(self):
+        self.surf = pygame.Surface((1000, 600), pygame.SRCALPHA, 32)\
+                          .convert_alpha()
+        self.update_hp_bar()
+        self.update_ki_bar()
 
 
     def show_bars(self):
