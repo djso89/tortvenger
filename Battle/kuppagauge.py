@@ -2,12 +2,12 @@ from attr import K_Attr
 import pygame
 from fonts.bordertext import Borderline_Txt
 from display import screen
-from troopakuppa19.kuppabattle import P1
 from gauge_imgs import *
 
 class K_Gauge(K_Attr):
     def __init__(self):
         super().__init__()
+        self.update_hp = False
         self.image_pf = pygame.image.load(pf_dir)
         self.image_hp = pygame.image.load(hp_dir).convert()
         self.image_ki = pygame.image.load(ki_dir).convert()
@@ -78,8 +78,9 @@ class K_Gauge(K_Attr):
 
 
     def show_bars(self):
-        if P1.cell_atk_k:
+        if self.update_hp:
             self.update_bars()
+            self.update_hp = False
         self.surf.convert()
         self.surf = pygame.transform.scale(self.surf,(300, 150))
 
@@ -87,10 +88,10 @@ class K_Gauge(K_Attr):
 
     def show_gauge(self):
         self.show_profile()
-        #self.show_bars()
+        self.show_bars()
 
         screen.blit(self.pf, (20, 20))
-        #screen.blit(self.surf, (20, 20))
+        screen.blit(self.surf, (20, 20))
 
 
 pygame.font.init()
