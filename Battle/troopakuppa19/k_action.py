@@ -193,6 +193,7 @@ class K_Act(Kuppa):
             if self.cnt_got_dmg >= period:
                 self.ani_turn_off()
                 self.cnt_got_dmg = 0
+                self.dmg_blinking = True
                 if self.num_blinks == 15:
                     self.cell_atk_k = False
                     self.dmg_blinking = False
@@ -201,7 +202,6 @@ class K_Act(Kuppa):
                     self.num_blinks += 1
             else:
                 self.cnt_got_dmg += 1
-                self.dmg_blinking = True
 
     def ani_turn_off(self):
         """ turn off the action frame """

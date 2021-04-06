@@ -12,6 +12,7 @@ class K_Gauge(K_Attr):
     def __init__(self):
         super().__init__()
         self.update_hp = False
+        self.update_kp = False
         self.image_pf = pygame.image.load(pf_dir)
         self.image_hp = pygame.image.load(hp_dir).convert()
         self.image_ki = pygame.image.load(ki_dir).convert()
