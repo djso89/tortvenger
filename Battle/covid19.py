@@ -7,15 +7,18 @@ from stage import *
 import random
 from spritesheet import SpriteSheet
 from stageobject import *
+from c19gauge import *
+
 
 NumCells = 7
 black = (0, 0, 0)
 
-class COVID19(pygame.sprite.Sprite):
+class COVID19(C19_Gauge, pygame.sprite.Sprite):
     """COVID19 Class """
     def __init__(self, x, y):
         """ initialize COVID19 Cell """
-        super().__init__()
+        pygame.sprite.Sprite.__init__(self)
+        C19_Gauge.__init__(self)
         sprite_sheet = SpriteSheet("images/C19_rdy.png", black)
         sprite_sheet_dmg_cut = SpriteSheet("images/C19_dmg_cut.png", black)
         sprite_sheet_dmg_envk = SpriteSheet("images/C19_dmg_envk.png", black)
@@ -34,8 +37,8 @@ class COVID19(pygame.sprite.Sprite):
         self.dmg_cut = []
         self.dmg_envk = []
         self.dmg_expk = []
-        
-        
+
+
         #load all the ready images
         for i in range (0, 6, 1):
             width = ss_dmg_cut.get_width()
@@ -158,12 +161,17 @@ class COVID19(pygame.sprite.Sprite):
 
     def animate(self):
         self.ani_move()
+        self.show_gauge()
+        self.pause()
 
     def render(self):
         """paste the COVID19 cell into screen """
         screen.blit(self.image, self.pos,
                     (0, 0, self.image.get_width(),
                      self.image.get_height()))
+
+        self.show_gauge()
+        screen.blit(self.hp_stat, self.pos)
 
 
 

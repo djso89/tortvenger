@@ -125,7 +125,6 @@ class Game:
         #draw the cells
         for cell in Cells:
             cell.animate()
-            cell.pause()
             cell.render()
 
     def player_draw(self):

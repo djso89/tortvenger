@@ -5,6 +5,7 @@ import random
 class Attr():
     """ character attribute class """
     def __init__(self, l, h, attack, defense, dexterity, luck, expr):
+        super(Attr, self).__init__()
         self.LV = l
         self.HP = h
         self.attack = attack
@@ -14,10 +15,51 @@ class Attr():
         self.expr = expr
 
 
+
+
 class C19_Attr(Attr):
     def __init__(self):
-        Attr.__init__(self, 1, 36, 20, 10, 15, 15, 0)
+        #Attr.__init__(self, 1, 36, 60, 10, 15, 15, 0)
+        super(C19_Attr, self).__init__(1, 36, 60, 10, 15, 15, 0)
         self.curr_hp = self.HP
+
+
+
+    def raise_hp(self, hpp):
+        self.HP += hpp
+
+    def raise_all(self, plus):
+        self.attack += plus
+        self.defense += plus
+        self.dexterity += plus
+        self.luck += plus
+
+    def raise_stat(self, ad, plus):
+        if ad == 'a':
+            self.attack += plus
+        elif ad == 'd':
+            self.defense += plus
+        elif ad == 'ad':
+            self.attack += plus
+            self.defense += plus
+        elif ad == 'dx':
+            self.dexterity += plus
+        elif ad == 'l':
+            self.luck += plus
+
+
+    def get_dmg(self, e_defen, e_luck):
+        dmg = (self.attack ** 2) / (self.attack + e_defen)
+        if self.luck < e_luck:
+            dmg_factor = random.randint(e_luck - self.luck, e_luck) / e_luck
+        else:
+            dmg_factor = 1 + (random.randint(self.luck - e_luck, self.luck) / self.luck)
+        return (round((dmg * dmg_factor) / 10))
+
+    def hit_hp(self, dmg):
+        self.curr_hp -= dmg
+        if self.curr_hp < 0:
+            self.curr_hp = 0
 
 
 class K_Attr(Attr):
