@@ -17,6 +17,7 @@ class C19_Gauge(C19_Attr):
         self.img_ehb = pygame.image.load(ehb_dir).convert()
         self.img_hp = pygame.image.load(hp_dir).convert()
         self.show_hp = False
+        self.cnt_show_hp = 0
 
         self.hp_stat = self.img_ehb
         self.font = pygame.font.Font(font_dir, 90)
@@ -33,6 +34,14 @@ class C19_Gauge(C19_Attr):
     def show_gauge(self):
         """transform the updated hp bar of C19 to show """
         self.hp_stat = pygame.transform.scale(self.hp_stat, (140, 30))
+
+    def hp_show(self):
+        if self.show_hp:
+            if self.cnt_show_hp >= 20:
+                self.show_hp = False
+                self.cnt_show_hp = 0
+            else:
+                self.cnt_show_hp += 1
 
 
     def __str__(self):

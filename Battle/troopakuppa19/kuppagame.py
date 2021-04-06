@@ -104,6 +104,7 @@ class Game:
         # do the COVID19 routines
         for cell in Cells:
             cell.move()
+            cell.hp_show()
 
 
         """ drawing routines """

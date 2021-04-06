@@ -27,9 +27,6 @@ class K_Battle(K_Act):
             # set the x coordinate
             self.pos.x = self.rect.x
 
-
-
-
     def collisionX(self):
         """check the collision in X direction """
         # touch bricks
@@ -152,6 +149,7 @@ class K_Battle(K_Act):
         cut_finish = cut_frame_num * cut_frame_period - 1
         if self.atk_comb < 2:
             self.show_comb = True
+            cell.show_hp = True
             if (self.btn_mash >= 10):
                 self.pos.x -= 50 * knock_back
                 self.gotHit = True
@@ -162,6 +160,7 @@ class K_Battle(K_Act):
         if self.atk_comb >= 2 and self.cnt_swd_cut == cut_finish:
             self.btn_mash = 0
             self.show_comb = True
+            cell.show_hp = True
             if self.atk_comb == 11:
                 self.pos.x += shadow_cut_dash
             cell.pos.x += combo_knock_back
@@ -186,6 +185,7 @@ class K_Battle(K_Act):
                             self.show_comb = True
                             cell.pos.x += 100
                             cell.hitCell = True
+                            cell.show_hp = True
                     else:
                         if not self.dmg_blinking:
                             self.cell_atk_k = True
@@ -213,6 +213,7 @@ class K_Battle(K_Act):
                         if self.cnt_swd_cut == cut_finish:
                             self.show_comb = True
                             cell.pos.x -= 100
+                            cell.show_hp = True
                             cell.hitCell = True
                     else:
                         if not self.dmg_blinking:

@@ -164,14 +164,15 @@ class COVID19(C19_Gauge, pygame.sprite.Sprite):
         self.show_gauge()
         self.pause()
 
+
     def render(self):
         """paste the COVID19 cell into screen """
         screen.blit(self.image, self.pos,
                     (0, 0, self.image.get_width(),
                      self.image.get_height()))
-
-        self.show_gauge()
-        screen.blit(self.hp_stat, self.pos)
+        if self.show_hp:
+            self.show_gauge()
+            screen.blit(self.hp_stat, self.pos)
 
 
 
