@@ -14,16 +14,15 @@ class K_Gauge(K_Attr):
         self.image_kp = pygame.image.load(kp_dir)
         self.image_keh = pygame.image.load(keh_dir).convert()
 
-        self.surf = pygame.Surface((1000, 600), pygame.SRCALPHA, 32)
-        self.surf = self.surf.convert_alpha()
+        self.surf = pygame.Surface((1000, 600), pygame.SRCALPHA, 32).convert_alpha()
 
         self.fonth = pygame.font.Font('fonts/aileron_regular.otf', 80)
         self.fontk = pygame.font.Font('fonts/aileron_regular.otf', 80)
 
-        self.pf = pygame.Surface((453, 500)).convert()
+        self.pf = pygame.Surface((453, 500), pygame.SRCALPHA, 32).convert_alpha()
         self.pf.blit(self.image_pf, (0, 0))
         self.pf.blit(self.image_kp, (0, 0))
-        self.pf.set_colorkey((0, 0, 0))
+
 
 
         self.surf.blit(self.image_keh, (453, 100))
@@ -88,10 +87,10 @@ class K_Gauge(K_Attr):
 
     def show_gauge(self):
         self.show_profile()
-        self.show_bars()
+        #self.show_bars()
 
         screen.blit(self.pf, (20, 20))
-        screen.blit(self.surf, (20, 20))
+        #screen.blit(self.surf, (20, 20))
 
 
 pygame.font.init()
