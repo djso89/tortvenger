@@ -14,8 +14,8 @@ font_dir = 'fonts/aileron_regular.otf'
 class C19_Gauge(C19_Attr):
     def __init__(self):
         super(C19_Gauge, self).__init__()
-        self.img_ehb = pygame.image.load(ehb_dir)
-        self.img_hp = pygame.image.load(hp_dir)
+        self.img_ehb = pygame.image.load(ehb_dir).convert()
+        self.img_hp = pygame.image.load(hp_dir).convert()
         self.show_hp = False
         self.cnt_show_hp = 0
 
