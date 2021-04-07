@@ -8,22 +8,13 @@ class Attr():
         super(Attr, self).__init__()
         self.LV = l
         self.HP = h
+        self.curr_hp = self.HP
         self.attack = attack
         self.defense = defense
         self.dexterity = dexterity
         self.luck = luck
         self.expr = expr
-
-
-
-
-class C19_Attr(Attr):
-    def __init__(self):
-        #Attr.__init__(self, 1, 36, 60, 10, 15, 15, 0)
-        super(C19_Attr, self).__init__(1, 36, 60, 10, 15, 15, 0)
-        self.curr_hp = self.HP
-
-
+        self.curr_exp = self.expr
 
     def raise_hp(self, hpp):
         self.HP += hpp
@@ -62,14 +53,20 @@ class C19_Attr(Attr):
             self.curr_hp = 0
 
 
+class C19_Attr(Attr):
+    """COVID19 Attribute class """
+    def __init__(self):
+        """initialize the C19_Attr class with default stat """
+        super(C19_Attr, self).__init__(1, 36, 60, 10, 15, 15, 0)
+
+
+
 class K_Attr(Attr):
     """ Kuppa's attribute class"""
     def __init__(self):
         Attr.__init__(self, 1, 50, 50, 30, 60, 70, 200)
         self.KI = 20
-        self.curr_hp = self.HP
         self.curr_ki = self.KI
-        self.curr_exp = self.expr
 
     def grow(self, expr_pts):
         self.get_expr(expr_pts)
@@ -81,15 +78,6 @@ class K_Attr(Attr):
 
     def get_expr(self, expr_pts):
         self.curr_exp -= expr_pts
-
-    def get_dmg(self, e_defen, e_luck):
-        dmg = (self.attack ** 2) / (self.attack + e_defen)
-        if self.luck < e_luck:
-            dmg_factor = random.randint(e_luck - self.luck, e_luck) / e_luck
-        else:
-            dmg_factor = 1 + (random.randint(self.luck - e_luck, self.luck) / self.luck)
-
-        return (round((dmg * dmg_factor) / 10))
 
     def level_up(self):
         self.LV += 1
