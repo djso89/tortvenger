@@ -95,8 +95,6 @@ class Game:
         """this function updates
         objects on the screen"""
 
-
-        kuppainfo.curr_hp = 30
         # do the Player 1 routines
         self.player_stuff()
         self.show_info()
@@ -115,7 +113,7 @@ class Game:
         self.cell_draw()
         self.player_draw()
 
-        kuppainfo.show_gauge()
+        
 
         """refresh the page per (1000/FPS) ms """
         # tick the clock at 60Hz rate
@@ -139,6 +137,7 @@ class Game:
                 self.cnt_show_comb = 0
             KuppaCombo.update_combo(P1.atk_comb)
             self.cnt_show_comb += 1
+        kuppainfo.show_gauge()
 
     def player_stuff(self):
         P1.move()
