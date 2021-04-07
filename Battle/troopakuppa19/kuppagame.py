@@ -113,7 +113,7 @@ class Game:
         self.cell_draw()
         self.player_draw()
 
-        
+
 
         """refresh the page per (1000/FPS) ms """
         # tick the clock at 60Hz rate

@@ -82,10 +82,14 @@ class K_Battle(K_Act):
         """ detecting collision between player and cells"""
         hitCells = pygame.sprite.spritecollide(self, Cells, False)
         for cell in hitCells:
-            #print("made contact with cell")
             self.check_dir_x(cell)
+            break
 
-
+    def cell_do_dmg_x(self, cell, knock_back):
+        kuppainfo.hit_hp(cell.get_dmg(kuppainfo.defense, kuppainfo.luck))
+        self.pos.x += knock_back
+        self.cell_atk_k = True
+        kuppainfo.update_hp = True
 
 
     def cell_hit_player_xl(self, cell):
@@ -96,27 +100,18 @@ class K_Battle(K_Act):
         if cell.direction == 0: # cell direction right
             if self.pos.x + 80  <= (cell.pos.x + cell.rect.width):
                 if not self.dmg_blinking:
-                    kuppainfo.hit_hp(cell.get_dmg(kuppainfo.defense, kuppainfo.luck))
-                    self.pos.x += 200
-                    self.cell_atk_k = True
+                    self.cell_do_dmg_x(cell, 200)
                     self.gotHit = True
-                    kuppainfo.update_hp = True
         if cell.direction == 1:  # cell direction left
             if self.pos.x < cell.pos.x: # the cell is behind the player
                 if cell.pos.x <= (self.pos.x + self.rect.width) - 80:
                     if not self.dmg_blinking:
-                        kuppainfo.hit_hp(cell.get_dmg(kuppainfo.defense, kuppainfo.luck))
-                        self.pos.x -= 100
-                        self.cell_atk_k = True
-                        kuppainfo.update_hp = True
+                        self.cell_do_dmg_x(cell, -100)
             else: # the cell is front of the player
                 if self.pos.x <= (cell.pos.x + cell.rect.width - 80):
                     if not self.dmg_blinking:
-                        kuppainfo.hit_hp(cell.get_dmg(kuppainfo.defense, kuppainfo.luck))
-                        self.pos.x += 100 # bounce to right
-                        self.cell_atk_k = True
+                        self.cell_do_dmg_x(cell, 100)
                         self.gotHit = True
-                        kuppainfo.update_hp = True
 
 
     def cell_hit_player_xr(self, cell):
@@ -127,27 +122,18 @@ class K_Battle(K_Act):
         if cell.direction == 1:
             if (self.pos.x + self.rect.width - 80) >= cell.pos.x:
                 if not self.dmg_blinking:
-                    kuppainfo.hit_hp(cell.get_dmg(kuppainfo.defense, kuppainfo.luck))
-                    self.pos.x -= 200
-                    self.cell_atk_k = True
+                    self.cell_do_dmg_x(cell, -200)
                     self.gotHit = True
-                    kuppainfo.update_hp = True
         if cell.direction == 0:
             if self.pos.x > cell.pos.x:
                 if self.pos.x + 80 <= (cell.pos.x + cell.rect.width):
                     if not self.dmg_blinking:
-                        kuppainfo.hit_hp(cell.get_dmg(kuppainfo.defense, kuppainfo.luck))
-                        self.pos.x += 100
-                        self.cell_atk_k = True
-                        kuppainfo.update_hp = True
+                        self.cell_do_dmg_x(cell, 100)
             else:
                 if self.pos.x + self.rect.width >= cell.pos.x + 80:
                     if not self.dmg_blinking:
-                        kuppainfo.hit_hp(cell.get_dmg(kuppainfo.defense, kuppainfo.luck))
-                        self.pos.x -= 100
-                        self.cell_atk_k = True
+                        self.cell_do_dmg_x(cell, -100)
                         self.gotHit = True
-                        kuppainfo.update_hp = True
 
     def player_attack(self, cell, knock_back, combo_knock_back, shadow_cut_dash):
         """
@@ -157,22 +143,30 @@ class K_Battle(K_Act):
         cut_finish = cut_frame_num * cut_frame_period - 1
         if self.atk_comb < 2:
             self.show_comb = True
-            cell.show_hp = True
             if (self.btn_mash >= 10):
                 self.pos.x -= 50 * knock_back
                 self.gotHit = True
                 self.btn_mash = 0
             else:
-                cell.pos.x += knock_back
-            cell.hitCell = True
+                if self.cnt_swd_cut == cut_finish:
+                    combo_dmg = round((self.atk_comb / 3) * kuppainfo.get_dmg(cell.defense, cell.luck))
+                    cell.hit_hp(combo_dmg)
+                    cell.pos.x += knock_back
+                    cell.hitCell = True
+                    cell.update_hp()
+                    cell.show_hp = True
         if self.atk_comb >= 2 and self.cnt_swd_cut == cut_finish:
             self.btn_mash = 0
             self.show_comb = True
-            cell.show_hp = True
             if self.atk_comb == 11:
                 self.pos.x += shadow_cut_dash
+            combo_dmg = round((self.atk_comb / 3) * kuppainfo.get_dmg(cell.defense, cell.luck))
+            cell.hit_hp(combo_dmg)
             cell.pos.x += combo_knock_back
             cell.hitCell = True
+            cell.update_hp()
+            cell.show_hp = True
+
 
     def player_hit_cell_xl(self, cell):
         """
@@ -193,7 +187,6 @@ class K_Battle(K_Act):
                             self.show_comb = True
                             cell.pos.x += 100
                             cell.hitCell = True
-                            cell.show_hp = True
                     else:
                         if not self.dmg_blinking:
                             kuppainfo.hit_hp(cell.get_dmg(kuppainfo.defense, kuppainfo.luck))
@@ -222,7 +215,6 @@ class K_Battle(K_Act):
                         if self.cnt_swd_cut == cut_finish:
                             self.show_comb = True
                             cell.pos.x -= 100
-                            cell.show_hp = True
                             cell.hitCell = True
                     else:
                         if not self.dmg_blinking:

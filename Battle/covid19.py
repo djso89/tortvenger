@@ -10,7 +10,7 @@ from stageobject import *
 from c19gauge import *
 
 
-NumCells = 7
+NumCells = 30
 black = (0, 0, 0)
 
 class COVID19(C19_Gauge, pygame.sprite.Sprite):
@@ -104,6 +104,8 @@ class COVID19(C19_Gauge, pygame.sprite.Sprite):
         if self.cnt_hc >= period * (len(self.dmg_cut) - 1) :
             self.cnt_hc = 0
             self.hitCell = False
+            if self.curr_hp == 0:
+                self.kill()
         else:
             self.image = self.dmg_cut[self.cnt_hc // period]
             self.cnt_hc += 1
@@ -171,8 +173,8 @@ class COVID19(C19_Gauge, pygame.sprite.Sprite):
                     (0, 0, self.image.get_width(),
                      self.image.get_height()))
         if self.show_hp:
-            self.show_gauge()
-            screen.blit(self.hp_stat, self.pos)
+            pos_y = self.pos.y + self.image.get_height() / 2
+            screen.blit(self.hp_stat, (self.pos.x, pos_y))
 
 
 
@@ -197,4 +199,4 @@ C19.set_range(0, 1200)
 C1 = COVID19(400,300)
 C1.set_range(0, 1200)
 Cells.add(C19)
-#Cells.add(C1)
+Cells.add(C1)

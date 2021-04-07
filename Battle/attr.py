@@ -57,7 +57,7 @@ class C19_Attr(Attr):
     """COVID19 Attribute class """
     def __init__(self):
         """initialize the C19_Attr class with default stat """
-        super(C19_Attr, self).__init__(1, 36, 60, 10, 15, 15, 0)
+        super(C19_Attr, self).__init__(1, 36, 30, 10, 15, 15, 0)
 
 
 
