@@ -143,7 +143,7 @@ class K_Battle(K_Act):
         cut_finish = cut_frame_num * cut_frame_period - 1
         if self.atk_comb < 2:
             self.show_comb = True
-            if (self.btn_mash >= 10):
+            if (self.btn_mash >= 3):
                 self.pos.x -= 50 * knock_back
                 self.gotHit = True
                 self.btn_mash = 0

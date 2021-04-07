@@ -28,8 +28,9 @@ class C19_Gauge(C19_Attr):
         self.font = pygame.font.Font(font_dir, 90)
         self.hp_bar_w = self.img_hp.get_width()
         self.hp_bar_h = self.img_hp.get_height()
+        self.hp_bar_cw = (self.curr_hp / self.HP) * self.hp_bar_w
         self.hp_stat.blit(self.img_hp, (25, 25), \
-                       (0, 0, (self.curr_hp / self.HP) * self.hp_bar_w, self.hp_bar_h))
+                       (0, 0, self.hp_bar_cw, self.hp_bar_h))
 
         self.hpstring = 'H P :  ' + str(self.curr_hp) + ' / ' + str(self.HP)
         self.hptxt = Borderline_Txt(self.hpstring, self.font, black, white, 10)
@@ -44,8 +45,10 @@ class C19_Gauge(C19_Attr):
         self.font = pygame.font.Font(font_dir, 90)
         self.hp_bar_w = self.img_hp.get_width()
         self.hp_bar_h = self.img_hp.get_height()
+        self.hp_bar_cw = (self.curr_hp / self.HP) * self.hp_bar_w
         self.hp_stat.blit(self.img_hp, (25, 25), \
-                       (0, 0, (self.curr_hp / self.HP) * self.hp_bar_w, self.hp_bar_h))
+                       (0, 0, self.hp_bar_cw, self.hp_bar_h))
+
 
         self.hpstring = 'H P :  ' + str(self.curr_hp) + ' / ' + str(self.HP)
         self.hptxt = Borderline_Txt(self.hpstring, self.font, black, white, 10)
@@ -54,7 +57,7 @@ class C19_Gauge(C19_Attr):
 
     def hp_show(self):
         if self.show_hp:
-            if self.cnt_show_hp >= 20:
+            if self.cnt_show_hp >= 10:
                 self.show_hp = False
                 self.cnt_show_hp = 0
             else:

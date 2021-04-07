@@ -65,7 +65,7 @@ class K_Gauge(K_Attr):
         self.hp_bar_w = self.image_hp.get_width()
         self.width_per_hp = self.hp_bar_w / self.HP
 
-        self.chw =  (self.curr_hp / self. HP) * self.hp_bar_w
+        self.chw =  (self.curr_hp / self.HP) * self.hp_bar_w
         self.hp_h =  self.image_hp.get_height()
         self.surf.blit(self.image_hp, (485, 133), (0, 0, self.chw, self.hp_h))
 
@@ -77,7 +77,9 @@ class K_Gauge(K_Attr):
         self.surf.blit(self.image_keh, (453, 328))
         self.ki_bar_w = self.image_ki.get_width()
         self.width_per_ki = self.ki_bar_w / self.KI
-        self.surf.blit(self.image_ki, (485, 363), (0, 0, self.ki_bar_w, self.image_ki.get_height()))
+
+        self.ckw = (self.curr_ki / self.KI) * self.ki_bar_w
+        self.surf.blit(self.image_ki, (485, 363), (0, 0, self.ckw, self.image_ki.get_height()))
 
 
 
@@ -93,9 +95,10 @@ class K_Gauge(K_Attr):
 
 
     def show_bars(self):
-        if self.update_hp:
+        if self.update_hp or self.update_kp:
             self.update_bars()
             self.update_hp = False
+            self.update_kp = False
         self.surf.convert()
         self.surf = pygame.transform.scale(self.surf,(300, 150))
 

@@ -79,7 +79,10 @@ class Game:
                     P1.draw_the_swrd()
                 if event.key == pygame.K_s:
                     if not P1.swd_on:
-                        self.SB_toggle = True
+                        if kuppainfo.curr_ki > 0:
+                            self.SB_toggle = True
+                            kuppainfo.curr_ki -= 1
+                            kuppainfo.update_kp = True
                 if event.key == pygame.K_a:
                     self.attack_event()
                 if event.key == pygame.K_UP:
