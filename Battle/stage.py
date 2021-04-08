@@ -18,13 +18,12 @@ class Stage(pygame.sprite.Sprite):
 
         # stage objects to show
         self.StageBlocks = pygame.sprite.Group()
-
         self.StageBlocks.add(self.Plats)
         self.StageBlocks.add(self.platforms)
         self.StageBlocks.add(self.Cars)
         self.StageBlocks.add(self.Steps)
         self.StageBlocks.add(self.Bldgs)
-        
+
         self.bgimg = pygame.image.load("images/bg_level.png").convert()
         self.rect = self.bgimg.get_rect(topleft=(0,0))
 

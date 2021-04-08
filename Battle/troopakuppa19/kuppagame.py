@@ -2,8 +2,9 @@
 import sys
 import pygame
 from display import *
+import time as t
 from troopakuppa19.kuppabattle import *
-from fonts.kuppacombo import KuppaCombo
+from fonts.kuppacombo import *
 from kuppagauge import kuppainfo
 
 
@@ -18,6 +19,7 @@ class Game:
     def __init__(self):
         pygame.init()
         self.clock = pygame.time.Clock()
+        self.run = True
         self.prd = 0
         self.cnt_show_comb = False
         self.frames = 0
@@ -56,9 +58,14 @@ class Game:
         self.Key_a_delay(cut_len + 100, 90 ,34)
 
     def run_game(self):
-        while True:
+        while self.run:
             self._check_events()
             self._update_screen()
+
+
+        t.sleep(3)
+        pygame.quit()
+        sys.exit()
 
     def print_key(self, key):
         print(key)
@@ -82,7 +89,7 @@ class Game:
                         if kuppainfo.curr_ki > 0:
                             self.SB_toggle = True
                             kuppainfo.curr_ki -= 1
-                            kuppainfo.update_kp = True
+                            kuppainfo.update_bar = True
                 if event.key == pygame.K_a:
                     self.attack_event()
                 if event.key == pygame.K_UP:
@@ -115,6 +122,12 @@ class Game:
         # draw the cells and player
         self.cell_draw()
         self.player_draw()
+
+        if kuppainfo.curr_hp == 0:
+            font = pygame.font.Font('fonts/aileron_regular.otf', 40)
+            g_over_txt = Borderline_Txt("Game Over", font, black, white, 5)
+            screen.blit(g_over_txt, (WIN_W/2, WIN_H/2))
+            self.run = False
 
 
 

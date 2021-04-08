@@ -10,7 +10,7 @@ from troopakuppa19.kuppa import *
 black = (0, 0, 0)
 
 # number of maximum combo you can perform
-MaxCombo = 3
+MaxCombo = 4
 # show one frame per 33ms = cut_frame_period * (1000 / FPS)
 cut_frame_period = 2
 # number of frames for one cut
@@ -240,6 +240,7 @@ class K_Act(Kuppa):
             self.ani_cut()
         elif not self.ATK:
             self.cnt_swd_cut = 0
+
 
 
     def ani_swd_move(self):

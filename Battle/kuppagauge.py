@@ -11,15 +11,15 @@ white = (255, 255, 255)
 class K_Gauge(K_Attr):
     def __init__(self):
         super().__init__()
-        self.update_hp = False
-        self.update_kp = False
+        self.update_bar = False
         self.image_pf = pygame.image.load(pf_dir)
         self.image_hp = pygame.image.load(hp_dir).convert()
         self.image_ki = pygame.image.load(ki_dir).convert()
         self.image_kp = pygame.image.load(kp_dir)
         self.image_keh = pygame.image.load(keh_dir).convert()
 
-        self.surf = pygame.Surface((1000, 600), pygame.SRCALPHA, 32).convert_alpha()
+        self.surf = pygame.Surface((1000, 600), pygame.SRCALPHA, 32)\
+                          .convert_alpha()
 
         self.fonth = pygame.font.Font('fonts/aileron_regular.otf', 80)
         self.fontk = pygame.font.Font('fonts/aileron_regular.otf', 80)
@@ -95,11 +95,9 @@ class K_Gauge(K_Attr):
 
 
     def show_bars(self):
-        if self.update_hp or self.update_kp:
+        if self.update_bar:
             self.update_bars()
-            self.update_hp = False
-            self.update_kp = False
-        self.surf.convert()
+            self.update_bar = False
         self.surf = pygame.transform.scale(self.surf,(300, 150))
 
 

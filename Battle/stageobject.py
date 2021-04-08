@@ -20,7 +20,7 @@ Cars = pygame.sprite.Group()
 Car1 = Block()
 Car2 = Block()
 
-Car1.newBlock(193, 400, 65, 52, alph)
+Car1.newBlock(193, 400, 65, 50, alph)
 Car2.newBlock(938, 359, 105, 50, alph)
 
 Cars.add(Car1)
@@ -46,7 +46,7 @@ Steps.add(Step3)
 Plats = pygame.sprite.Group()
 
 Plat = Block()
-Plat.newBlock(0, 452, 188, 2, alph)
+Plat.newBlock(0, 452, 253, 10, alph)
 Plats.add(Plat)
 
 Plat1 = Block()
