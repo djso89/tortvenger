@@ -10,7 +10,7 @@ from stageobject import *
 from c19gauge import *
 
 
-NumCells = 10
+NumCells = 20
 black = (0, 0, 0)
 
 class COVID19(C19_Gauge, pygame.sprite.Sprite):
@@ -181,9 +181,17 @@ class COVID19(C19_Gauge, pygame.sprite.Sprite):
 Cells = pygame.sprite.Group()
 
 def cell_gen(numcells):
+    last_cp = random.choice(cell_plats.sprites())
+    num_last = 0
     for i in range (0, numcells, 1):
         cp = random.choice(cell_plats.sprites())
-        print(str(cp))
+        if cp == last_cp:
+            num_last += 1
+        else:
+            num_last = 0
+        while (cp == last_cp and num_last <= (numcells // 5)):
+            cp = random.choice(cell_plats.sprites())
+        last_cp = cp
         x = random.randint(cp.rect.left, cp.rect.right)
         x_ext_l = random.randrange(-200, 200, 25)
         x_ext_r = random.randrange(100, 200, 25)

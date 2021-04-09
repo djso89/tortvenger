@@ -67,6 +67,7 @@ class K_Attr(Attr):
         Attr.__init__(self, 1, 50, 50, 30, 60, 70, 200)
         self.KI = 20
         self.curr_ki = self.KI
+        self.MaxCombo = 3
 
     def grow(self, expr_pts):
         self.get_expr(expr_pts)

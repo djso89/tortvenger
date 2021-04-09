@@ -187,30 +187,66 @@ class K_Battle(K_Act):
                 self.pos.x += shadow_cut_dash
             self.player_dmg(cell, combo_knock_back)
 
+    def player_combo_routine_xl(self, cell):
+        """this is where how cells will be attacked from
+        combo 1 through 9 when player is facing left"""
+        cut_finish = cut_frame_num * cut_frame_period - 1
+        if self.atk_comb >= 1 and self.atk_comb <= 9:
+            if cell.direction == 0:
+                if self.pos_a.x <= (cell.pos.x + cell.rect.width) - 40:
+                    self.player_attack(cell, -2, -50, -400)
+            if cell.direction == 1:
+                if self.pos_a.x <= (cell.pos.x + cell.rect.width) - 20:
+                    if self.pos.x > cell.pos.x: # you are behind cell
+                        self.player_attack(cell, -2, -50, -400)
+                    else: # cell is behind you
+                        if self.atk_comb == 4: #when combo4 is executed, go away
+                            if self.cnt_swd_cut == cut_finish:
+                                self.show_comb = True
+                                self.player_dmg(cell, 400)
+                        else:
+                            if not self.dmg_blinking:
+                                self.cell_do_dmg_x(cell, 400)
+
+    def player_combo_routine_xr(self, cell):
+        """this is where how cells will be attacked from
+        combo 1 through 9 when player is facing right"""
+        cut_finish = cut_frame_num * cut_frame_period - 1
+        if self.atk_comb >= 1 and self.atk_comb <= 9:
+            if cell.direction == 1:
+                if self.atk_comb >= 1 and self.atk_comb <= 9:
+                    if self.pos_a.x + self.rect_a.width - 40 >= cell.pos.x:
+                        self.player_attack(cell, 2, 50, 400)
+            if cell.direction == 0:
+                if self.rect_a.left + self.rect_a.width >= (cell.rect.left + 40):
+                    if self.pos.x < cell.pos.x:
+                        self.player_attack(cell, 2, 50, 500)
+                    else:
+                        #cell do the damage so watch your back
+                        #cell knocks you back to the left
+                        if self.atk_comb == 4:
+                            if self.cnt_swd_cut == cut_finish:
+                                self.show_comb = True
+                                self.player_dmg(cell, -400)
+                        else:
+                            if not self.dmg_blinking:
+                                self.cell_do_dmg_x(cell, -400)
+
 
     def player_hit_cell_xl(self, cell):
         """
         function that checks for collision between player
         facing left and cell when player is attacking
         """
-        cut_finish = cut_frame_num * cut_frame_period - 1
-        if cell.direction == 0:
-            if self.atk_comb >= 1 and self.atk_comb <= 9:
-                if self.pos_a.x <= (cell.pos.x + cell.rect.width) - 40:
-                    self.player_attack(cell, -2, -50, -400)
-        if cell.direction == 1:
-            if self.pos_a.x <= (cell.pos.x + cell.rect.width) - 20:
+        self.player_combo_routine_xl(cell)
+        if self.atk_comb == 10:
+            if cell.direction == 0:
+                self.player_dmg(cell, -50)
+            if cell.direction == 1:
                 if self.pos.x > cell.pos.x:
-                    self.player_attack(cell, -2, -50, -400)
+                    self.player_dmg(cell, -50)
                 else:
-                    if self.atk_comb == 4 or self.atk_comb == 10:
-                        if self.cnt_swd_cut == cut_finish:
-                            self.show_comb = True
-                            self.player_dmg(cell, 400)
-                    else:
-                        if not self.dmg_blinking:
-                            self.cell_do_dmg_x(cell, 400)
-
+                    self.player_dmg(cell, 50)
 
 
     def player_hit_cell_xr(self, cell):
@@ -218,33 +254,15 @@ class K_Battle(K_Act):
         function that checks for collision between player
         facing right and cell when player is attacking
         """
-        cut_finish = cut_frame_num * cut_frame_period - 1
-        if cell.direction == 1:
-            if self.atk_comb >= 1 and self.atk_comb <= 9:
-                if self.pos_a.x + self.rect_a.width - 40 >= cell.pos.x:
-                    self.player_attack(cell, 2, 50, 400)
-        if cell.direction == 0:
-            if self.rect_a.left + self.rect_a.width >= (cell.rect.left + 40):
-                if self.pos.x < cell.pos.x:
-                    self.player_attack(cell, 2, 50, 500)
+        self.player_combo_routine_xr(cell)
+        if self.atk_comb == 10:
+            if cell.direction == 1:
+                self.player_dmg(cell, 50)
+            if cell.direction == 0:
+                if self.pos.x > cell.pos.x:
+                    self.player_dmg(cell, -50)
                 else:
-                    #cell do the damage so watch your back
-                    #cell knocks you back to the left
-                    if self.atk_comb == 4 or self.atk_comb == 10:
-                        if self.cnt_swd_cut == cut_finish:
-                            combo_dmg = round((self.atk_comb / 3) * kuppainfo.get_dmg(cell.defense, cell.luck))
-                            cell.hit_hp(combo_dmg)
-                            self.show_comb = True
-                            cell.pos.x -= 400
-                            cell.hitCell = True
-                            cell.update_hp()
-                            cell.show_hp = True
-                    else:
-                        if not self.dmg_blinking:
-                            kuppainfo.hit_hp(cell.get_dmg(kuppainfo.defense, kuppainfo.luck))
-                            self.cell_atk_k = True
-                            self.pos.x -= 400
-                            kuppainfo.update_hp = True
+                    self.player_dmg(cell, 50)
 
 
     def check_dir_x(self, cell):
