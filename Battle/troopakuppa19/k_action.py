@@ -326,7 +326,7 @@ class K_Act(Kuppa):
             self.ani_adj_offset(2, -2)
         elif self.ATK == True and (self.atk_comb > 2 and self.atk_comb <= 4):
             self.ani_adj_offset(2, 20)
-        elif self.ATK == True and (self.atk_comb > 4 and self.atk_comb <= MaxCombo):
+        elif self.ATK == True and (self.atk_comb > 4 and self.atk_comb <= 11):
             self.ani_adj_offset(2, -20)
 
     def ani_action(self):

@@ -10,7 +10,7 @@ from stageobject import *
 from c19gauge import *
 
 
-NumCells = 20
+NumCells = 10
 black = (0, 0, 0)
 
 class COVID19(C19_Gauge, pygame.sprite.Sprite):

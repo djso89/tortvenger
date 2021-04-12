@@ -95,10 +95,10 @@ class K_Battle(K_Act):
                     break
             elif self.atk_comb == 5:
                 #attack up to 3 cells
-                if self.num_cells == 5:
+                if self.num_cells == 4:
                     break
-            elif self.atk_comb == 6:
-                if self.num_cells == 7:
+            elif self.atk_comb >= 6 and self.atk_comb < 9:
+                if self.num_cells == 5:
                     break
         self.num_cells = 0
 

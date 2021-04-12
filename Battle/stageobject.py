@@ -72,7 +72,6 @@ platforms.add(Step1)
 platforms.add(Step2)
 
 cell_plats = pygame.sprite.Group()
-cell_plats.add(Bldgs)
 cell_plats.add(Plat1)
 cell_plats.add(Ground)
 cell_plats.add(Step3)
