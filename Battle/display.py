@@ -14,6 +14,6 @@ WIN_W = setting.screen_width
 WIN_H = setting.screen_height
 
 
-setting.flags = pygame.SCALED | pygame.RESIZABLE #| pygame.FULLSCREEN
+setting.flags = pygame.SCALED | pygame.RESIZABLE
 screen = pygame.display.set_mode((WIN_W, WIN_H),
     setting.flags)

@@ -57,6 +57,8 @@ class K_Battle(K_Act):
         self.vel.x += self.acc.x
         self.pos.x += self.vel.x + 0.5 * self.acc.x
 
+
+
         self.touch_cell_X()
 
         # routine when player didn't touch cells

@@ -138,7 +138,7 @@ class Kuppa(pygame.sprite.Sprite):
         if self.OnGround == True:
             self.vel.y = -40
             self.OnGround = False
-            
+
     # Kuppa touching the stage objects
     def touchXR(self, hits):
         #touch hits coming from right side

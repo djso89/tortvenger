@@ -61,8 +61,12 @@ Plat2.newBlock(145, 534, 100, 50, alph)
 Bldgs = pygame.sprite.Group()
 Bldg1 = Block()
 Bldg1.newBlock(840, 85, 166, 10, alph)
-Bldgs.add(Bldg1)
 
+Bldg2 = Block()
+Bldg2.loadobject(0, 253, 'images/buildings/petsmart.png')
+
+Bldgs.add(Bldg1)
+#Bricks.add(Bldg2)
 
 
 platforms = pygame.sprite.Group()

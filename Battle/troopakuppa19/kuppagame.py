@@ -11,6 +11,7 @@ from kuppagauge import kuppainfo
 from covid19 import *
 from stage import *
 
+from troopakuppa19.vid import *
 
 
 
@@ -72,7 +73,9 @@ class Game:
         cut_len = (cut_period * 1000) / FPS
         self.Key_a_delay(cut_len + 100, 90 ,34)
 
+
     def run_game(self):
+        play_cutscene_1_1()
         while self.run:
             self._check_events()
             self._update_screen()
