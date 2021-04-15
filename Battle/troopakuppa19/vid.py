@@ -5,6 +5,8 @@ from ffpyplayer.player import MediaPlayer
 
 # Create a VideoCapture object and read from input file
 cap = cv2.VideoCapture('videos/1_1.mp4')
+fps = cap.get(cv2.CAP_PROP_FPS)
+delay_ms = int(round((1/fps) * 1000))
 player = MediaPlayer('videos/1_1.mp4')
 window_name = "window"
 # Check if camera opened successfully
@@ -15,24 +17,23 @@ cv2.setWindowProperty(window_name, cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREE
 
 
 def play_cutscene_1_1():
-    while True:
+    while cap.isOpened():
     # Capture frame-by-frame
         ret, frame = cap.read()
         audio_frame, val = player.get_frame()
-        if ret == True:
-            # Display the resulting frame
-            cv2.imshow(window_name, frame)
-            # Press Q on keyboard to  exit
-            if cv2.waitKey(28) & 0xFF == ord('q'):
-                break
-            if val != 'eof' and audio_frame is not None:
-                #audio
-                img, t = audio_frame
-            # Break the loop
-        else:
+        if not ret:
+            print("end of the video")
             break
+        
+        if cv2.waitKey(24) & 0xFF == ord('s'):
+            break
+        cv2.imshow(window_name, frame)
+        if val != 'eof' and audio_frame is not None:
+            #audio
+            img, t = audio_frame
     # When everything done, release
     # the video capture object
+    player.close_player()
     cap.release()
     # Closes all the frames
     cv2.destroyAllWindows()
