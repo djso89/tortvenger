@@ -24,8 +24,8 @@ def play_cutscene_1_1():
         if not ret:
             print("end of the video")
             break
-        
-        if cv2.waitKey(24) & 0xFF == ord('s'):
+
+        if cv2.waitKey(26) & 0xFF == ord('s'):
             break
         cv2.imshow(window_name, frame)
         if val != 'eof' and audio_frame is not None:

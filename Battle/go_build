@@ -1,0 +1,15 @@
+#!/bin/bash
+pyinstaller \
+    --onefile \
+    --noconsole \
+    --hidden-import=ffpyplayer.threading \
+    --hidden-import=ffpyplayer.player.queue \
+    --hidden-import=ffpyplayer.player.frame_queue \
+    --hidden-import=ffpyplayer.player.decoder \
+    --hidden-import=ffpyplayer.player.clock \
+    --hidden-import=ffpyplayer.pic \
+    --hidden-import=ffpyplayer.tools \
+    --hidden-import=ffpyplayer.player.core \
+    main.py
+mv dist/main .
+rm -r build dist

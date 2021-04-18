@@ -4,10 +4,10 @@ block_cipher = None
 
 
 a = Analysis(['main.py'],
-             pathex=['C:\\Users\\Daniel\\pygame_projects\\tortvenger\\Battle'],
+             pathex=['/home/djso89/tortvenger/Battle'],
              binaries=[],
              datas=[],
-             hiddenimports=[],
+             hiddenimports=['ffpyplayer.threading', 'ffpyplayer.player.queue', 'ffpyplayer.player.frame_queue', 'ffpyplayer.player.decoder', 'ffpyplayer.player.clock', 'ffpyplayer.pic', 'ffpyplayer.tools', 'ffpyplayer.player.core'],
              hookspath=[],
              runtime_hooks=[],
              excludes=[],
