@@ -8,7 +8,7 @@ setting = Settings()
 
 ACC = 0.6
 FRIC = -0.12
-FPS = 60
+FPS = 70
 
 WIN_W = setting.screen_width
 WIN_H = setting.screen_height

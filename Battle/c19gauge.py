@@ -51,7 +51,7 @@ class C19_Gauge(C19_Attr):
 
 
         self.hpstring = 'H P :  ' + str(self.curr_hp) + ' / ' + str(self.HP)
-        self.hptxt = Borderline_Txt(self.hpstring, self.font, black, white, 10)
+        self.hptxt = Borderline_Txt(self.hpstring, self.font, black, white, 10).convert_alpha()
         self.hp_stat.blit(self.hptxt, (100, 10))
 
 

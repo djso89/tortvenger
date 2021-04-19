@@ -41,4 +41,4 @@ def Borderline_Txt(text, font, gfcolor, ocolor, opx):
         surf.blit(osurf, (dx + opx, dy + opx))
 
     surf.blit(textsurface, (opx, opx))
-    return surf
+    return surf.convert_alpha()
