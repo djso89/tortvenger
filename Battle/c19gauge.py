@@ -67,8 +67,8 @@ class C19_Gauge(C19_Attr):
 
     def show_gauge(self):
         """transform the updated hp bar of C19 to show """
-        self.hp_stat.convert()
         self.hp_stat = pygame.transform.scale(self.hp_stat, (140, 30))
+        self.hp_stat.convert()
 
 
 

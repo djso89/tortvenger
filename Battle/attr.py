@@ -60,6 +60,32 @@ class C19_Attr(Attr):
         super(C19_Attr, self).__init__(1, 36, 30, 10, 15, 15, 0)
 
 
+class GST_Attr(Attr):
+    """ Gooster's attribute class """
+    def __init__(self):
+        Attr.__init__(self, 1, 35, 35, 27, 35, 40, 120)
+        self.PKGS = 50
+        self.curr_pkgs = self.PKGS
+
+    def grow(self, expr_pts):
+        self.get_expr(expr_pts)
+        if self.curr_exp <= 0:
+            remainder = self.curr_exp
+            print("remainder{}".format(remainder))
+            self.level_up()
+            self.curr_exp += remainder
+
+    def get_expr(self, expr_pts):
+        self.curr_exp -= expr_pts
+        
+    def level_up(self):
+        self.LV += 1
+        self.attack += random.randint(5, 8)
+        self.defense += random.randint(4, 8)
+        self.dexterity += random.randint(2, 7)
+        self.luck += random.randint(3, 5)
+        self.expr += random.randint(85, 110)
+        self.curr_exp = self.expr
 
 class K_Attr(Attr):
     """ Kuppa's attribute class"""

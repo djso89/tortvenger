@@ -12,10 +12,10 @@ class K_Gauge(K_Attr):
     def __init__(self):
         super().__init__()
         self.update_bar = False
-        self.image_pf = pygame.image.load(pf_dir)
+        self.image_pf = pygame.image.load(pf_dir).convert_alpha()
         self.image_hp = pygame.image.load(hp_dir).convert()
         self.image_ki = pygame.image.load(ki_dir).convert()
-        self.image_kp = pygame.image.load(kp_dir)
+        self.image_kp = pygame.image.load(kp_dir).convert_alpha()
         self.image_keh = pygame.image.load(keh_dir).convert()
 
         self.surf = pygame.Surface((1000, 600), pygame.SRCALPHA, 32)\
@@ -99,6 +99,7 @@ class K_Gauge(K_Attr):
             self.update_bars()
             self.update_bar = False
         self.surf = pygame.transform.scale(self.surf,(300, 150))
+        self.surf.convert()
 
 
 

@@ -5,6 +5,7 @@ from display import *
 from roostergooster.gst_battle import *
 from roostergooster.envkunai import *
 from roostergooster.expkage import *
+from goostergauge import *
 
 from covid19 import *
 from stage import *
@@ -95,6 +96,7 @@ class Game:
         """ drawing routines """
         # draw the Stage
         ST1.draw(screen, self.SB_toggle)
+        goosterinfo.show_gauge()
 
         # draw the cells and player
         
