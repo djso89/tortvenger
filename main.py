@@ -3,7 +3,7 @@ import subprocess, time
 file_path = 'menus/main.py'
 
 def main():
-    child = subprocess.Popen(['python3', file_path])
+    child = subprocess.Popen(['python', file_path])
     while child.poll() is None:
         print("parent: child (pid = %d) is still running" % child.pid)
         # do parent stuff
