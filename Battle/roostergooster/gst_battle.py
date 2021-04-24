@@ -3,7 +3,7 @@ from covid19 import Cells
 from roostergooster.gst_action import *
 from roostergooster.expkage import expk_bullets
 from roostergooster.envkunai import envk_bullets
-
+from goostergauge import goosterinfo
 
 class GST_Battle(GST_Act):
     def __init__(self):
@@ -40,7 +40,7 @@ class GST_Battle(GST_Act):
         #touch Cars
         hitC = pygame.sprite.spritecollide(self, Cars, False)
         self.touchX(hitC)
-        
+
         hitP = pygame.sprite.spritecollide(self, Plats, False)
         self.touchX(hitP)
 
@@ -89,7 +89,13 @@ class GST_Battle(GST_Act):
             #print("made contact with cell")
             self.check_dir_x(cell)
         #print("---------------------------------")
-    
+
+    def cell_do_dmg_x(self, cell, knock_back):
+        goosterinfo.hit_hp(cell.get_dmg(goosterinfo.defense, goosterinfo.luck))
+        self.pos.x += knock_back
+        self.cell_atk_g = True
+        goosterinfo.update_bar = True
+
     def cell_hit_player_xl(self, cell):
         """
         function that checks for collision between
@@ -97,11 +103,13 @@ class GST_Battle(GST_Act):
         """
         if cell.direction == 0:
             if self.pos.x  <= (cell.pos.x + cell.rect.width) - 20:
-                self.pos.x += 200
-                self.gotHit = True
+                if not self.dmg_blinking:
+                    self.cell_do_dmg_x(cell, 200)
+                    self.gotHit = True
         if cell.direction == 1:
             if cell.pos.x >= (self.pos.x + self.rect.width) - 20:
                 self.pos.x -= 100
+                self.cell_atk_g = True
 
     def cell_hit_player_xr(self, cell):
         """
@@ -115,8 +123,8 @@ class GST_Battle(GST_Act):
         if cell.direction == 0:
             if self.pos.x + 20 >= (cell.pos.x + cell.rect.width):
                 self.pos.x += 100
-                
-                
+
+
     def envk_hit_cell(self):
         """
         function that checks collision between
@@ -135,7 +143,7 @@ class GST_Battle(GST_Act):
                     cell.pos.x -= 20
                 if bullet.orientation == 'left' and cell.direction == 1:
                     cell.pos.x -= 20
-                
+
     def expk_hit_cell(self):
         for bullet in expk_bullets:
             hitCells = pygame.sprite.spritecollide(bullet, Cells, False)
@@ -161,9 +169,8 @@ class GST_Battle(GST_Act):
             self.cell_hit_player_xr(cell)
         if self.vel.x < 0:
             self.cell_hit_player_xl(cell)
-            
-                            
-        
+
+
+
 
 P1 = GST_Battle()
-

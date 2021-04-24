@@ -77,7 +77,7 @@ class GST_Attr(Attr):
 
     def get_expr(self, expr_pts):
         self.curr_exp -= expr_pts
-        
+
     def level_up(self):
         self.LV += 1
         self.attack += random.randint(5, 8)

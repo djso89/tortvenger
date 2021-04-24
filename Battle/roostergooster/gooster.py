@@ -11,8 +11,7 @@ from spritesheet import SpriteSheet
 green = (0, 255, 0)
 black = (0, 0, 0)
 class Gooster(pygame.sprite.Sprite):
-
-
+    """Gooster Class """
     def loadimages(self):
         """ load all the kuppa action frames """
         sprite_sheet = SpriteSheet("images/gst_rdy.png", black)
@@ -37,8 +36,10 @@ class Gooster(pygame.sprite.Sprite):
         """ initialize player """
         super().__init__()
 
-        #counter for animating jumping
+        # counter for animating jumping
         self.cnt = 0
+        # counter for damage blinking
+        self.cnt_dmg = 0
 
         # action frames
         self.ready_r = []
@@ -62,12 +63,33 @@ class Gooster(pygame.sprite.Sprite):
         # orientation and movement status
         self.orientation = 'right'
         self.OnGround = True
-        
 
-        
+        # cell attack and damage blinking
+        self.cell_atk_g = False
+        self.dmg_blinking = False
+        self.n_blinks = 0
+
+
     def get_rect(self):
         return self.image.get_rect()
-        
+
+    def no_atk_dmg_blink(self):
+        period = 2
+        if self.cell_atk_g:
+            if self.cnt_dmg >= period:
+                self.image = Surface((self.rect.width, self.rect.height),\
+                                     flags = SRCALPHA)
+                self.image.fill((0, 0, 0, 0))
+                self.dmg_blinking = True
+                self.cnt_dmg = 0
+                if self.n_blinks == 15:
+                    self.cell_atk_g = False
+                    self.dmg_blinking = False
+                    self.n_blinks = 0
+                else:
+                    self.n_blinks += 1
+            else:
+                self.cnt_dmg += 1
 
 
 
@@ -91,45 +113,7 @@ class Gooster(pygame.sprite.Sprite):
         if self.OnGround == True:
             self.vel.y = -25
             self.OnGround = False
-            
-    # def update(self):
-        # """
-        # function that calculates position
-        # and check collision
-        # """
-        # # move along the x direction
-        # self.acc.x += self.vel.x * FRIC
-        # self.vel.x += self.acc.x
-        # self.pos.x += self.vel.x + 0.5 * self.acc.x
 
-        # #left Most boundary of stage. Block the player from
-        # #moving further
-        # if self.pos.x < 0:
-            # self.pos.x = 0
-
-        # if self.pos.x > WIN_W - self.rect.width:
-            # self.pos.x = WIN_W - self.rect.width
-
-        # self.rect.x = self.pos.x
-        # self.collisionX()
-        # #moving along the y direction
-        # self.vel.y += self.acc.y
-        # self.pos.y += self.vel.y + 0.5 * self.acc.y
-        # # assign the y coordinate to frame's y
-        # self.rect.y = self.pos.y
-
-        # self.collisionY()
-        
-    # def touchX(self, hits):
-        # #touch hits
-        # for block in hits:
-            # if self.vel.x > 0: #moving right
-                # self.rect.right = block.rect.left
-            # if self.vel.x < 0: #moving left
-                # self.rect.left = block.rect.right
-            # # set the x coordinate
-            # self.pos.x = self.rect.x
-            
     # gooster touching the stage objects
     def touchXR(self, hits):
         #touch hits coming from right side
@@ -200,7 +184,7 @@ class Gooster(pygame.sprite.Sprite):
         #touch Steps
         hitSt = pygame.sprite.spritecollide(self, Steps, False)
         self.touchYUD(hitSt)
-        
+
 
     """ animation functions """
 
@@ -215,10 +199,8 @@ class Gooster(pygame.sprite.Sprite):
         elif self.orientation == 'left' and self.OnGround == True:
             frame = (self.pos.x // 30) % len(self.ready_l)
             self.image = self.ready_l[int(frame)]
-    
-    
 
-            
+
 
 
     # def ani_jump(self):
@@ -233,7 +215,3 @@ class Gooster(pygame.sprite.Sprite):
                 # self.image = self.OnGround_r[self.cnt//period]
             # if self.orientation == 'left':
                 # self.image = self.OnGround_l[self.cnt//period]
-
-
-
-

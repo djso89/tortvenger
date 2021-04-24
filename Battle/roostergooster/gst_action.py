@@ -28,12 +28,12 @@ class GST_Act(Gooster):
         self.exp_k_l = []
         self.exp_k_r = []
         """initialize all the action frames """
-        
+
     def load_images(self):
         """ load the images from sprite sheets """
         sprite_sheet_envk = SpriteSheet("images/gst_env_k.png", black)
         ss_envk = sprite_sheet_envk.sprite_sheet
-        
+
         sprite_sheet_expk = SpriteSheet("images/gst_exp_k.png", black)
         ss_expk = sprite_sheet_expk.sprite_sheet
 
@@ -45,7 +45,7 @@ class GST_Act(Gooster):
             self.env_k_r.append(image)
             image = pygame.transform.flip(image, True, False)
             self.env_k_l.append(image)
-            
+
         for i in range(0, 9, 1):
             width = ss_expk.get_width()
             height = ss_expk.get_height()
@@ -122,7 +122,7 @@ class GST_Act(Gooster):
                 # throw
                 self.throw_expk()
             self.frame_expk += 1
-            
+
             if self.frame_expk >= len(self.exp_k_r):
                 self.frame_expk = 0
                 self.go_exp_k = False
@@ -131,15 +131,15 @@ class GST_Act(Gooster):
         else:
             self.done_expk = False
             self.cnt_expk += 1
-                
+
     def envk_frame_adj(self):
         if self.go_env_k:
             if self.orientation == 'left':
                 self.ani_adj_offset(-20, 0)
             if self.orientation == 'right':
                 self.ani_adj_offset(0, 0)
-                
-                
+
+
     def expk_frame_adj(self):
         if self.go_exp_k:
             if self.orientation == 'left':
@@ -155,7 +155,7 @@ class GST_Act(Gooster):
             self.pos_a.x = self.pos.x + x_off
             self.pos_a.y = self.pos.y + y_off
         self.rect_a = self.image_a.get_rect(topleft=self.pos_a)
-            
+
     def throw_envk(self):
         if self.orientation == 'right':
             start_x = self.pos.x + self.rect.width
@@ -165,7 +165,7 @@ class GST_Act(Gooster):
             start_x = self.pos.x
             start_y = self.pos.y + 50 + random.randint(-50, 50)
             envk_bullet = ENV_K(start_x, start_y, self.orientation)
-        envk_bullets.add(envk_bullet)   
+        envk_bullets.add(envk_bullet)
 
     def throw_expk(self):
         if self.orientation == 'right':
@@ -178,35 +178,28 @@ class GST_Act(Gooster):
             expk_bullet = EXP_K(start_x, start_y, self.orientation)
         expk_bullets.add(expk_bullet)
 
-        
+
 
     def animate(self):
         """animate the player. """
-        
+
         self.ani_move()
+        self.no_atk_dmg_blink()
         self.atk_envk()
         self.atk_expk()
 
-        self.envk_frame_adj()   
-        self.expk_frame_adj() 
+        self.envk_frame_adj()
+        self.expk_frame_adj()
 
     def render(self):
         """ paste the player object into screen """
         self.animate()
-        
+
         if (self.go_env_k or self.go_exp_k):
             w_a = self.image_a.get_width()
             h_a = self.image_a.get_height()
-            screen.blit(self.image_a, self.pos_a, (0, 0,w_a ,h_a))
+            screen.blit(self.image_a, self.pos_a, (0, 0, w_a , h_a))
         else:
             w = self.image.get_width()
             h = self.image.get_height()
             screen.blit(self.image, self.pos, (0, 0,w ,h))
-
-#P1 = GST_Act()
-
-
-
-
-
-

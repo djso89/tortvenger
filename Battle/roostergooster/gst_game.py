@@ -25,13 +25,13 @@ class Game:
         # toggle flag for displaying Stage Objects
         self.SB_toggle = False
 
-        # release counter for measing how long the a key is let go after it's pressed
+        # release counter for measing how long
+        # the a key is let go after it's pressed
         self.a_key_cnt = 0
 
     def Key_a_delay(self, cnt_h, cnt_btnM_h, cnt_btnM_l):
         """Key release Key_a mechanism """
         self.a_key_cnt = pygame.time.get_ticks() - self.a_key_cnt
-        # print("you release key a for " + str(self.a_key_cnt) + "ms")
         P1.go_env_k = True
 
 
@@ -64,7 +64,6 @@ class Game:
                     sys.exit()
                 if event.key == pygame.K_d:
                     P1.go_exp_k = True
-                    # P1.draw_the_swrd()
                 if event.key == pygame.K_a:
                     self.attack_event()
                 if event.key == pygame.K_UP:
@@ -82,13 +81,14 @@ class Game:
         self.player_stuff()
         self.show_info()
 
+
         # do the COVID19 routines
         for cell in Cells:
             cell.move()
-            
+
+        # gooster's bullet routines
         for bullet in envk_bullets:
             bullet.move()
-        
         for bullet in expk_bullets:
             bullet.move()
 
@@ -99,20 +99,20 @@ class Game:
         goosterinfo.show_gauge()
 
         # draw the cells and player
-        
         self.cell_draw()
         self.player_draw()
-        
+
         for bullet in envk_bullets:
             bullet.animate()
             bullet.render()
-            
+
         for bullet in expk_bullets:
             bullet.animate()
             bullet.render()
+
         """refresh the page per (1000/FPS) ms """
         # tick the clock at 60Hz rate
-        pygame.display.flip()
+        pygame.display.update()
         self.clock.tick(FPS)
 
     def cell_draw(self):
@@ -135,23 +135,15 @@ class Game:
 
 
 
-
-
-
-
-
-
     def get_coord(self):
         m1, m2, m3 = pygame.mouse.get_pressed()
         if m1 == 1:
             print("Point 1: {}".format(pygame.mouse.get_pos()))
-                
     def show_info(self):
         if (self.prd >= 13):
             self.get_coord()
         self.prd += 1
 
-        
     def print_stat(self):
         if (P1.ATK):
             act_rect = P1.rect_a
