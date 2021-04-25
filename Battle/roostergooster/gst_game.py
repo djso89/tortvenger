@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import sys
+import time as t
 import pygame
 from display import *
 from roostergooster.gst_battle import *
@@ -19,6 +20,7 @@ class Game:
     def __init__(self):
         #pygame.init()
         self.clock = pygame.time.Clock()
+        self.run = True
         self.prd = 0
         self.cnt_show_comb = False
         self.frames = 0
@@ -44,9 +46,13 @@ class Game:
         self.Key_a_delay(envk_len + 100, 90 ,34)
 
     def run_game(self):
-        while True:
+        while self.run:
             self._check_events()
             self._update_screen()
+
+        t.sleep(3)
+        pygame.quit()
+        sys.exit()
 
     def print_key(self, key):
         print(key)
@@ -111,6 +117,13 @@ class Game:
         for bullet in expk_bullets:
             bullet.animate()
             bullet.render()
+
+        # game over
+        if goosterinfo.curr_hp == 0:
+            font = pygame.font.Font('fonts/aileron_regular.otf', 40)
+            g_over_txt = Borderline_Txt("Game Over", font, black, white, 5)
+            screen.blit(g_over_txt, (WIN_W / 2, WIN_H /2))
+            self.run = False
 
         """refresh the page per (1000/FPS) ms """
         # tick the clock at 60Hz rate

@@ -152,9 +152,9 @@ class GST_Battle(GST_Act):
         else:
             self.cnt_reset_combo = 0
 
-    def combo3_pkg_up(self):
+    def combo3_pkg_up(self, pkg_recovery):
         if self.atk_comb == 3:
-            goosterinfo.curr_pkgs += 3
+            goosterinfo.curr_pkgs += pkg_recovery
             if goosterinfo.curr_pkgs >= goosterinfo.PKGS:
                 goosterinfo.curr_pkgs = goosterinfo.PKGS
             goosterinfo.update_bar = True
@@ -185,7 +185,7 @@ class GST_Battle(GST_Act):
                 self.atk_comb += 1
                 if self.atk_comb == goosterinfo.max_combo + 1:
                     self.atk_comb = 1
-                self.combo3_pkg_up()
+                self.combo3_pkg_up(3)
                 self.show_comb = True
                 break
 
