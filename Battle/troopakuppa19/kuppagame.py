@@ -18,7 +18,7 @@ from troopakuppa19.vid import *
 class Game:
     """ Game class """
     def __init__(self):
-        pygame.init()
+#        pygame.init()
         self.clock = pygame.time.Clock()
         self.run = True
         self.prd = 0

@@ -56,8 +56,12 @@ class C19_Gauge(C19_Attr):
 
 
     def hp_show(self):
+        """
+        function that holds show_hp flag for
+        10 * 1000/FPS ms
+        """
         if self.show_hp:
-            if self.cnt_show_hp >= 10:
+            if self.cnt_show_hp >= 20:
                 self.show_hp = False
                 self.cnt_show_hp = 0
             else:

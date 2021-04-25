@@ -8,6 +8,7 @@ import pygame
 from roostergooster.gooster import *
 from roostergooster.envkunai import *
 from roostergooster.expkage import *
+from goostergauge import goosterinfo
 import random
 
 envk_frame_period = 2
@@ -67,7 +68,7 @@ class GST_Act(Gooster):
         self.envk_comb = 1
         self.cnt_envk = 0
         self.frame_env = 0
-        
+
         # attack: explosive package attack
         self.go_exp_k = False
         self.done_expk = False
@@ -85,14 +86,14 @@ class GST_Act(Gooster):
             self.ani_envk()
         elif not self.go_env_k:
             self.cnt_envk = 0
-            
+
     def atk_expk(self):
         if self.go_exp_k:
             self.ani_expk()
         elif not self.go_exp_k:
             self.cnt_expk = 0
-            
-          
+
+
     def ani_envk(self):
         if self.cnt_envk >= envk_frame_period:
             if self.orientation == 'right':
@@ -111,7 +112,7 @@ class GST_Act(Gooster):
         else:
             self.done_envk = False
             self.cnt_envk += 1
-    
+
     def ani_expk(self):
         if self.cnt_expk >= 2:
             if self.orientation == 'right':
@@ -176,7 +177,12 @@ class GST_Act(Gooster):
             start_x = self.pos.x
             start_y = self.pos.y + 50 + random.randint(-100, 50)
             expk_bullet = EXP_K(start_x, start_y, self.orientation)
-        expk_bullets.add(expk_bullet)
+        if goosterinfo.curr_pkgs >= 5:
+            goosterinfo.curr_pkgs -= 5
+            expk_bullets.add(expk_bullet)
+        if goosterinfo.curr_pkgs <= 0:
+            goosterinfo.curr_pkgs = 0
+        goosterinfo.update_bar = True
 
 
 

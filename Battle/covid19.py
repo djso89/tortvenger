@@ -115,6 +115,8 @@ class COVID19(C19_Gauge, pygame.sprite.Sprite):
         if self.cnt_hc >= period * (len(self.dmg_envk) - 1):
             self.cnt_hc = 0
             self.hitCell_envk = False
+            if self.curr_hp == 0:
+                self.kill()
         else:
             self.image = self.dmg_envk[self.cnt_hc // period]
             self.cnt_hc += 1
@@ -124,6 +126,8 @@ class COVID19(C19_Gauge, pygame.sprite.Sprite):
         if self.cnt_hc >= period * (len(self.dmg_expk) - 1):
             self.cnt_hc = 0
             self.hitCell_expk = False
+            if self.curr_hp == 0:
+                self.kill()
         else:
             self.image = self.dmg_expk[self.cnt_hc // period]
             self.cnt_hc += 1

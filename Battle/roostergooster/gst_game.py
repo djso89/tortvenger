@@ -6,6 +6,7 @@ from roostergooster.gst_battle import *
 from roostergooster.envkunai import *
 from roostergooster.expkage import *
 from goostergauge import *
+from fonts.goostercombo import *
 
 from covid19 import *
 from stage import *
@@ -16,7 +17,7 @@ from stage import *
 class Game:
     """ Game class """
     def __init__(self):
-        pygame.init()
+        #pygame.init()
         self.clock = pygame.time.Clock()
         self.prd = 0
         self.cnt_show_comb = False
@@ -85,6 +86,7 @@ class Game:
         # do the COVID19 routines
         for cell in Cells:
             cell.move()
+            cell.hp_show()
 
         # gooster's bullet routines
         for bullet in envk_bullets:
@@ -125,6 +127,14 @@ class Game:
     def player_draw(self):
         #draw the player
         P1.render()
+
+        if P1.show_comb:
+            if self.cnt_show_comb >= 20:
+                P1.show_comb = False
+                self.cnt_show_comb = 0
+            GoosterCombo.update_combo(P1.atk_comb)
+            self.cnt_show_comb += 1
+        
 
 
     def player_stuff(self):

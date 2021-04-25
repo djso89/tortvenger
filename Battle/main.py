@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-from troopakuppa19.kuppagame import *
+from character_import import *
+
 
 
 if __name__ == '__main__':

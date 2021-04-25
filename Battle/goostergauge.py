@@ -35,7 +35,7 @@ class GST_Gauge(GST_Attr):
 
         self.hpstring = 'H P :  ' + str(self.curr_hp) + "  /  " + str(self.HP)
         self.hp_text = Borderline_Txt(self.hpstring, self.fonth, black, white, 10)
-        self.surf.blit(self.hp_text, (495, 180))
+        self.surf.blit(self.hp_text, (465, 180))
 
 
 
@@ -70,7 +70,7 @@ class GST_Gauge(GST_Attr):
         self.surf.blit(self.hp_surf, (395, 190),(0, 0, hp_len, hp_h))
         self.hpstring = 'H P :  ' + str(self.curr_hp) + "  /  " + str(self.HP)
         self.hp_text = Borderline_Txt(self.hpstring, self.fonth, black, white, 10)
-        self.surf.blit(self.hp_text, (495, 180))
+        self.surf.blit(self.hp_text, (465, 180))
 
         #initialize Packages gauges
         pkg_bar_w = self.image_pkg.get_width()
