@@ -8,49 +8,38 @@ from spritesheet import SpriteSheet
 
 
 
-green = (0, 255, 0)
-black = (0, 0, 0)
-class Gooster(pygame.sprite.Sprite):
-    """Gooster Class """
+class Lettuce(pygame.sprite.Sprite):
+
     def loadimages(self):
         """ load all the kuppa action frames """
-        sprite_sheet = SpriteSheet("images/gst_rdy.png", black)
-        #sprite_sheet_envk = SpriteSheet("images/gst_env_k.png", black)
+        sprite_sheet = SpriteSheet("images/le_rdy.png", (0, 0, 0))
+
 
         ss = sprite_sheet.sprite_sheet
-        #ss_envk = sprite_sheet_envk.sprite_sheet
 
         # load all right facing ready images
         for i in range(0, 2, 1):
             width = ss.get_width()
             height = ss.get_height()
-            image = sprite_sheet.get_image(i * width / 2, 0,
-                                           width / 2, height)
+            image = sprite_sheet.get_image(i * width/2, 0,
+                                           width/2, height)
             self.ready_r.append(image)
             image = pygame.transform.flip(image, True, False)
-            image.set_colorkey((0, 0, 0))
             self.ready_l.append(image)
-
-
 
     def __init__(self):
         """ initialize player """
         super().__init__()
 
-        # counter for animating jumping
         self.cnt = 0
-        # counter for damage blinking
+        self.cnt_swrd_draw = 0
         self.cnt_dmg = 0
 
         # action frames
         self.ready_r = []
         self.ready_l = []
-        self.jmp_l = []
-        self.jmp_r = []
 
-        # load the image
         self.loadimages()
-
 
         # kinematic factors
         self.pos = vec((0, 0))
@@ -58,33 +47,30 @@ class Gooster(pygame.sprite.Sprite):
         self.acc = vec(0, 0)
 
         # set the image the player start with
-        self.image = self.ready_r[0]
+        self.image = pygame.image.load('images/le_frame.png').convert_alpha()
         self.rect = self.image.get_rect(topleft=self.pos)
 
         # orientation and movement status
         self.orientation = 'right'
         self.OnGround = True
 
-        # cell attack and damage blinking
-        self.cell_atk_g = False
+        self.wand_on = False
+        self.wand_drwn = False
+
+        self.cell_atk_k = False
         self.dmg_blinking = False
         self.n_blinks = 0
 
-
-    def get_rect(self):
-        return self.image.get_rect()
-
-    def no_atk_dmg_blink(self):
+    def no_swd_dmg_blink(self):
         period = 2
-        if self.cell_atk_g:
+        if self.cell_atk_k:
             if self.cnt_dmg >= period:
-                self.image = Surface((self.rect.width, self.rect.height),\
-                                     flags = SRCALPHA)
+                self.image = Surface((self.rect.width, self.rect.height), flags = SRCALPHA)
                 self.image.fill((0, 0, 0, 0))
                 self.dmg_blinking = True
                 self.cnt_dmg = 0
                 if self.n_blinks == 15:
-                    self.cell_atk_g = False
+                    self.cell_atk_k = False
                     self.dmg_blinking = False
                     self.n_blinks = 0
                 else:
@@ -92,22 +78,35 @@ class Gooster(pygame.sprite.Sprite):
             else:
                 self.cnt_dmg += 1
 
+    def get_rect(self):
+        return self.image.get_rect()
+
+    def draw_the_wand(self):
+        self.wand_on = not self.wand_on
 
 
     def move(self):
-        """
-        player move function
-        this just simply sets acceleration
-        according to the key presses
-        """
+        """Player move function """
         self.acc = vec(0, 2.5)
         pressed_keys = pygame.key.get_pressed()
         if pressed_keys[K_LEFT]:
-            self.acc.x = -ACC
-            self.orientation = 'left'
+            if not pressed_keys[K_a]:
+                self.acc.x = -ACC
+                self.orientation = 'left'
+            if pressed_keys[K_a] and not self.wand_on:
+                self.acc.x = -ACC
+                self.orientation = 'left'
+            if pressed_keys[K_a] and self.wand_on:
+                self.acc.x = 0
         if pressed_keys[K_RIGHT]:
-            self.acc.x = ACC
-            self.orientation = 'right'
+            if not pressed_keys[K_a]:
+                self.acc.x = ACC
+                self.orientation = 'right'
+            if pressed_keys[K_a] and not self.wand_on:
+                self.acc.x = ACC
+                self.orientation = 'right'
+            if pressed_keys[K_a] and self.wand_on:
+                self.acc.x = 0
 
     def jump(self):
         """ jump action """
@@ -115,7 +114,9 @@ class Gooster(pygame.sprite.Sprite):
             self.vel.y = -25
             self.OnGround = False
 
-    # gooster touching the stage objects
+
+
+    # Kuppa touching the stage objects
     def touchXR(self, hits):
         #touch hits coming from right side
         for block in hits:
@@ -156,8 +157,6 @@ class Gooster(pygame.sprite.Sprite):
             self.pos.y = self.rect.y
 
 
-
-
     def collisionY(self):
 
         """ check the collision in Y direction """
@@ -168,7 +167,7 @@ class Gooster(pygame.sprite.Sprite):
 
         #touch Cars
         hitC = pygame.sprite.spritecollide(self, Cars, False)
-        self.touchYUD(hitC)
+        self.touchYU(hitC)
 
         # touch Bricks
         hitB = pygame.sprite.spritecollide(self, Bricks, False)
@@ -185,34 +184,3 @@ class Gooster(pygame.sprite.Sprite):
         #touch Steps
         hitSt = pygame.sprite.spritecollide(self, Steps, False)
         self.touchYUD(hitSt)
-
-
-    """ animation functions """
-
-
-    def ani_move(self):
-        """ animate the left right movement"""
-        if self.orientation == 'right' and self.OnGround == True:
-            frame = (self.pos.x // 30) % len(self.ready_r)
-            self.image = self.ready_r[int(frame)]
-
-
-        elif self.orientation == 'left' and self.OnGround == True:
-            frame = (self.pos.x // 30) % len(self.ready_l)
-            self.image = self.ready_l[int(frame)]
-
-
-
-
-    # def ani_jump(self):
-        # """ animate the jump """
-        # period = 2
-        # if self.OnGround == False:
-            # if (self.cnt >= period * (len(self.OnGround_r) -1 )):
-                # self.cnt = period * (len(self.OnGround_r) -1 )
-            # else:
-                # self.cnt += 1
-            # if self.orientation == 'right':
-                # self.image = self.OnGround_r[self.cnt//period]
-            # if self.orientation == 'left':
-                # self.image = self.OnGround_l[self.cnt//period]

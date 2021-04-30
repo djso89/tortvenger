@@ -147,7 +147,7 @@ class Game:
                 self.cnt_show_comb = 0
             GoosterCombo.update_combo(P1.atk_comb)
             self.cnt_show_comb += 1
-        
+
 
 
     def player_stuff(self):

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Action Class - K_Act
+Action Class - GST_Act
 animating attacks and actions that involve when
-swords are drawn
+envelope kunai and explosive package are thrown
 """
 import pygame
 from roostergooster.gooster import *
@@ -45,6 +45,7 @@ class GST_Act(Gooster):
             image = sprite_sheet_envk.get_image(i * width / 9, 0, width / 9, height)
             self.env_k_r.append(image)
             image = pygame.transform.flip(image, True, False)
+            image.set_colorkey((0, 0, 0))
             self.env_k_l.append(image)
 
         for i in range(0, 9, 1):
@@ -53,6 +54,7 @@ class GST_Act(Gooster):
             image = sprite_sheet_expk.get_image(i * width / 9, 0, width / 9, height)
             self.exp_k_r.append(image)
             image = pygame.transform.flip(image, True, False)
+            image.set_colorkey((0, 0, 0))
             self.exp_k_l.append(image)
 
     def __init__(self):
