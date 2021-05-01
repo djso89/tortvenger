@@ -38,11 +38,12 @@ class GST_Act(Gooster):
         sprite_sheet_expk = SpriteSheet("images/gst_exp_k.png", black)
         ss_expk = sprite_sheet_expk.sprite_sheet
 
-        # load all the L/R frames for jumping with swords held
+        # load all the L/R frames for throwing envelop or packages
         for i in range(0, 9, 1):
             width = ss_envk.get_width()
             height = ss_envk.get_height()
             image = sprite_sheet_envk.get_image(i * width / 9, 0, width / 9, height)
+            image.set_colorkey((0, 0, 0))
             self.env_k_r.append(image)
             image = pygame.transform.flip(image, True, False)
             image.set_colorkey((0, 0, 0))
@@ -52,6 +53,7 @@ class GST_Act(Gooster):
             width = ss_expk.get_width()
             height = ss_expk.get_height()
             image = sprite_sheet_expk.get_image(i * width / 9, 0, width / 9, height)
+            image.set_colorkey((0, 0, 0))
             self.exp_k_r.append(image)
             image = pygame.transform.flip(image, True, False)
             image.set_colorkey((0, 0, 0))

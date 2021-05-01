@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import pygame
-from character_import import character
+#from character_import import character
 
 
 class SpriteSheet(object):
@@ -21,8 +21,8 @@ class SpriteSheet(object):
         image.blit(self.sprite_sheet, (0, 0), (x, y, width, height))
 
         # if background has backdrop color, set it transparant
-        if character == 'Gooster':
-            image.set_colorkey(self.bck_drop_clr)
+ #       if character == 'Gooster':
+ #           image.set_colorkey(self.bck_drop_clr)
 
         # return the image
         return image

@@ -26,6 +26,7 @@ class Gooster(pygame.sprite.Sprite):
             height = ss.get_height()
             image = sprite_sheet.get_image(i * width / 2, 0,
                                            width / 2, height)
+            image.set_colorkey((0, 0, 0))
             self.ready_r.append(image)
             image = pygame.transform.flip(image, True, False)
             image.set_colorkey((0, 0, 0))

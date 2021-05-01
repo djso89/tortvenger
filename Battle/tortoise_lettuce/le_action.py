@@ -6,6 +6,7 @@ when the wand is drawn
 """
 import pygame
 from tortoise_lettuce.lettuce import *
+from tortoise_lettuce.magic_orb import *
 
 black = (0, 0, 0)
 
@@ -138,7 +139,6 @@ class LE_Act(Lettuce):
 
     def shoot(self):
         if self.ATK:
-            print('here')
             self.ani_shoot()
         elif not self.ATK:
             self.cnt_wand_shoot = 0
@@ -199,6 +199,17 @@ class LE_Act(Lettuce):
         elif self.wand_on == False:
             self.ani_wand_in()
 
+    def shoot_orbs(self):
+        if self.orientation == 'right':
+            start_x = self.pos.x + self.rect.width
+            start_y = self.pos.y
+            orb = M_Orb(start_x, start_y, self.orientation)
+        if self.orientation == 'left':
+            start_x = self.pos.x
+            start_y = self.pos.y
+            orb = M_Orb(start_x, start_y, self.orientation)
+        magic_orbs.add(orb)
+
 
 
     def ani_shoot(self):
@@ -207,7 +218,7 @@ class LE_Act(Lettuce):
                 self.frame_shoot = 0
                 self.ATK = False
                 #self.ATK_DONE = True
-                #self.cnt_wand_shoot = 0
+                self.cnt_wand_shoot = 0
             else:
                 self.frame_shoot += 1
             self.cnt_wand_shoot = 0
@@ -218,6 +229,8 @@ class LE_Act(Lettuce):
             self.image_a = self.wand_shoot_r[self.frame_shoot]
         if self.orientation == 'left':
             self.image_a = self.wand_shoot_l[self.frame_shoot]
+        if self.frame_shoot == 5:
+            self.shoot_orbs()
 
         """ animation functions """
 
@@ -239,9 +252,12 @@ class LE_Act(Lettuce):
 
 
     def ani_action(self):
-        if self.wand_on or self.wand_drwn:
+        if self.wand_drwn == True:
             if self.orientation == 'left':
-                self.ani_adj_offset(-40, -30)
+                if self.ATK == False:
+                    self.ani_adj_offset(-40, -30)
+                else:
+                    self.ani_adj_offset(-80, -30)
             if self.orientation == 'right':
                 self.ani_adj_offset(-5, -30)
         else:
@@ -254,7 +270,7 @@ class LE_Act(Lettuce):
 
     def render_a(self):
         self.ani_action()
-        #self.render()
+#        self.render() # to show the player frame
         w = self.image_a.get_width()
         h = self.image_a.get_height()
         pos = (self.pos_a.x, self.pos_a.y)

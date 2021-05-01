@@ -3,3 +3,5 @@ python3 main.py
 rm -r __pycache__
 rm -r fonts/__pycache__
 rm -r troopakuppa19/__pycache__
+rm -r roostergooster/__pycache__
+rm -r tortoise_lettuce/__pycache__

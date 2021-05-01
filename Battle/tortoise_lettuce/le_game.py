@@ -71,6 +71,9 @@ class Game:
             cell.move()
             cell.hp_show()
 
+        for orb in magic_orbs:
+            orb.move()
+
 
         """ drawing routines """
         # draw the Stage
@@ -79,6 +82,10 @@ class Game:
         # draw the cells and player
         self.cell_draw()
         self.player_draw()
+
+        for orb in magic_orbs:
+            orb.animate()
+            orb.render()
 
 
 
