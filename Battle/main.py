@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-from game import *
+from character_import import *
+
 
 
 if __name__ == '__main__':

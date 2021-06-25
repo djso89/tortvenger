@@ -11,7 +11,7 @@ class Game():
         self.DISPLAY_W, self.DISPLAY_H = self.info.current_w, self.info.current_h
         self.display = pygame.Surface((self.DISPLAY_W,self.DISPLAY_H))
         self.window = pygame.display.set_mode((self.DISPLAY_W,self.DISPLAY_H), pygame.FULLSCREEN)
-        self.font_name = 'fonts/8-BIT WONDER.TTF'
+        self.font_name = 'menus/fonts/8-BIT WONDER.TTF'
         #self.font_name = pygame.font.get_default_font()
         self.BLACK, self.WHITE = (0, 0, 0), (255, 255, 255)
         self.main_menu = MainMenu(self)
@@ -50,8 +50,8 @@ class Game():
                     self.UP_KEY = True
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
-                    return 1
-                    sys.exit()
+                    #return 301
+                    sys.exit(2)
 
     def reset_keys(self):
         self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY = False, False, False, False

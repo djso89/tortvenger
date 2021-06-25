@@ -1,25 +1,27 @@
 #!/usr/bin/env python3
+"""Stage 1-0 objects"""
 from block import *
 from display import *
 
-alph = 1
+
+
+alph = 68
+
 Ground = Block()
 
 Bricks = pygame.sprite.Group()
 Brick1 = Block()
-Brick2 = Block()
 Brick1.loadBrick(411, 237)
-Brick2.newBlock(0, 452, 188, 2, alph)
 
 Bricks.add(Brick1)
-Bricks.add(Brick2)
+#Bricks.add(Brick2)
 
 Cars = pygame.sprite.Group()
 Car1 = Block()
 Car2 = Block()
 
-Car1.newBlock(193, 400, 65, 52, alph)
-Car2.newBlock(930, 362, 105, 30, alph)
+Car1.newBlock(193, 400, 65, 50, alph)
+Car2.newBlock(938, 359, 105, 50, alph)
 
 Cars.add(Car1)
 Cars.add(Car2)
@@ -42,20 +44,29 @@ Step3.newBlock(616, 408, 600, 4, alph)
 Steps.add(Step3)
 
 Plats = pygame.sprite.Group()
+
+Plat = Block()
+Plat.newBlock(0, 452, 253, 10, alph)
+Plats.add(Plat)
+
 Plat1 = Block()
 Plat1.newBlock(503, 250, 233, 8, alph)
 Plats.add(Plat1)
 
 Plat2 = Block()
-Plat2.newBlock(719, 410, 500, 4, alph)
+Plat2.newBlock(145, 534, 100, 50, alph)
 
 
 
 Bldgs = pygame.sprite.Group()
 Bldg1 = Block()
 Bldg1.newBlock(840, 85, 166, 10, alph)
-Bldgs.add(Bldg1)
 
+Bldg2 = Block()
+Bldg2.loadobject(0, 253, 'images/buildings/petsmart.png')
+
+Bldgs.add(Bldg1)
+#Bricks.add(Bldg2)
 
 
 platforms = pygame.sprite.Group()
@@ -63,3 +74,8 @@ platforms.add(Ground)
 platforms.add(Step0)
 platforms.add(Step1)
 platforms.add(Step2)
+
+cell_plats = pygame.sprite.Group()
+cell_plats.add(Plat1)
+cell_plats.add(Ground)
+cell_plats.add(Step3)

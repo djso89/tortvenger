@@ -12,8 +12,8 @@ class Block(pygame.sprite.Sprite):
         the ground is established """
         super().__init__()
         self.surf = pygame.Surface((WIDTH, 20))
-        self.surf.set_alpha(12)
-        self.surf.fill((255,255,255))
+        self.surf.set_alpha(17)
+        self.surf.fill((0, 0, 0))
         self.rect = self.surf.get_rect(center = (WIDTH/2, HEIGHT - 10))
 
     def newBlock(self, x, y, w, h, a):
@@ -24,6 +24,15 @@ class Block(pygame.sprite.Sprite):
 
 
     def loadBrick(self, x, y):
-        self.surf = pygame.image.load('images/block1.png').convert()
-        self.surf.set_alpha(190)
+        ob = pygame.image.load('images/block1.png').convert()
+        self.surf = pygame.Surface([ob.get_width(), ob.get_height()])
+        self.surf.blit(ob, (0, 0), (0, 0, ob.get_width(), ob.get_height()))
+        #self.surf.set_colorkey((0, 0, 0))
+        self.rect = self.surf.get_rect(topleft=(x, y))
+
+    def loadobject(self, x, y, img_path):
+        ob = pygame.image.load(img_path)
+        self.surf = pygame.Surface([ob.get_width(), ob.get_height()], \
+                                   pygame.SRCALPHA, 32).convert_alpha()
+        self.surf.blit(ob, (0, 0), (0, 0, ob.get_width(), ob.get_height()))
         self.rect = self.surf.get_rect(topleft=(x, y))
