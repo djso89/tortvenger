@@ -17,3 +17,9 @@ class Ch_Menu():
 
     def show_menu(self):
         screen.blit(self.menu_display, (0, 0))
+
+
+class MainMenu(Menu):
+    def __init__(self):
+        Menu.__init__(self)
+        self.state = "Start"

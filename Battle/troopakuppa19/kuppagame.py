@@ -33,6 +33,7 @@ class Game:
         # release counter for measing how long the a key is let go after it's pressed
         self.a_key_cnt = 0
 
+
     def kuppavision(self):
         if self.SB_toggle:
             if self.cnt_sb >= 35:
@@ -45,6 +46,7 @@ class Game:
             self.cnt_sb += 1
         else:
             self.cnt_sb = 0
+
 
     def Key_a_delay(self, cnt_h, cnt_btnM_h, cnt_btnM_l):
         """Key release Key_a mechanism """
@@ -66,6 +68,7 @@ class Game:
                 else:
                     if P1.ATK_DONE:
                         P1.atk_comb += 1
+
 
     def attack_event(self):
         """attacking routine of player """

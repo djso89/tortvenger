@@ -195,10 +195,10 @@ class K_Battle(K_Act):
         cut_finish = cut_frame_num * cut_frame_period - 1
         if self.atk_comb >= 1 and self.atk_comb <= 9:
             if cell.direction == 0:
-                if self.pos_a.x <= (cell.pos.x + cell.rect.width) - 40:
+                if self.pos_a.x <= (cell.pos.x + cell.rect.width) - 0:
                     self.player_attack(cell, -2, -50, -400)
             if cell.direction == 1:
-                if self.pos_a.x <= (cell.pos.x + cell.rect.width) - 20:
+                if self.pos_a.x <= (cell.pos.x + cell.rect.width) - 0:
                     if self.pos.x > cell.pos.x: # you are behind cell
                         self.player_attack(cell, -2, -50, -400)
                     else: # cell is behind you
@@ -217,10 +217,10 @@ class K_Battle(K_Act):
         if self.atk_comb >= 1 and self.atk_comb <= 9:
             if cell.direction == 1:
                 if self.atk_comb >= 1 and self.atk_comb <= 9:
-                    if self.pos_a.x + self.rect_a.width - 40 >= cell.pos.x:
+                    if self.pos_a.x + self.rect_a.width - 0 >= cell.pos.x:
                         self.player_attack(cell, 2, 50, 400)
             if cell.direction == 0:
-                if self.rect_a.left + self.rect_a.width >= (cell.rect.left + 40):
+                if self.rect_a.left + self.rect_a.width >= (cell.rect.left + 0):
                     if self.pos.x < cell.pos.x:
                         self.player_attack(cell, 2, 50, 500)
                     else:

@@ -4,8 +4,6 @@ import numpy as np
 from ffpyplayer.player import MediaPlayer
 
 
-
-
 def play_cutscene_1_1():
     # Create a VideoCapture object and read from input file
     cap = cv2.VideoCapture('videos/1_1.mp4')
