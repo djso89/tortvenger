@@ -1,0 +1,51 @@
+#!/usr/bin/env python3
+from display import *
+import pygame
+from spritesheet import SpriteSheet
+
+
+black = (0, 0, 0)
+
+class Ani_Frame(pygame.sprite.Sprite):
+    def __init__(self):
+        super.__init__()
+        self.cnt_0 = 0
+        self.cnt_1 = 0
+        self.cnt_2 = 0
+        self.frame_0 = []
+        self.frame_1 = []
+        self.frame_2 = []
+
+
+    def load_frame0(self, path, fr_tot):
+        """ load the images from spritesheet for frame0 """
+        sprite_sheet = SpriteSheet(path, black)
+        for i in range(0, fr_tot):
+            ss = sprite_sheet.sprite_sheet
+            width = ss.get_width()
+            height = ss.get_height()
+            image = sprite_sheet.get_image\
+                (i * width // fr_tot, 0, width // fr_tot, height)
+            self.frame0.append(image)
+
+    def load_frame1(self, path, fr_tot):
+        """ load the images from spritesheet for frame1"""
+        sprite_sheet = SpriteSheet(path, black)
+        for i in range(0, fr_tot):
+            ss = sprite_sheet.sprite_sheet
+            width = ss.get_width()
+            height = ss.get_height()
+            image = sprite_sheet.get_image\
+                (i * width // fr_tot, 0, width // fr_tot, height)
+            self.frame1.append(image)
+
+    def load_frame2(self, path, fr_tot):
+        """ load the images from spritesheet for frame1"""
+        sprite_sheet = SpriteSheet(path, black)
+        for i in range(0, fr_tot):
+            ss = sprite_sheet.sprite_sheet
+            width = ss.get_width()
+            height = ss.get_height()
+            image = sprite_sheet.get_image\
+                (i * width // fr_tot, 0, width // fr_tot, height)
+            self.frame2.append(image)

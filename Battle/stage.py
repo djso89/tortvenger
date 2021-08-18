@@ -56,13 +56,13 @@ class Stage(pygame.sprite.Sprite):
 
 
 ST1 = Stage()
-Bldgs = ST1.Bldgs
-platforms = ST1.platforms
-Plats = ST1.Plats
-Steps = ST1.Steps
-Bricks = ST1.Bricks
-Cars = ST1.Cars
-BackDrop = pygame.sprite.Group()
+#Bldgs = ST1.Bldgs
+#platforms = ST1.platforms
+#Plats = ST1.Plats
+#Steps = ST1.Steps
+#Bricks = ST1.Bricks
+#Cars = ST1.Cars
+#BackDrop = pygame.sprite.Group()
 
 
 

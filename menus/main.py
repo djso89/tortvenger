@@ -3,7 +3,8 @@ import pygame
 from game import Game
 
 g = Game()
-pygame.mixer.music.load('menus//sounds//titlescreen.wav')
+#pygame.mixer.music.load('sounds/titlescreen.ogg')
+pygame.mixer.music.load('menus/sounds/titlescreen.wav')
 pygame.mixer.music.play(-1)
 
 while g.running:
