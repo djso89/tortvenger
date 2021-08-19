@@ -1,7 +1,9 @@
 #!/usr/bin/python3
 from display import *
+from profile import Ch_Sel_Profile
 from fonts.bordertext import Borderline_Txt
 
+black = (0, 0, 0)
 white = (255, 255, 255)
 turquise = (0, 108, 117)
 transparent = (0, 0, 0, 0)
@@ -12,31 +14,58 @@ class Ch_Menu():
         self.run_display = True
         self.clock = pygame.time.Clock()
         self.offset = -100
+
         self.bg_img = pygame.image.load("images/ch_sel_bg.png").convert()
+        self.b_win = pygame.image.\
+            load("images/windows/ch_sel_bio_win.png").convert_alpha()
+        self.attr_win = pygame.image.\
+            load('images/windows/ch_sel_attr_win.png').convert_alpha()
 
+        """character selection text title on upper left corner """
         self.titlefont = pygame.font.Font("fonts/Serif_Bold_Italic.ttf", 55)
+        self.title_txt = self.titlefont.render('', True, turquise)
+        self.title_rect = self.title_txt.get_rect()
+        self.title_rect.topleft = ((5, 5))
+        self.title_txt = Borderline_Txt\
+            ('Character', self.titlefont, turquise, white, 3)
+        """ selection string  """
+        self.title_txt1 = self.titlefont.render('', True, turquise)
+        self.title_rect1 = self.title_txt1.get_rect()
+        self.title_rect1.topleft = ((55, 55))
+        self.title_txt1 = Borderline_Txt\
+            ('Selection', self.titlefont, turquise, white, 3)
 
+        """blinking arrow """
         self.arrows_LR = pygame.image.\
             load("images/arrows/ch_sel_arrows.png").convert_alpha()
         self.arrows_L = pygame.image.\
             load("images/arrows/ch_sel_l_arrow.png").convert_alpha()
         self.arrows_R = pygame.image.\
             load("images/arrows/ch_sel_r_arrow.png").convert_alpha()
-
         self.arrow_LF = pygame.Surface\
             ((150, 640), pygame.SRCALPHA, 32).convert_alpha()
         self.arrow_RF = pygame.Surface\
             ((1200, 640), pygame.SRCALPHA, 32).convert_alpha()
-        self.crs_pos = vec((0, 0))
+
         self.bl_cnt = 0
         self.br_cnt = 0
         self.go_bl = False
         self.go_br = False
 
+        """character profile """
+        self.prof = Ch_Sel_Profile('Kuppa', 0)
+        self.prof.pics.pos_0 = vec((50, 200))
+        self.prof.pics.pos_1 = vec((50, 300))
+        self.prof.load_profile_img(2, 14, 14)
+
     def show_arrows_LR(self):
+        """display the both arrows """
         screen.blit(self.arrows_LR, (0, 0))
 
     def blink_arrow_L(self):
+        """left arrow blinking animation
+        when pressed left arrow
+        """
         if self.go_bl:
             if self.bl_cnt >= 2:
                 self.go_bl = False
@@ -49,6 +78,10 @@ class Ch_Menu():
         screen.blit(self.arrow_LF, (0, 0))
 
     def blink_arrow_R(self):
+        """
+        right arrow blinking animation
+        when pressed right arrow key
+        """
         if self.go_br:
             if self.br_cnt >= 2:
                 self.go_br = False
@@ -62,32 +95,17 @@ class Ch_Menu():
 
 
     def bio_window(self):
-        b_win = pygame.image.\
-            load("images/windows/ch_sel_bio_win.png").convert_alpha()
-        screen.blit(b_win, (0, 0))
+        """ show the transparent bio window"""
+        screen.blit(self.b_win, (0, 0))
 
     def attr_window(self):
-        attr_win = pygame.image.\
-            load('images/windows/ch_sel_attr_win.png').convert_alpha()
-        screen.blit(attr_win, (0, 0))
+        """ show the transparent attribute window """
+        screen.blit(self.attr_win, (0, 0))
 
     def title_name(self):
-        title_txt = self.titlefont.render('', True, turquise)
-        title_rect = title_txt.get_rect()
-        title_rect.topleft = ((5, 5))
-        title_txt = Borderline_Txt\
-            ('Character', self.titlefont, turquise, white, 3)
-
-        screen.blit(title_txt, title_rect)
-        title_txt = Borderline_Txt\
-            ('Selection', self.titlefont, turquise, white, 3)
-        title_rect.topleft = ((55, 55))
-        screen.blit(title_txt, title_rect)
-
-
-    def move_cursor(self, x, y):
-        self.crs_pos.x += x
-        self.crs_pos.y += y
+        """display the title name of menu """
+        screen.blit(self.title_txt, self.title_rect)
+        screen.blit(self.title_txt1, self.title_rect1)
 
 
     def show_menu(self):
@@ -110,3 +128,4 @@ class Ch_Menu():
         self.attr_window()
 
         # show the character roster
+        self.prof.show_pics(10, 2) # period0 and period1

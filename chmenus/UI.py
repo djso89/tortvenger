@@ -26,8 +26,8 @@ class Ch_Sel_UI(Ch_Menu):
 
     def _update_screen(self):
         self.show_menu()
-        pygame.display.flip()
-        self.clock.tick(60)
+        pygame.display.update()
+        self.clock.tick(70)
 
     def run_ch_sel(self):
         """ run the character selection menu """
