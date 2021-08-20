@@ -2,6 +2,7 @@
 from display import *
 from fonts.bordertext import Borderline_Txt
 from ani_frame import Ani_Frame
+from gauge_import import *
 
 
 black = (0, 0, 0)
@@ -31,7 +32,7 @@ def paragraph_text(surface, text, pos, \
 
 class Ch_Sel_Profile():
     """Character Selection Profile Class """
-    def __init__(self, name, Ch_info):
+    def __init__(self, name):
         """constructor """
         """displaying the name of character """
         self.name = name
@@ -41,6 +42,10 @@ class Ch_Sel_Profile():
             (self.name, self.namefont, green, white, 3)
         self.name_rect = self.name_txt.get_rect()
         self.name_rect.topleft = ((402, 82))
+
+        """period values for animated profile pics """
+        self.period_0 = 1
+        self.period_1 = 1
 
         """character biography """
         bio_path = "bio/" + "{}/{}_Bio.txt".\
@@ -56,9 +61,11 @@ class Ch_Sel_Profile():
         self.bio_title_rect = self.bio_title.get_rect()
         self.bio_title_rect.topleft = ((400, 180))
 
-        self.bio_text_font = pygame.font.Font("fonts/aileron_regular.otf", 23)
+        self.bio_text_font = pygame.font.Font("fonts/aileron_regular.otf", 20)
 
-        self.ch_info = Ch_info
+        gauge_name = self.name + 'info'
+        self.ch_info = eval(gauge_name)
+        self.pos_info = vec((0, 0))
         self.pics = Ani_Frame()
 
 
@@ -86,8 +93,9 @@ class Ch_Sel_Profile():
         screen.blit(self.bio_title, self.bio_title_rect)
         paragraph_text(screen, self.bio_text, (407, 246), self.bio_text_font)
 
-    def show_pics(self, period0, period1):
+    def show_pics(self):
         """animate the character profile pics """
+        self.ch_info.show_gauge(self.pos_info)
         self.show_name()
         self.show_bio()
-        self.pics.show_frame(period0, period1)
+        self.pics.show_frame(self.period_0, self.period_1)

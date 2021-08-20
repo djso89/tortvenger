@@ -1,7 +1,9 @@
 #!/usr/bin/python3
 from display import *
 from profile import Ch_Sel_Profile
+from profile_list import character_profiles
 from fonts.bordertext import Borderline_Txt
+
 
 black = (0, 0, 0)
 white = (255, 255, 255)
@@ -13,7 +15,6 @@ class Ch_Menu():
         pygame.font.init()
         self.run_display = True
         self.clock = pygame.time.Clock()
-        self.offset = -100
 
         self.bg_img = pygame.image.load("images/ch_sel_bg.png").convert()
         self.b_win = pygame.image.\
@@ -53,10 +54,10 @@ class Ch_Menu():
         self.go_br = False
 
         """character profile """
-        self.prof = Ch_Sel_Profile('Kuppa', 0)
-        self.prof.pics.pos_0 = vec((50, 200))
-        self.prof.pics.pos_1 = vec((50, 300))
-        self.prof.load_profile_img(2, 14, 14)
+        """list of data for single character profile """
+        self.index_prof = 0
+        self.num_prof_tot = len(character_profiles)
+        self.curr_prof = character_profiles[self.index_prof]
 
     def show_arrows_LR(self):
         """display the both arrows """
@@ -69,6 +70,11 @@ class Ch_Menu():
         if self.go_bl:
             if self.bl_cnt >= 2:
                 self.go_bl = False
+                if self.index_prof == 0:
+                    self.index_prof = 0
+                else:
+                    self.index_prof -= 1
+                self.curr_prof = character_profiles[self.index_prof]
                 self.bl_cnt = 0
             self.arrow_LF.blit(self.arrows_L, (0, 0))
             self.bl_cnt += 1
@@ -85,6 +91,11 @@ class Ch_Menu():
         if self.go_br:
             if self.br_cnt >= 2:
                 self.go_br = False
+                if self.index_prof == self.num_prof_tot - 1:
+                    self.index_prof = self.num_prof_tot - 1
+                else:
+                    self.index_prof += 1
+                self.curr_prof = character_profiles[self.index_prof]
                 self.br_cnt = 0
             self.arrow_RF.blit(self.arrows_R, (0, 0))
             self.br_cnt += 1
@@ -128,4 +139,4 @@ class Ch_Menu():
         self.attr_window()
 
         # show the character roster
-        self.prof.show_pics(10, 2) # period0 and period1
+        self.curr_prof.show_pics() # period0 and period1
