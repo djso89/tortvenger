@@ -25,7 +25,17 @@ character_data = {
          'frames2': 9,
          'period_0': 10,
          'period_1': 3
-    }
+    },
+    3 : { 'name': 'Lettuce',
+          'pos0': vec((70, 200)),
+          'pos1': vec((70, 400)),
+          'pos_info': vec((736, 131)),
+          'frames0': 2,
+          'frames1': 8,
+          'frames2': 7,
+          'period_0': 10,
+          'period_1': 3
+        }
 }
 
 character_profiles = []

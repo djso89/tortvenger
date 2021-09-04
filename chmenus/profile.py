@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 from display import *
 from fonts.bordertext import Borderline_Txt
+from profile_attr import Profile_ATTR
+from profile_attr_bar import ATTR_BAR
 from ani_frame import Ani_Frame
 from gauge_import import *
 
@@ -68,6 +70,10 @@ class Ch_Sel_Profile():
         self.pos_info = vec((0, 0))
         self.pics = Ani_Frame()
 
+        """profile_attribute """
+        self.prof_attr = Profile_ATTR()
+        self.attr_bars = ATTR_BAR()
+
 
     def load_profile_img(self, fr_tot0, fr_tot1, fr_tot2):
         """load the profile sprites based on character name """
@@ -93,9 +99,24 @@ class Ch_Sel_Profile():
         screen.blit(self.bio_title, self.bio_title_rect)
         paragraph_text(screen, self.bio_text, (407, 246), self.bio_text_font)
 
+    def show_attr(self):
+        """display the Attribute names """
+        screen.blit(self.prof_attr.attr_atk_name, \
+                    self.prof_attr.attr_atk_name_rect)
+        screen.blit(self.prof_attr.attr_def_name, \
+                    self.prof_attr.attr_def_name_rect)
+        screen.blit(self.prof_attr.attr_dex_name, \
+                    self.prof_attr.attr_dex_name_rect)
+        screen.blit(self.prof_attr.attr_luk_name, \
+                    self.prof_attr.attr_luk_name_rect)
+        """display the attribute bars along with its values"""
+        self.attr_bars.set_bars(self.ch_info)
+        screen.blit(self.attr_bars.bar_img, (942, 310))
+
     def show_pics(self):
         """animate the character profile pics """
         self.ch_info.show_gauge(self.pos_info)
         self.show_name()
         self.show_bio()
+        self.show_attr()
         self.pics.show_frame(self.period_0, self.period_1)

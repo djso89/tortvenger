@@ -79,6 +79,11 @@ class GST_Attr(Attr):
     def get_expr(self, expr_pts):
         self.curr_exp -= expr_pts
 
+    def get_gauge_dict(self):
+        """ get the guage stat of character in dictionary"""
+        dict = {'HP': self.HP, 'PKGs': self.PKGS}
+        return dict
+
     def level_up(self):
         self.LV += 1
         self.attack += random.randint(5, 8)
@@ -103,6 +108,11 @@ class K_Attr(Attr):
             print("remainder{}".format(remainder))
             self.level_up()
             self.curr_exp += remainder
+
+    def get_gauge_dict(self):
+        """get the guage stat of character in dictionary """
+        dict = {'HP': self.HP, 'KI': self.KI}
+        return dict
 
     def get_expr(self, expr_pts):
         self.curr_exp -= expr_pts

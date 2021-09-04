@@ -34,7 +34,7 @@ class K_Gauge(K_Attr):
         self.hp_bar_w = self.image_hp.get_width()
         self.width_per_hp = self.hp_bar_w / self.HP
 
-        self.chw =  (self.curr_hp / self. HP) * self.hp_bar_w
+        self.chw =  (self.curr_hp / self.HP) * self.hp_bar_w
         self.hp_h =  self.image_hp.get_height()
 
         self.surf.blit(self.image_hp, (485, 133), (0, 0, self.chw, self.hp_h))

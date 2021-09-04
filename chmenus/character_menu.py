@@ -76,7 +76,8 @@ class Ch_Menu():
                     self.index_prof -= 1
                 self.curr_prof = character_profiles[self.index_prof]
                 self.bl_cnt = 0
-            self.arrow_LF.blit(self.arrows_L, (0, 0))
+            if self.index_prof != 0:
+                self.arrow_LF.blit(self.arrows_L, (0, 0))
             self.bl_cnt += 1
         else:
             self.arrow_LF = pygame.Surface\
@@ -97,7 +98,8 @@ class Ch_Menu():
                     self.index_prof += 1
                 self.curr_prof = character_profiles[self.index_prof]
                 self.br_cnt = 0
-            self.arrow_RF.blit(self.arrows_R, (0, 0))
+            if self.index_prof != self.num_prof_tot - 1:
+                self.arrow_RF.blit(self.arrows_R, (0, 0))
             self.br_cnt += 1
         else:
             self.arrow_RF = pygame.Surface\
