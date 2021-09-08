@@ -45,7 +45,7 @@ class K_Comb(pygame.sprite.Sprite):
             self.ComboRect.center = (P1.pos.x + 70, P1.pos.y - 30)
             self.ComboTxt = pygame.transform.rotate(self.ComboTxt, 45)
 
-
+        self.ComboTxt.convert_alpha()
         screen.blit(self.ComboTxt, self.ComboRect)
 
 
