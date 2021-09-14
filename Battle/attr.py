@@ -125,3 +125,36 @@ class K_Attr(Attr):
         self.luck += random.randint(3, 10)
         self.expr += random.randint(100, 150)
         self.curr_exp = self.expr
+
+class YM_Attr(Attr):
+    """ YesMan's attribute class"""
+    def __init__(self):
+        Attr.__init__(self, 1, 50, 45, 40, 45, 50, 200)
+        self.KI = 30
+        self.curr_ki = self.KI
+        self.MaxCombo = 2
+
+    def grow(self, expr_pts):
+        self.get_expr(expr_pts)
+        if self.curr_exp <= 0:
+            remainder = self.curr_exp
+            print("remainder{}".format(remainder))
+            self.level_up()
+            self.curr_exp += remainder
+
+    def get_gauge_dict(self):
+        """get the guage stat of character in dictionary """
+        dict = {'HP': self.HP, 'KI': self.KI}
+        return dict
+
+    def get_expr(self, expr_pts):
+        self.curr_exp -= expr_pts
+
+    def level_up(self):
+        self.LV += 1
+        self.attack += random.randint(4, 8)
+        self.defense += random.randint(1, 5)
+        self.dexterity += random.randint(2, 7)
+        self.luck += random.randint(3, 10)
+        self.expr += random.randint(100, 150)
+        self.curr_exp = self.expr

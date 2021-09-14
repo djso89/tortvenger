@@ -5,12 +5,14 @@ from pygame.locals import *
 from display import *
 from stage import *
 from spritesheet import SpriteSheet
+from attr import YM_Attr
+from yesmangauge import Yesmaninfo
 
 cut_frame_period = 5
 cut_frame_num = 7
 
 
-class Yesman(pygame.sprite.Sprite):
+class Yesman(pygame.sprite.Sprite, YM_Attr):
     """ Yesman class """
 
     def loadimages(self):
@@ -22,7 +24,8 @@ class Yesman(pygame.sprite.Sprite):
         sprite_sheet_swd_drw = SpriteSheet('images/ym_swd_draw.png', (0, 0, 0))
         sprite_sheet_swdjmp = SpriteSheet("images/ym_swd_jmp.png", (0, 0, 0))
         sprite_sheet_swd_cut1 = SpriteSheet("images/ym_swd_combo1.png", (0, 0, 0))
-
+        sprite_sheet_swd_cut2 = SpriteSheet("images/ym_swd_combo2.png",(0, 0, 0))
+        sprite_sheet_swd_cut3 = SpriteSheet("images/ym_swd_combo3.png",(0, 0, 0))
 
 
         ss = sprite_sheet.sprite_sheet
@@ -31,14 +34,35 @@ class Yesman(pygame.sprite.Sprite):
         ss_jmp = sprite_sheetjmp.sprite_sheet
         ss_swd_draw = sprite_sheet_swd_drw.sprite_sheet
         ss_swd_cut1 = sprite_sheet_swd_cut1.sprite_sheet
+        ss_swd_cut2 = sprite_sheet_swd_cut2.sprite_sheet
+        ss_swd_cut3 = sprite_sheet_swd_cut3.sprite_sheet
 
-
-        # load first 3 sword cutting images
+        # load combo 1-3 sword cutting images
         for i in range(0, 7, 1):
             width = ss_swd_cut1.get_width()
             height = ss_swd_cut1.get_height()
             image = sprite_sheet_swd_cut1.get_image(i * width / 7, 0,
                                            width / 7, height)
+            self.swd_cut_r.append(image)
+            image = pygame.transform.flip(image, True, False)
+            self.swd_cut_l.append(image)
+
+        #load combo 4 - 5 sword cutting images
+        for i in range(0, 8, 1):
+            width = ss_swd_cut2.get_width()
+            height = ss_swd_cut2.get_height()
+            image = sprite_sheet_swd_cut2.get_image(i * width / 8, 0,
+                                           width / 8, height)
+            self.swd_cut_r.append(image)
+            image = pygame.transform.flip(image, True, False)
+            self.swd_cut_l.append(image)
+
+        #load combo 6 sword cutting images
+        for i in range(0, 8, 1):
+            width = ss_swd_cut3.get_width()
+            height = ss_swd_cut3.get_height()
+            image = sprite_sheet_swd_cut3.get_image(i * width / 8, 0,
+                                           width / 8, height)
             self.swd_cut_r.append(image)
             image = pygame.transform.flip(image, True, False)
             self.swd_cut_l.append(image)
@@ -101,7 +125,8 @@ class Yesman(pygame.sprite.Sprite):
 
     def __init__(self):
         """ initialize player """
-        super().__init__()
+        pygame.sprite.Sprite.__init__(self)
+        YM_Attr.__init__(self)
 
         #counter for animating jumping
         self.cnt = 0
@@ -155,8 +180,13 @@ class Yesman(pygame.sprite.Sprite):
 
         # flag for attack
         self.ATK = False
+        self.ATK_DONE = False
         self.atk_comb = 1
+        self.cut_period = 0
         self.cnt_swd_cut = 0
+
+        # slash number
+        self.slash_number = 0
 
         self.cell_atk_k = False
         self.dmg_blinking = False
@@ -181,6 +211,7 @@ class Yesman(pygame.sprite.Sprite):
 
 
     def get_rect(self):
+        """get the rectangle object from image """
         return self.image.get_rect()
 
     def draw_the_swrd(self):
@@ -188,6 +219,8 @@ class Yesman(pygame.sprite.Sprite):
         the function gets the key press reading
         and toggles swrd_on flaf to True to False """
         self.swd_on = not self.swd_on
+
+
     def move(self):
         """
         player move function
@@ -221,12 +254,6 @@ class Yesman(pygame.sprite.Sprite):
             self.vel.y = -40
             self.OnGround = False
 
-    def attack(self):
-        """game logic for attack if ATK flag is triggered """
-        if self.ATK:
-            self.ani_cut()
-        elif not self.ATK:
-            self.cnt_swd_cut = 0
 
 
     def update(self):
@@ -428,29 +455,98 @@ class Yesman(pygame.sprite.Sprite):
         elif self.swd_on == False:
             self.ani_swd_in()
 
-    def ani_cut(self):
-        """ animate the sword cutting"""
-        cut_period = cut_frame_period * cut_frame_num
-        if self.cnt_swd_cut >= cut_period:
+    def get_slash_number(self, frame_atk):
+        if frame_atk == 3:
+            self.slash_number = 1
+        if frame_atk == 4:
+            self.slash_number = 2
+        if frame_atk == 6:
+            self.slash_number = 3
+        if frame_atk == 10:
+            self.slash_number = 4
+        if frame_atk == 12:
+            self.slash_number = 5
+        if frame_atk == 21:
+            self.slash_number = 6
+
+    def ani_cut1(self):
+        """ animate the sword cutting
+        combo 1 - 3
+        """
+        cut_frame_period = 5
+        self.cut_period = cut_frame_period * 7
+        if self.cnt_swd_cut >= self.cut_period:
             self.cnt_swd_cut = 0
             self.ATK = False
             self.ATK_DONE = True
         else:
             self.ATK_DONE = False
-            combo_i = (self.atk_comb *cut_frame_num) - cut_frame_num
+            combo_i = (self.atk_comb * 7) - 7
             frame_atk = combo_i + (self.cnt_swd_cut // cut_frame_period)
+            self.get_slash_number(frame_atk)
             if self.orientation == 'right':
                 self.image_ym = self.swd_cut_r[frame_atk]
             if self.orientation == 'left':
                 self.image_ym = self.swd_cut_l[frame_atk]
             self.cnt_swd_cut += 1
 
+    def ani_cut2(self):
+        """ animate the sword cutting
+        combo 4 - 5
+        """
+        cut_frame_period = 3
+        self.cut_period = cut_frame_period * 8
+        if self.cnt_swd_cut >= self.cut_period:
+            self.cnt_swd_cut = 0
+            self.ATK = False
+            self.ATK_DONE = True
+        else:
+            self.ATK_DONE = False
+            combo_i = (self.atk_comb * 8) - 8 - 1
+            frame_atk = combo_i + (self.cnt_swd_cut // cut_frame_period)
+            self.get_slash_number(frame_atk)
+            if self.orientation == 'right':
+                self.image_ym = self.swd_cut_r[frame_atk]
+            if self.orientation == 'left':
+                self.image_ym = self.swd_cut_l[frame_atk]
+            self.cnt_swd_cut += 1
+
+    def ani_cut3(self):
+        """ animate the sword cutting
+        combo 6
+        """
+        cut_frame_period = 5
+        self.cut_period = cut_frame_period * 8
+        if self.cnt_swd_cut >= self.cut_period:
+            self.cnt_swd_cut = 0
+            self.ATK = False
+            self.ATK_DONE = True
+        else:
+            self.ATK_DONE = False
+            combo_i = (self.atk_comb * 8) - 8 - 1
+            frame_atk = combo_i + (self.cnt_swd_cut // cut_frame_period)
+            self.get_slash_number(frame_atk)
+            if self.orientation == 'right':
+                self.image_ym = self.swd_cut_r[frame_atk]
+            if self.orientation == 'left':
+                self.image_ym = self.swd_cut_l[frame_atk]
+            self.cnt_swd_cut += 1
+
+    def go_attack(self):
+        """game logic for attack if ATK flag is triggered """
+        if self.ATK:
+            combo_func = 'self.ani_cut' + str(self.atk_comb)
+            eval(combo_func)()
+            print(self.slash_number)
+        elif not self.ATK:
+            self.cnt_swd_cut = 0
+
     def animate(self):
         """animate the player. """
         self.ani_move()
         self.ani_jump()
         self.ani_swd_draw()
-        self.attack()
+        self.go_attack()
         self.no_swd_dmg_blink()
 
     def ani_frame_adj(self):

@@ -3,9 +3,8 @@ import sys
 import pygame
 from display import *
 import time as t
-from yes_man_the_tortoise.yesman import P1
-from yes_man_the_tortoise.yesman import cut_frame_period
-from yes_man_the_tortoise.yesman import cut_frame_num
+from yes_man_the_tortoise.yesman import *
+
 
 
 
@@ -45,7 +44,7 @@ class Game:
                 P1.atk_comb = 1
             else:
                 #check if current attack combo reached MaxCombo
-                if P1.atk_comb == 1:
+                if P1.atk_comb == P1.MaxCombo:
                     # reset the combo to 1
                     P1.atk_comb = 1
                 else:
@@ -54,9 +53,8 @@ class Game:
 
     def attack_event(self):
         """attacking routine of player """
-        cut_period = cut_frame_period * (cut_frame_num)
-        cut_len = (cut_period * 1000) / FPS
-        self.Key_a_delay(cut_len + 100, 90 ,34)
+        cut_len = (P1.cut_period * 1000) / FPS
+        self.Key_a_delay(cut_len, 90 ,34)
 
 
     def run_game(self):
@@ -110,6 +108,8 @@ class Game:
         """ drawing routines """
         # draw the Stage
         ST1.draw(screen, False)
+        # draw the gauge
+        Yesmaninfo.show_gauge()
 
         # draw the cells and player
         self.cell_draw()
