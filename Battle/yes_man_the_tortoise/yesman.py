@@ -6,20 +6,52 @@ from display import *
 from stage import *
 from spritesheet import SpriteSheet
 
+cut_frame_period = 5
+cut_frame_num = 7
 
 
 class Yesman(pygame.sprite.Sprite):
-
+    """ Yesman class """
 
     def loadimages(self):
         """ load all the kuppa action frames """
         sprite_sheet = SpriteSheet("images/ym_rdy.png", (0, 0, 0))
+        sprite_sheet_swd = SpriteSheet("images/ym_swd_rdy.png", (0, 0, 0))
         sp_sheet_frame = SpriteSheet("images/ym_frame.png", (0, 0, 0))
         sprite_sheetjmp = SpriteSheet("images/ym_jmp.png", (0, 0, 0))
+        sprite_sheet_swd_drw = SpriteSheet('images/ym_swd_draw.png', (0, 0, 0))
+        sprite_sheet_swdjmp = SpriteSheet("images/ym_swd_jmp.png", (0, 0, 0))
+        sprite_sheet_swd_cut1 = SpriteSheet("images/ym_swd_combo1.png", (0, 0, 0))
+
+
 
         ss = sprite_sheet.sprite_sheet
+        ss_swd = sprite_sheet_swd.sprite_sheet
         ss_frame = sp_sheet_frame.sprite_sheet
         ss_jmp = sprite_sheetjmp.sprite_sheet
+        ss_swd_draw = sprite_sheet_swd_drw.sprite_sheet
+        ss_swd_cut1 = sprite_sheet_swd_cut1.sprite_sheet
+
+
+        # load first 3 sword cutting images
+        for i in range(0, 7, 1):
+            width = ss_swd_cut1.get_width()
+            height = ss_swd_cut1.get_height()
+            image = sprite_sheet_swd_cut1.get_image(i * width / 7, 0,
+                                           width / 7, height)
+            self.swd_cut_r.append(image)
+            image = pygame.transform.flip(image, True, False)
+            self.swd_cut_l.append(image)
+
+        # load all drawing sword images
+        for i in range(0, 13, 1):
+            width = ss_swd_draw.get_width()
+            height = ss_swd_draw.get_height()
+            image = sprite_sheet_swd_drw.get_image(i * width / 13, 0,
+                                           width / 13, height)
+            self.swrd_draw_r.append(image)
+            image = pygame.transform.flip(image, True, False)
+            self.swrd_draw_l.append(image)
 
         # load the frame
         for i in range(0, 1, 1):
@@ -38,6 +70,14 @@ class Yesman(pygame.sprite.Sprite):
             image = pygame.transform.flip(image, True, False)
             self.ready_l.append(image)
 
+            width = ss_swd.get_width()
+            height = ss_swd.get_height()
+            image = sprite_sheet_swd.get_image(i * width/2, 0,
+                                           width/2, height)
+            self.swd_rdy_r.append(image)
+            image = pygame.transform.flip(image, True, False)
+            self.swd_rdy_l.append(image)
+
 
         # load all the right facing jmp images
         for i in range(0, 6, 1):
@@ -45,9 +85,19 @@ class Yesman(pygame.sprite.Sprite):
             height = ss_jmp.get_height()
             image = sprite_sheetjmp.get_image(width/ 6 * i, 0,
                                                width/ 6, height)
-            self.OnGround_r.append(image)
+            self.jmp_r.append(image)
             image = pygame.transform.flip(image, True, False)
-            self.OnGround_l.append(image)
+            self.jmp_l.append(image)
+
+            ss_swd_jmp = sprite_sheet_swdjmp.sprite_sheet
+            width = ss_swd_jmp.get_width()
+            height = ss_swd_jmp.get_height()
+            image = sprite_sheet_swdjmp.get_image\
+                (i * width // 6, 0, width // 6, height)
+            self.swd_jmp_r.append(image)
+            image = pygame.transform.flip(image, True, False)
+            self.swd_jmp_l.append(image)
+
 
     def __init__(self):
         """ initialize player """
@@ -57,13 +107,24 @@ class Yesman(pygame.sprite.Sprite):
         self.cnt = 0
         self.cnt_swrd_draw = 0
         self.cnt_dmg = 0
+
         # action frames
         self.ymframe = []
         self.ready_r = []
         self.ready_l = []
-        self.OnGround_l = []
-        self.OnGround_r = []
+        self.swd_rdy_r = []
+        self.swd_rdy_l = []
 
+        self.jmp_l = []
+        self.jmp_r = []
+
+        self.swd_cut_r = []
+        self.swd_cut_l = []
+
+        self.swd_jmp_l = []
+        self.swd_jmp_r = []
+        self.swrd_draw_r = []
+        self.swrd_draw_l = []
 
         # load the image
         self.loadimages()
@@ -73,6 +134,9 @@ class Yesman(pygame.sprite.Sprite):
         self.pos = vec((0, 0))
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
+
+        # action frame position
+        self.pos_a = vec((0, 0))
 
         # set the image the player start with
         self.image = self.ymframe[0]
@@ -84,8 +148,15 @@ class Yesman(pygame.sprite.Sprite):
         self.orientation = 'right'
         self.OnGround = True
 
+        # flag switch for drawing swd
         self.swd_on = False
-        self.swd_drwn = False
+        # flag for process of drawing swd
+        self.swd_drawing = False
+
+        # flag for attack
+        self.ATK = False
+        self.atk_comb = 1
+        self.cnt_swd_cut = 0
 
         self.cell_atk_k = False
         self.dmg_blinking = False
@@ -117,7 +188,6 @@ class Yesman(pygame.sprite.Sprite):
         the function gets the key press reading
         and toggles swrd_on flaf to True to False """
         self.swd_on = not self.swd_on
-
     def move(self):
         """
         player move function
@@ -150,6 +220,13 @@ class Yesman(pygame.sprite.Sprite):
         if self.OnGround == True:
             self.vel.y = -40
             self.OnGround = False
+
+    def attack(self):
+        """game logic for attack if ATK flag is triggered """
+        if self.ATK:
+            self.ani_cut()
+        elif not self.ATK:
+            self.cnt_swd_cut = 0
 
 
     def update(self):
@@ -192,16 +269,6 @@ class Yesman(pygame.sprite.Sprite):
             self.pos.x = self.rect.x
 
 
-    def touchX(self, hits):
-        #touch hits
-        for block in hits:
-            if self.vel.x > 0: #moving right
-                self.rect.right = block.rect.left
-            if self.vel.x < 0: #moving left
-                self.rect.left = block.rect.right
-            # set the x coordinate
-            self.pos.x = self.rect.x
-
 
     def collisionX(self):
         """check the collision in X direction """
@@ -216,6 +283,16 @@ class Yesman(pygame.sprite.Sprite):
         # touch Plat
         hitP = pygame.sprite.spritecollide(self, Plats, False)
         self.touchX(hitP)
+
+    def touchX(self, hits):
+        #touch hits
+        for block in hits:
+            if self.vel.x > 0: #moving right
+                self.rect.right = block.rect.left
+            if self.vel.x < 0: #moving left
+                self.rect.left = block.rect.right
+            # set the x coordinate
+            self.pos.x = self.rect.x
 
     def touchXL(self, hits):
         #touch hits coming from left side
@@ -251,9 +328,7 @@ class Yesman(pygame.sprite.Sprite):
 
 
     def collisionY(self):
-
         """ check the collision in Y direction """
-
         #touch ground platforms
         hits = pygame.sprite.spritecollide(self, platforms, False)
         self.touchYU(hits)
@@ -284,43 +359,134 @@ class Yesman(pygame.sprite.Sprite):
         """ animate the left right movement"""
         if self.orientation == 'right' and self.OnGround == True:
             frame = (self.pos.x // 30) % len(self.ready_r)
-            self.image_ym = self.ready_r[int(frame)]
+            if self.swd_on == True and self.swd_drawing == False:
+                self.image_ym = self.swd_rdy_r[int(frame)]
+            else:
+                self.image_ym = self.ready_r[int(frame)]
         elif self.orientation == 'left' and self.OnGround == True:
             frame = (self.pos.x // 30) % len(self.ready_l)
-            self.image_ym = self.ready_l[int(frame)]
+            if self.swd_on == True and self.swd_drawing == False:
+                self.image_ym = self.swd_rdy_l[int(frame)]
+            else:
+                self.image_ym = self.ready_l[int(frame)]
+
 
     def ani_jump(self):
         """ animate the jump """
         period = 4
         if self.OnGround == False:
-            if (self.cnt >= period * (len(self.OnGround_r) -1 )):
-                self.cnt = period * (len(self.OnGround_r) -1 )
+            if self.cnt >= (period * (len(self.jmp_r) -1 )):
+                self.cnt = period * (len(self.jmp_r) -1 )
             else:
                 self.cnt += 1
             if self.orientation == 'right':
-                self.image_ym = self.OnGround_r[self.cnt//period]
+                if self.swd_on:
+                    self.image_ym = self.swd_jmp_r[self.cnt//period]
+                else:
+                    self.image_ym = self.jmp_r[self.cnt//period]
             if self.orientation == 'left':
-                self.image_ym = self.OnGround_l[self.cnt//period]
+                if self.swd_on:
+                    self.image_ym = self.swd_jmp_l[self.cnt//period]
+                else:
+                    self.image_ym = self.jmp_l[self.cnt//period]
 
 
+    def ani_swd_out(self):
+        """ animate pulling out swords"""
+        period = 2
+        max_period = period * (len(self.swrd_draw_r) - 1)
+        if (self.cnt_swrd_draw >= max_period):
+            self.cnt_swrd_draw = max_period
+            self.swd_drawing = False
+        else:
+            self.swd_drawing = True
+            if (self.orientation == 'right'):
+                self.image_ym = self.swrd_draw_r[self.cnt_swrd_draw // period]
+            if (self.orientation == 'left'):
+                self.image_ym = self.swrd_draw_l[self.cnt_swrd_draw // period]
+            self.cnt_swrd_draw += 1
+
+    def ani_swd_in(self):
+        """animate drawing the swords """
+        period = 5
+        max_period = period * (len(self.swrd_draw_l) - 1)
+        if (self.cnt_swrd_draw <= 0):
+            self.cnt_swrd_draw = 0
+            self.swd_drawing = False
+        else:
+            self.swd_drawing = True
+            self.cnt_swrd_draw -= 1
+            if (self.orientation == 'right'):
+                self.image_ym = self.swrd_draw_r[self.cnt_swrd_draw // period]
+            if self.orientation == 'left':
+                self.image_ym = self.swrd_draw_l[self.cnt_swrd_draw // period]
+
+
+    def ani_swd_draw(self):
+        if self.swd_on == True:
+            self.ani_swd_out()
+        elif self.swd_on == False:
+            self.ani_swd_in()
+
+    def ani_cut(self):
+        """ animate the sword cutting"""
+        cut_period = cut_frame_period * cut_frame_num
+        if self.cnt_swd_cut >= cut_period:
+            self.cnt_swd_cut = 0
+            self.ATK = False
+            self.ATK_DONE = True
+        else:
+            self.ATK_DONE = False
+            combo_i = (self.atk_comb *cut_frame_num) - cut_frame_num
+            frame_atk = combo_i + (self.cnt_swd_cut // cut_frame_period)
+            if self.orientation == 'right':
+                self.image_ym = self.swd_cut_r[frame_atk]
+            if self.orientation == 'left':
+                self.image_ym = self.swd_cut_l[frame_atk]
+            self.cnt_swd_cut += 1
 
     def animate(self):
         """animate the player. """
         self.ani_move()
         self.ani_jump()
+        self.ani_swd_draw()
+        self.attack()
         self.no_swd_dmg_blink()
+
+    def ani_frame_adj(self):
+        """adjust the frame according to action flags """
+        if self.orientation == 'left':
+            if self.swd_drawing == True:
+                self.pos_a.x = self.pos.x - 50
+                self.pos_a.y = self.pos.y - 50
+            else:
+                if self.ATK:
+                    self.pos_a.x = self.pos.x - 50
+                    self.pos_a.y = self.pos.y - 60
+                else:
+                    self.pos_a.x = self.pos.x - 33
+                    self.pos_a.y = self.pos.y
+        elif self.orientation == 'right':
+            if self.swd_drawing == True:
+                self.pos_a.x = self.pos.x - 15
+                self.pos_a.y = self.pos.y - 50
+            else:
+                if self.ATK:
+                    self.pos_a.x = self.pos.x - 15
+                    self.pos_a.y = self.pos.y - 60
+                else:
+                    self.pos_a.x = self.pos.x
+                    self.pos_a.y = self.pos.y
 
     def render(self):
         """ paste the player object into screen """
         self.animate()
         w = self.image.get_width()
         h = self.image.get_height()
+        self.ani_frame_adj()
+        screen.blit(self.image_ym, self.pos_a)
+        #screen.blit(self.image, self.pos)
 
-        # check for action flags
-        if self.orientation == 'left':
-            screen.blit(self.image_ym, (self.pos.x - 24 , self.pos.y))
-        else:
-            screen.blit(self.image_ym, self.pos)
 
 
 P1 = Yesman()

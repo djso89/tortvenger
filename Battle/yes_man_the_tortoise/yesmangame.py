@@ -3,7 +3,9 @@ import sys
 import pygame
 from display import *
 import time as t
-from yes_man_the_tortoise.yesman import *
+from yes_man_the_tortoise.yesman import P1
+from yes_man_the_tortoise.yesman import cut_frame_period
+from yes_man_the_tortoise.yesman import cut_frame_num
 
 
 
@@ -16,7 +18,7 @@ from stage import *
 class Game:
     """ Game class """
     def __init__(self):
-#        pygame.init()
+        pygame.init()
         self.clock = pygame.time.Clock()
         self.run = True
         self.prd = 0
@@ -24,25 +26,11 @@ class Game:
         self.cnt_sb = 0
         self.frames = 0
 
-        # toggle flag for displaying Stage Objects
-        # for the KuppaVision
-        self.SB_toggle = False
 
-        # release counter for measing how long the a key is let go after it's pressed
+        # release counter for measing how long
+        #the a key is let go after it's pressed
         self.a_key_cnt = 0
 
-    def kuppavision(self):
-        if self.SB_toggle:
-            if self.cnt_sb >= 35:
-                if kuppainfo.curr_ki <= 0:
-                    kuppainfo.curr_ki = 0
-                else:
-                    kuppainfo.curr_ki -= 1
-                    kuppainfo.update_bar = True
-                self.cnt_sb = 0
-            self.cnt_sb += 1
-        else:
-            self.cnt_sb = 0
 
     def Key_a_delay(self, cnt_h, cnt_btnM_h, cnt_btnM_l):
         """Key release Key_a mechanism """
@@ -55,10 +43,9 @@ class Game:
                 P1.cnt_swd_cut = 0
             elif (self.a_key_cnt <= cnt_btnM_h and self.a_key_cnt > cnt_btnM_l):
                 P1.atk_comb = 1
-                P1.btn_mash += 1
             else:
                 #check if current attack combo reached MaxCombo
-                if P1.atk_comb == kuppainfo.MaxCombo:
+                if P1.atk_comb == 1:
                     # reset the combo to 1
                     P1.atk_comb = 1
                 else:
@@ -76,8 +63,6 @@ class Game:
         while self.run:
             self._check_events()
             self._update_screen()
-
-
         t.sleep(3)
         pygame.quit()
         sys.exit()
@@ -97,6 +82,10 @@ class Game:
                     pygame.display.quit()
                     pygame.quit()
                     sys.exit()
+                if event.key == pygame.K_a:
+                    self.attack_event()
+                if event.key == pygame.K_d:
+                    P1.draw_the_swrd()
                 if event.key == pygame.K_UP:
                     P1.jump()
             if (event.type == pygame.KEYUP):
@@ -111,8 +100,6 @@ class Game:
 
         # do the Player 1 routines
         self.player_stuff()
-        self.kuppavision()
-
 
         # do the COVID19 routines
         for cell in Cells:
@@ -122,7 +109,7 @@ class Game:
 
         """ drawing routines """
         # draw the Stage
-        ST1.draw(screen, self.SB_toggle)
+        ST1.draw(screen, False)
 
         # draw the cells and player
         self.cell_draw()
