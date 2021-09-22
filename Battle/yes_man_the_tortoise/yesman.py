@@ -185,8 +185,14 @@ class Yesman(pygame.sprite.Sprite, YM_Attr):
         self.cut_period = 0
         self.cnt_swd_cut = 0
 
+        self.cnt_hold = 0
+        self.key_held_a = 0
+
+        self.clock = pygame.time.Clock()
+        self.pressed_a = False
+
         # slash number
-        self.slash_number = 0
+        self.slash_number = 1
 
         self.cell_atk_k = False
         self.dmg_blinking = False
@@ -457,89 +463,103 @@ class Yesman(pygame.sprite.Sprite, YM_Attr):
 
     def get_slash_number(self, frame_atk):
         if frame_atk == 3:
-            self.slash_number = 1
+            return 1
         if frame_atk == 4:
-            self.slash_number = 2
+            return 2
         if frame_atk == 6:
-            self.slash_number = 3
+            return 3
         if frame_atk == 10:
-            self.slash_number = 4
+            return 4
         if frame_atk == 12:
-            self.slash_number = 5
+            return 5
         if frame_atk == 21:
-            self.slash_number = 6
+            return 6
+        return 0
 
-    def ani_cut1(self):
+    def get_frame_atk(self, slash_num):
+        if slash_num == 1:
+            return 3
+        if slash_num == 2:
+            return 4
+        if slash_num == 3:
+            return 6
+        if slash_num == 4:
+            return 10
+        if slash_num == 5:
+            return 12
+        if slash_num == 6:
+            return 21
+        return 0
+
+    def get_cut_frame_period(self, slash_num):
+        if slash_num >= 1 and slash_num <= 3:
+            return 4
+        if slash_num == 4 or slash_num == 5:
+            return 5
+        if slash_num == 6:
+            return 4
+        return 1
+
+    def show_cut(self, frame_atk):
+        """display the cut image according to frame_atk """
+        if self.orientation == 'right':
+            self.image_ym = self.swd_cut_r[frame_atk]
+        if self.orientation == 'left':
+            self.image_ym = self.swd_cut_l[frame_atk]
+
+    def ani_cut(self):
         """ animate the sword cutting
-        combo 1 - 3
+        according to slash number
         """
-        cut_frame_period = 5
-        self.cut_period = cut_frame_period * 7
+        cut_frame_period = self.get_cut_frame_period(self.slash_number)
+        start_pt = self.get_frame_atk(self.slash_number - 1)
+        end_pt = self.get_frame_atk(self.slash_number)
+        frame_num = (end_pt - start_pt)
+
+        self.cut_period = cut_frame_period * (frame_num)
+        frame_atk = start_pt + (self.cnt_swd_cut // cut_frame_period)
+        #print("cut counter: {} index: {}".format(self.cnt_swd_cut,frame_atk))
+        self.show_cut(frame_atk)
         if self.cnt_swd_cut >= self.cut_period:
-            self.cnt_swd_cut = 0
-            self.ATK = False
+            self.show_cut(end_pt)
             self.ATK_DONE = True
+            #self.pressed_a = False
         else:
             self.ATK_DONE = False
-            combo_i = (self.atk_comb * 7) - 7
-            frame_atk = combo_i + (self.cnt_swd_cut // cut_frame_period)
-            self.get_slash_number(frame_atk)
-            if self.orientation == 'right':
-                self.image_ym = self.swd_cut_r[frame_atk]
-            if self.orientation == 'left':
-                self.image_ym = self.swd_cut_l[frame_atk]
             self.cnt_swd_cut += 1
 
-    def ani_cut2(self):
-        """ animate the sword cutting
-        combo 4 - 5
-        """
-        cut_frame_period = 3
-        self.cut_period = cut_frame_period * 8
-        if self.cnt_swd_cut >= self.cut_period:
-            self.cnt_swd_cut = 0
-            self.ATK = False
-            self.ATK_DONE = True
-        else:
-            self.ATK_DONE = False
-            combo_i = (self.atk_comb * 8) - 8 - 1
-            frame_atk = combo_i + (self.cnt_swd_cut // cut_frame_period)
-            self.get_slash_number(frame_atk)
-            if self.orientation == 'right':
-                self.image_ym = self.swd_cut_r[frame_atk]
-            if self.orientation == 'left':
-                self.image_ym = self.swd_cut_l[frame_atk]
-            self.cnt_swd_cut += 1
+    def cut_delay(self):
+        cut_frame_period = self.get_cut_frame_period(self.slash_number)
+        print("delay: {} key_a: {}".format(self.cnt_hold, self.pressed_a))
+        key_a_held = 0
+        if (self.ATK_DONE):
+            if (self.cnt_hold >= 2 * cut_frame_period):
+                self.ATK_DONE = False
+                self.cnt_hold = 0
+                self.cnt_swd_cut = 0
+                self.incr_slash()
+                self.ATK = False
+            else:
+                self.cnt_hold += 1
 
-    def ani_cut3(self):
-        """ animate the sword cutting
-        combo 6
-        """
-        cut_frame_period = 5
-        self.cut_period = cut_frame_period * 8
-        if self.cnt_swd_cut >= self.cut_period:
-            self.cnt_swd_cut = 0
-            self.ATK = False
-            self.ATK_DONE = True
+
+    def incr_slash(self):
+        if self.slash_number == 3:
+            self.slash_number = 1
         else:
-            self.ATK_DONE = False
-            combo_i = (self.atk_comb * 8) - 8 - 1
-            frame_atk = combo_i + (self.cnt_swd_cut // cut_frame_period)
-            self.get_slash_number(frame_atk)
-            if self.orientation == 'right':
-                self.image_ym = self.swd_cut_r[frame_atk]
-            if self.orientation == 'left':
-                self.image_ym = self.swd_cut_l[frame_atk]
-            self.cnt_swd_cut += 1
+            self.slash_number += 1
 
     def go_attack(self):
         """game logic for attack if ATK flag is triggered """
         if self.ATK:
-            combo_func = 'self.ani_cut' + str(self.atk_comb)
+            combo_func = 'self.ani_cut'
             eval(combo_func)()
-            print(self.slash_number)
-        elif not self.ATK:
-            self.cnt_swd_cut = 0
+        self.cut_delay()
+
+
+        #elif not self.ATK:
+            #self.cnt_swd_cut = 0
+            #self.cnt_hold = 0
 
     def animate(self):
         """animate the player. """

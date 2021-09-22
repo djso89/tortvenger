@@ -34,27 +34,17 @@ class Game:
     def Key_a_delay(self, cnt_h, cnt_btnM_h, cnt_btnM_l):
         """Key release Key_a mechanism """
         self.a_key_cnt = pygame.time.get_ticks() - self.a_key_cnt
-        # print("you release key a for " + str(self.a_key_cnt) + "ms")
+        #print("you release key a for " + str(self.a_key_cnt) + "ms")
+        P1.pressed_a = True
         if P1.swd_on:
-            P1.ATK = True
-            if self.a_key_cnt >= cnt_h:
-                P1.atk_comb = 1
-                P1.cnt_swd_cut = 0
-            elif (self.a_key_cnt <= cnt_btnM_h and self.a_key_cnt > cnt_btnM_l):
-                P1.atk_comb = 1
-            else:
-                #check if current attack combo reached MaxCombo
-                if P1.atk_comb == P1.MaxCombo:
-                    # reset the combo to 1
-                    P1.atk_comb = 1
-                else:
-                    if P1.ATK_DONE:
-                        P1.atk_comb += 1
+            if P1.ATK_DONE == False:
+                P1.ATK = True
+
 
     def attack_event(self):
         """attacking routine of player """
-        cut_len = (P1.cut_period * 1000) / FPS
-        self.Key_a_delay(cut_len, 90 ,34)
+        cut_len = int((P1.cut_period * 1000) / FPS)
+        self.Key_a_delay(cut_len, 50 ,34)
 
 
     def run_game(self):
@@ -89,6 +79,9 @@ class Game:
             if (event.type == pygame.KEYUP):
                 if event.key == pygame.K_a:
                     self.a_key_cnt = pygame.time.get_ticks()
+                    P1.pressed_a = False
+
+
 
 
 
