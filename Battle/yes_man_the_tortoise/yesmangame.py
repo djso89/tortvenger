@@ -31,11 +31,12 @@ class Game:
         self.a_key_cnt = 0
 
 
+
+
     def Key_a_delay(self, cnt_h, cnt_btnM_h, cnt_btnM_l):
         """Key release Key_a mechanism """
         self.a_key_cnt = pygame.time.get_ticks() - self.a_key_cnt
-        #print("you release key a for " + str(self.a_key_cnt) + "ms")
-        P1.pressed_a = True
+        self.pressed_a = True
         if P1.swd_on:
             if P1.ATK_DONE == False:
                 P1.ATK = True
@@ -72,6 +73,7 @@ class Game:
                     sys.exit()
                 if event.key == pygame.K_a:
                     self.attack_event()
+                    P1.cnt_a += 1
                 if event.key == pygame.K_d:
                     P1.draw_the_swrd()
                 if event.key == pygame.K_UP:
@@ -79,7 +81,9 @@ class Game:
             if (event.type == pygame.KEYUP):
                 if event.key == pygame.K_a:
                     self.a_key_cnt = pygame.time.get_ticks()
-                    P1.pressed_a = False
+                    print("a key counter held: {}".format(P1.cnt_a))
+                    P1.go_combo()
+
 
 
 

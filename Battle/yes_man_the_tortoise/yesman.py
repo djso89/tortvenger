@@ -133,6 +133,8 @@ class Yesman(pygame.sprite.Sprite, YM_Attr):
         self.cnt_swrd_draw = 0
         self.cnt_dmg = 0
 
+        self.cnt_a = 0
+
         # action frames
         self.ymframe = []
         self.ready_r = []
@@ -518,36 +520,43 @@ class Yesman(pygame.sprite.Sprite, YM_Attr):
 
         self.cut_period = cut_frame_period * (frame_num)
         frame_atk = start_pt + (self.cnt_swd_cut // cut_frame_period)
-        #print("cut counter: {} index: {}".format(self.cnt_swd_cut,frame_atk))
         self.show_cut(frame_atk)
         if self.cnt_swd_cut >= self.cut_period:
             self.show_cut(end_pt)
             self.ATK_DONE = True
-            #self.pressed_a = False
         else:
             self.ATK_DONE = False
             self.cnt_swd_cut += 1
 
+    def atk_isDone(self):
+        self.ATK_DONE = False
+        self.ATK = False
+        self.slash_number = 1
+        self.cnt_hold = 0
+        self.cnt_swd_cut = 0
+
+    def go_combo(self):
+        self.ATK_DONE = False
+        self.incr_slash()
+        self.cnt_hold = 0
+        self.cnt_swd_cut = 0
+
     def cut_delay(self):
         cut_frame_period = self.get_cut_frame_period(self.slash_number)
-        print("delay: {} key_a: {}".format(self.cnt_hold, self.pressed_a))
-        key_a_held = 0
         if (self.ATK_DONE):
-            if (self.cnt_hold >= 2 * cut_frame_period):
-                self.ATK_DONE = False
-                self.cnt_hold = 0
-                self.cnt_swd_cut = 0
-                self.incr_slash()
-                self.ATK = False
+            if (self.cnt_hold >= cut_frame_period):
+                self.atk_isDone()
             else:
                 self.cnt_hold += 1
 
 
     def incr_slash(self):
-        if self.slash_number == 3:
+        if self.slash_number == 5:
             self.slash_number = 1
+            self.ATK_DONE = False
         else:
             self.slash_number += 1
+            self.ATK_DONE = False
 
     def go_attack(self):
         """game logic for attack if ATK flag is triggered """
@@ -557,9 +566,7 @@ class Yesman(pygame.sprite.Sprite, YM_Attr):
         self.cut_delay()
 
 
-        #elif not self.ATK:
-            #self.cnt_swd_cut = 0
-            #self.cnt_hold = 0
+
 
     def animate(self):
         """animate the player. """
