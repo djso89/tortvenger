@@ -29,17 +29,18 @@ class Game:
         # release counter for measing how long
         #the a key is let go after it's pressed
         self.a_key_cnt = 0
-
+        self.a_stamp = 0
 
 
 
     def Key_a_delay(self, cnt_h, cnt_btnM_h, cnt_btnM_l):
         """Key release Key_a mechanism """
-        self.a_key_cnt = pygame.time.get_ticks() - self.a_key_cnt
-        self.pressed_a = True
+        self.a_stamp = pygame.time.get_ticks() - self.a_key_cnt
+        print(self.a_stamp)
         if P1.swd_on:
             if P1.ATK_DONE == False:
                 P1.ATK = True
+
 
 
     def attack_event(self):
@@ -73,7 +74,6 @@ class Game:
                     sys.exit()
                 if event.key == pygame.K_a:
                     self.attack_event()
-                    P1.cnt_a += 1
                 if event.key == pygame.K_d:
                     P1.draw_the_swrd()
                 if event.key == pygame.K_UP:
@@ -81,8 +81,11 @@ class Game:
             if (event.type == pygame.KEYUP):
                 if event.key == pygame.K_a:
                     self.a_key_cnt = pygame.time.get_ticks()
-                    print("a key counter held: {}".format(P1.cnt_a))
-                    P1.go_combo()
+                    if self.a_stamp >= 200 or (self.a_stamp < 70 and self.a_stamp >= 35):
+                        P1.slash_number = 1
+                    else:
+                        P1.go_combo()
+
 
 
 

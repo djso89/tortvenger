@@ -398,12 +398,16 @@ class Yesman(pygame.sprite.Sprite, YM_Attr):
                 self.image_ym = self.swd_rdy_r[int(frame)]
             else:
                 self.image_ym = self.ready_r[int(frame)]
+            self.pos_a.x = self.pos.x
+            self.pos_a.y = self.pos.y
         elif self.orientation == 'left' and self.OnGround == True:
             frame = (self.pos.x // 30) % len(self.ready_l)
             if self.swd_on == True and self.swd_drawing == False:
                 self.image_ym = self.swd_rdy_l[int(frame)]
             else:
                 self.image_ym = self.ready_l[int(frame)]
+            self.pos_a.x = self.pos.x - 33
+            self.pos_a.y = self.pos.y
 
 
     def ani_jump(self):
@@ -419,11 +423,15 @@ class Yesman(pygame.sprite.Sprite, YM_Attr):
                     self.image_ym = self.swd_jmp_r[self.cnt//period]
                 else:
                     self.image_ym = self.jmp_r[self.cnt//period]
+                self.pos_a.x = self.pos.x
+                self.pos_a.y = self.pos.y
             if self.orientation == 'left':
                 if self.swd_on:
                     self.image_ym = self.swd_jmp_l[self.cnt//period]
                 else:
                     self.image_ym = self.jmp_l[self.cnt//period]
+                self.pos_a.x = self.pos.x - 33
+                self.pos_a.y = self.pos.y
 
 
     def ani_swd_out(self):
@@ -437,8 +445,12 @@ class Yesman(pygame.sprite.Sprite, YM_Attr):
             self.swd_drawing = True
             if (self.orientation == 'right'):
                 self.image_ym = self.swrd_draw_r[self.cnt_swrd_draw // period]
+                self.pos_a.x = self.pos.x - 15
+                self.pos_a.y = self.pos.y - 50
             if (self.orientation == 'left'):
                 self.image_ym = self.swrd_draw_l[self.cnt_swrd_draw // period]
+                self.pos_a.x = self.pos.x - 50
+                self.pos_a.y = self.pos.y - 50
             self.cnt_swrd_draw += 1
 
     def ani_swd_in(self):
@@ -453,8 +465,12 @@ class Yesman(pygame.sprite.Sprite, YM_Attr):
             self.cnt_swrd_draw -= 1
             if (self.orientation == 'right'):
                 self.image_ym = self.swrd_draw_r[self.cnt_swrd_draw // period]
+                self.pos_a.x = self.pos.x - 15
+                self.pos_a.y = self.pos.y - 50
             if self.orientation == 'left':
                 self.image_ym = self.swrd_draw_l[self.cnt_swrd_draw // period]
+                self.pos_a.x = self.pos.x - 50
+                self.pos_a.y = self.pos.y - 50
 
 
     def ani_swd_draw(self):
@@ -506,8 +522,12 @@ class Yesman(pygame.sprite.Sprite, YM_Attr):
         """display the cut image according to frame_atk """
         if self.orientation == 'right':
             self.image_ym = self.swd_cut_r[frame_atk]
+            self.pos_a.x = self.pos.x - 15
+            self.pos_a.y = self.pos.y - 60
         if self.orientation == 'left':
             self.image_ym = self.swd_cut_l[frame_atk]
+            self.pos_a.x = self.pos.x - 50
+            self.pos_a.y = self.pos.y - 60
 
     def ani_cut(self):
         """ animate the sword cutting
@@ -536,7 +556,6 @@ class Yesman(pygame.sprite.Sprite, YM_Attr):
         self.cnt_swd_cut = 0
 
     def go_combo(self):
-        self.ATK_DONE = False
         self.incr_slash()
         self.cnt_hold = 0
         self.cnt_swd_cut = 0
@@ -544,28 +563,29 @@ class Yesman(pygame.sprite.Sprite, YM_Attr):
     def cut_delay(self):
         cut_frame_period = self.get_cut_frame_period(self.slash_number)
         if (self.ATK_DONE):
-            if (self.cnt_hold >= cut_frame_period):
+            if (self.cnt_hold >= 4 * cut_frame_period):
                 self.atk_isDone()
             else:
                 self.cnt_hold += 1
 
 
     def incr_slash(self):
-        if self.slash_number == 5:
-            self.slash_number = 1
-            self.ATK_DONE = False
+        if self.slash_number == 2:
+            self.atk_isDone()
         else:
             self.slash_number += 1
             self.ATK_DONE = False
 
+
+
+
     def go_attack(self):
         """game logic for attack if ATK flag is triggered """
         if self.ATK:
+            print("slash #: {}".format(self.slash_number))
             combo_func = 'self.ani_cut'
             eval(combo_func)()
         self.cut_delay()
-
-
 
 
     def animate(self):
@@ -576,37 +596,13 @@ class Yesman(pygame.sprite.Sprite, YM_Attr):
         self.go_attack()
         self.no_swd_dmg_blink()
 
-    def ani_frame_adj(self):
-        """adjust the frame according to action flags """
-        if self.orientation == 'left':
-            if self.swd_drawing == True:
-                self.pos_a.x = self.pos.x - 50
-                self.pos_a.y = self.pos.y - 50
-            else:
-                if self.ATK:
-                    self.pos_a.x = self.pos.x - 50
-                    self.pos_a.y = self.pos.y - 60
-                else:
-                    self.pos_a.x = self.pos.x - 33
-                    self.pos_a.y = self.pos.y
-        elif self.orientation == 'right':
-            if self.swd_drawing == True:
-                self.pos_a.x = self.pos.x - 15
-                self.pos_a.y = self.pos.y - 50
-            else:
-                if self.ATK:
-                    self.pos_a.x = self.pos.x - 15
-                    self.pos_a.y = self.pos.y - 60
-                else:
-                    self.pos_a.x = self.pos.x
-                    self.pos_a.y = self.pos.y
+
 
     def render(self):
         """ paste the player object into screen """
         self.animate()
         w = self.image.get_width()
         h = self.image.get_height()
-        self.ani_frame_adj()
         screen.blit(self.image_ym, self.pos_a)
         #screen.blit(self.image, self.pos)
 
