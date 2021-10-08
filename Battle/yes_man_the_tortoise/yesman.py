@@ -183,15 +183,16 @@ class Yesman(pygame.sprite.Sprite, YM_Attr):
         # flag for attack
         self.ATK = False
         self.ATK_DONE = False
-        self.atk_comb = 1
+        self.go_hit = False
+
         self.cut_period = 0
         self.cnt_swd_cut = 0
 
         self.cnt_hold = 0
-        self.key_held_a = 0
+
 
         self.clock = pygame.time.Clock()
-        self.pressed_a = False
+
 
         # slash number
         self.slash_number = 1
@@ -204,8 +205,8 @@ class Yesman(pygame.sprite.Sprite, YM_Attr):
         period = 2
         if self.cell_atk_k:
             if self.cnt_dmg >= period:
-                self.image = Surface((self.rect.width, self.rect.height), flags = SRCALPHA)
-                self.image.fill((0, 0, 0, 0))
+                self.image_ym = Surface((self.rect.width, self.rect.height), flags = SRCALPHA)
+                self.image_ym.fill((0, 0, 0, 0))
                 self.dmg_blinking = True
                 self.cnt_dmg = 0
                 if self.n_blinks == 15:
@@ -264,73 +265,19 @@ class Yesman(pygame.sprite.Sprite, YM_Attr):
 
 
 
-    def update(self):
-        """
-        function that calculates position
-        and check collision
-        """
-        # move along the x direction
-        self.acc.x += self.vel.x * FRIC
-        self.vel.x += self.acc.x
-        self.pos.x += self.vel.x + 0.5 * self.acc.x
-
-
-        # routine when player didn't touch cells
-        #left Most boundary of stage. Block the player from
-        #moving further
-        if self.pos.x < 0:
-            self.pos.x = 0
-
-        if self.pos.x > WIN_W - self.rect.width:
-            self.pos.x = WIN_W - self.rect.width
-
-        self.rect.x = self.pos.x
-        self.collisionX()
-
-        #moving along the y direction
-        self.vel.y += self.acc.y
-        self.pos.y += self.vel.y + 0.5 * self.acc.y
-        # assign the y coordinate to frame's y
-        self.rect.y = self.pos.y
-
-        self.collisionY()
-
     # Kuppa touching the stage objects
     def touchXR(self, hits):
-        #touch hits coming from right side
+        """
+        touch hits coming from right side
+        """
         for block in hits:
             if self.vel.x > 0:
                 self.rect.right = block.rect.left
             self.pos.x = self.rect.x
 
 
-
-    def collisionX(self):
-        """check the collision in X direction """
-        # touch bricks
-        hitB = pygame.sprite.spritecollide(self, Bricks, False)
-        self.touchX(hitB)
-
-        #touch Cars
-        hitC = pygame.sprite.spritecollide(self, Cars, False)
-        self.touchX(hitC)
-
-        # touch Plat
-        hitP = pygame.sprite.spritecollide(self, Plats, False)
-        self.touchX(hitP)
-
-    def touchX(self, hits):
-        #touch hits
-        for block in hits:
-            if self.vel.x > 0: #moving right
-                self.rect.right = block.rect.left
-            if self.vel.x < 0: #moving left
-                self.rect.left = block.rect.right
-            # set the x coordinate
-            self.pos.x = self.rect.x
-
     def touchXL(self, hits):
-        #touch hits coming from left side
+        """touch hits coming from left side """
         for block in hits:
             if self.vel.x < 0:
                 self.rect.left = block.rect.right
@@ -528,6 +475,7 @@ class Yesman(pygame.sprite.Sprite, YM_Attr):
             self.image_ym = self.swd_cut_l[frame_atk]
             self.pos_a.x = self.pos.x - 50
             self.pos_a.y = self.pos.y - 60
+        #print(frame_atk)
 
     def ani_cut(self):
         """ animate the sword cutting
@@ -544,8 +492,10 @@ class Yesman(pygame.sprite.Sprite, YM_Attr):
         if self.cnt_swd_cut >= self.cut_period:
             self.show_cut(end_pt)
             self.ATK_DONE = True
+            self.go_hit = True
         else:
             self.ATK_DONE = False
+            self.go_hit = False
             self.cnt_swd_cut += 1
 
     def atk_isDone(self):
@@ -557,24 +507,28 @@ class Yesman(pygame.sprite.Sprite, YM_Attr):
 
     def go_combo(self):
         self.incr_slash()
-        self.cnt_hold = 0
-        self.cnt_swd_cut = 0
+
 
     def cut_delay(self):
         cut_frame_period = self.get_cut_frame_period(self.slash_number)
         if (self.ATK_DONE):
-            if (self.cnt_hold >= 4 * cut_frame_period):
+            if (self.cnt_hold >=  3 * cut_frame_period):
                 self.atk_isDone()
             else:
                 self.cnt_hold += 1
 
 
+
     def incr_slash(self):
-        if self.slash_number == 2:
-            self.atk_isDone()
+        if self.slash_number == 3:
+            self.slash_number = 1
+            self.ATK_DONE = False
+            self.cnt_swd_cut = 0
         else:
             self.slash_number += 1
             self.ATK_DONE = False
+            self.cnt_hold = 0
+            self.cnt_swd_cut = 0
 
 
 
@@ -582,10 +536,12 @@ class Yesman(pygame.sprite.Sprite, YM_Attr):
     def go_attack(self):
         """game logic for attack if ATK flag is triggered """
         if self.ATK:
-            print("slash #: {}".format(self.slash_number))
+            #print("slash #: {}".format(self.slash_number))
             combo_func = 'self.ani_cut'
             eval(combo_func)()
-        self.cut_delay()
+            self.cut_delay()
+            #self.go_hit = False
+
 
 
     def animate(self):
@@ -593,8 +549,8 @@ class Yesman(pygame.sprite.Sprite, YM_Attr):
         self.ani_move()
         self.ani_jump()
         self.ani_swd_draw()
-        self.go_attack()
         self.no_swd_dmg_blink()
+        self.go_attack()
 
 
 
@@ -603,8 +559,9 @@ class Yesman(pygame.sprite.Sprite, YM_Attr):
         self.animate()
         w = self.image.get_width()
         h = self.image.get_height()
+        self.rect_ym = self.image_ym.get_rect(topleft=self.pos_a)
         screen.blit(self.image_ym, self.pos_a)
-        #screen.blit(self.image, self.pos)
+#        screen.blit(self.image, self.pos)
 
 
 

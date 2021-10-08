@@ -2,8 +2,9 @@
 import sys
 import pygame
 from display import *
+from fonts.yesmancombo import *
 import time as t
-from yes_man_the_tortoise.yesman import *
+from yes_man_the_tortoise.yesmanbattle import *
 
 
 
@@ -21,7 +22,7 @@ class Game:
         self.clock = pygame.time.Clock()
         self.run = True
         self.prd = 0
-        self.cnt_show_comb = False
+        self.cnt_show_comb = 0
         self.cnt_sb = 0
         self.frames = 0
 
@@ -30,23 +31,23 @@ class Game:
         #the a key is let go after it's pressed
         self.a_key_cnt = 0
         self.a_stamp = 0
+        self.cut_len = 0
 
 
 
-    def Key_a_delay(self, cnt_h, cnt_btnM_h, cnt_btnM_l):
+    def Key_a_delay(self):
         """Key release Key_a mechanism """
         self.a_stamp = pygame.time.get_ticks() - self.a_key_cnt
-        print(self.a_stamp)
         if P1.swd_on:
             if P1.ATK_DONE == False:
                 P1.ATK = True
 
 
 
+
     def attack_event(self):
         """attacking routine of player """
-        cut_len = int((P1.cut_period * 1000) / FPS)
-        self.Key_a_delay(cut_len, 50 ,34)
+        self.Key_a_delay()
 
 
     def run_game(self):
@@ -80,15 +81,12 @@ class Game:
                     P1.jump()
             if (event.type == pygame.KEYUP):
                 if event.key == pygame.K_a:
+                    self.cut_len = int((P1.cut_period * 1000) / FPS)
                     self.a_key_cnt = pygame.time.get_ticks()
-                    if self.a_stamp >= 200 or (self.a_stamp < 70 and self.a_stamp >= 35):
+                    if self.a_stamp >= 3 * self.cut_len:
                         P1.slash_number = 1
                     else:
                         P1.go_combo()
-
-
-
-
 
 
 
@@ -130,6 +128,13 @@ class Game:
     def player_draw(self):
         #draw the player
         P1.render()
+        if P1.show_comb:
+            if self.cnt_show_comb >= 20:
+                P1.show_comb = False
+                self.cnt_show_comb = 0
+            YesmanCombo.update_combo(P1.slash_number)
+            self.cnt_show_comb += 1
+
 
 
     def player_stuff(self):
