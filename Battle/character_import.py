@@ -11,6 +11,8 @@ elif character == 'Lettuce':
     from tortoise_lettuce.le_game import *
 elif character == 'Yesman':
     from yes_man_the_tortoise.yesmangame import *
+elif character == 'Darth Waffle':
+    from dozer_and_waffle.wafflegame import *
 else:
     print('Error: character name is either empty or does not exist')
     sys.exit()
