@@ -181,7 +181,7 @@ class YM_Battle(Yesman):
             if self.pos_a.x <= (cell.pos.x + cell.rect.width) - 1:
                 if self.pos.x > cell.pos.x: # you are behind cell
                     self.player_attack(cell, -50)
-2                else: # cell is behind you
+                else: # cell is behind you
                     self.cell_do_dmg_x(cell, 50)
 
 

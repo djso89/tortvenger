@@ -5,35 +5,36 @@ from pygame.locals import *
 from display import *
 from stage import *
 from spritesheet import SpriteSheet
-#from attr import WF_Attr
-#from yesmangauge import Yesmaninfo
+
+
+
 cut_frame_period = 5
 cut_frame_num = 7
 
 
-class Waffle(pygame.sprite.Sprite):#, WF_Attr):
-    """ Waffle class """
+class Sammi(pygame.sprite.Sprite):#, WF_Attr):
+    """ Sammi class """
 
     def loadimages(self):
         """ load all the kuppa action frames """
-        sprite_sheet = SpriteSheet("images/wf_rdy.png", (0, 0, 0))
-        sp_sheet_frame = SpriteSheet("images/wf_frame.png", (0, 0, 0))
-        sprite_sheet_sb = SpriteSheet("images/wf_sb_rdy.png", (0, 0, 0))
-        sprite_sheet_sb_drw = SpriteSheet('images/wf_draw.png', (0, 0, 0))
+        sprite_sheet = SpriteSheet("images/sm_rdy.png", (0, 0, 0))
+        sp_sheet_frame = SpriteSheet("images/sm_frame.png", (0, 0, 0))
+        sprite_sheet_swd = SpriteSheet("images/sm_swd_rdy.png", (0, 0, 0))
+        sprite_sheet_swd_drw = SpriteSheet('images/sm_draw.png', (0, 0, 0))
 
 
 
         ss = sprite_sheet.sprite_sheet
-        ss_sb = sprite_sheet_sb.sprite_sheet
+        ss_swd = sprite_sheet_swd.sprite_sheet
         ss_frame = sp_sheet_frame.sprite_sheet
-        ss_sb_draw = sprite_sheet_sb_drw.sprite_sheet
+        ss_swd_draw = sprite_sheet_swd_drw.sprite_sheet
 
         # load the frame
         for i in range(0, 1, 1):
             width = ss_frame.get_width()
             height = ss_frame.get_height()
             image = sp_sheet_frame.get_image(0, 0, width, height)
-            self.wfframe.append(image)
+            self.Sammiframe.append(image)
 
         # load all right facing ready images
         for i in range(0, 2, 1):
@@ -45,54 +46,55 @@ class Waffle(pygame.sprite.Sprite):#, WF_Attr):
             image = pygame.transform.flip(image, True, False)
             self.ready_l.append(image)
 
-            width = ss_sb.get_width()
-            height = ss_sb.get_height()
-            image = sprite_sheet_sb.get_image(i * width/2, 0,
+            width = ss_swd.get_width()
+            height = ss_swd.get_height()
+            image = sprite_sheet_swd.get_image(i * width/2, 0,
                                            width/2, height)
-            self.sb_rdy_r.append(image)
+            self.swd_rdy_r.append(image)
             image = pygame.transform.flip(image, True, False)
-            self.sb_rdy_l.append(image)
+            self.swd_rdy_l.append(image)
 
 
-        # load all drawing light-saber images
-        for i in range(0, 17, 1):
-            width = ss_sb_draw.get_width()
-            height = ss_sb_draw.get_height()
-            image = sprite_sheet_sb_drw.get_image(i * width / 17, 0,
-                                                   width / 17, height)
-            self.sber_draw_r.append(image)
+        # load all drawing Guan Dao images
+        for i in range(0, 8, 1):
+            width = ss_swd_draw.get_width()
+            height = ss_swd_draw.get_height()
+            image = sprite_sheet_swd_drw.get_image(i * width / 8, 0,
+                                                   width / 8, height)
+            self.swrd_draw_r.append(image)
             image = pygame.transform.flip(image, True, False)
-            self.sber_draw_l.append(image)
+            self.swrd_draw_l.append(image)
+
 
     def __init__(self):
         """ initialize player """
         pygame.sprite.Sprite.__init__(self)
-        #WF_Attr.__init__(self)
+        #GREGG_Attr.__init__(self)
 
         #counter for animating jumping
         self.cnt = 0
-        self.cnt_sber_draw = 0
+        self.cnt_swrd_draw = 0
         self.cnt_dmg = 0
 
         self.cnt_a = 0
 
         # action frames
-        self.wfframe = []
+        self.Sammiframe = []
         self.ready_r = []
         self.ready_l = []
-        self.sb_rdy_r = []
-        self.sb_rdy_l = []
+        self.swd_rdy_r = []
+        self.swd_rdy_l = []
 
         self.jmp_l = []
         self.jmp_r = []
 
-        self.sb_cut_r = []
-        self.sb_cut_l = []
+        self.swd_cut_r = []
+        self.swd_cut_l = []
 
-        self.sb_jmp_l = []
-        self.sb_jmp_r = []
-        self.sber_draw_r = []
-        self.sber_draw_l = []
+        self.swd_jmp_l = []
+        self.swd_jmp_r = []
+        self.swrd_draw_r = []
+        self.swrd_draw_l = []
 
         # load the image
         self.loadimages()
@@ -107,19 +109,19 @@ class Waffle(pygame.sprite.Sprite):#, WF_Attr):
         self.pos_a = vec((0, 0))
 
         # set the image the player start with
-        self.image = self.wfframe[0]
-        self.image_wf = self.ready_r[0]
+        self.image = self.Sammiframe[0]
+        self.image_sm = self.ready_r[0]
         self.rect = self.image.get_rect(topleft=self.pos)
-        self.rect_wf = self.image_wf.get_rect(topleft=self.pos_a)
+        self.rect_sm = self.image_sm.get_rect(topleft=self.pos_a)
 
         # orientation and movement status
         self.orientation = 'right'
         self.OnGround = True
 
-        # flag switch for drawing sb
-        self.sb_on = False
-        # flag for process of drawing sb
-        self.sb_drawing = False
+        # flag switch for drawing swd
+        self.swd_on = False
+        # flag for process of drawing swd
+        self.swd_drawing = False
 
         # flag for attack
         self.ATK = False
@@ -127,7 +129,7 @@ class Waffle(pygame.sprite.Sprite):#, WF_Attr):
 
 
         self.cut_period = 0
-        self.cnt_sb_cut = 0
+        self.cnt_swd_cut = 0
 
         self.cnt_hold = 0
 
@@ -140,12 +142,12 @@ class Waffle(pygame.sprite.Sprite):#, WF_Attr):
         self.dmg_blinking = False
         self.n_blinks = 0
 
-    def no_sb_dmg_blink(self):
+    def no_swd_dmg_blink(self):
         period = 2
         if self.cell_atk_k:
             if self.cnt_dmg >= period:
-                self.image_wf = Surface((self.rect.width, self.rect.height), flags = SRCALPHA)
-                self.image_wf.fill((0, 0, 0, 0))
+                self.image_sm = Surface((self.rect.width, self.rect.height), flags = SRCALPHA)
+                self.image_sm.fill((0, 0, 0, 0))
                 self.dmg_blinking = True
                 self.cnt_dmg = 0
                 if self.n_blinks == 15:
@@ -162,11 +164,11 @@ class Waffle(pygame.sprite.Sprite):#, WF_Attr):
         """get the rectangle object from image """
         return self.image.get_rect()
 
-    def draw_the_sber(self):
-        """ draw the sber function.
+    def draw_the_swrd(self):
+        """ draw the swrd function.
         the function gets the key press reading
-        and toggles sb_on flaf to True to False """
-        self.sb_on = not self.sb_on
+        and toggles swd_on flaf to True to False """
+        self.swd_on = not self.swd_on
 
 
     def move(self):
@@ -181,19 +183,19 @@ class Waffle(pygame.sprite.Sprite):#, WF_Attr):
             if not pressed_keys[K_a]:
                 self.acc.x = -ACC
                 self.orientation = 'left'
-            if pressed_keys[K_a] and not self.sb_on:
+            if pressed_keys[K_a] and not self.swd_on:
                 self.acc.x = -ACC
                 self.orientation = 'left'
-            if pressed_keys[K_a] and self.sb_on:
+            if pressed_keys[K_a] and self.swd_on:
                 self.acc.x = 0
         if pressed_keys[K_RIGHT]:
             if not pressed_keys[K_a]:
                 self.acc.x = ACC
                 self.orientation = 'right'
-            if pressed_keys[K_a] and not self.sb_on:
+            if pressed_keys[K_a] and not self.swd_on:
                 self.acc.x = ACC
                 self.orientation = 'right'
-            if pressed_keys[K_a] and self.sb_on:
+            if pressed_keys[K_a] and self.swd_on:
                 self.acc.x = 0
 
     def jump(self):
@@ -280,86 +282,82 @@ class Waffle(pygame.sprite.Sprite):#, WF_Attr):
         """ animate the left right movement"""
         if self.orientation == 'right':# and self.OnGround == True:
             frame = (self.pos.x // 30) % len(self.ready_r)
-            if self.sb_on and not self.sb_drawing:
-                self.image_wf = self.sb_rdy_r[int(frame)]
+            if self.swd_on:
+                self.image_sm = self.swd_rdy_r[int(frame)]
             else:
-                self.image_wf = self.ready_r[int(frame)]
-            self.pos_a.x = self.pos.x - 10
-            self.pos_a.y = self.pos.y - 60
+                self.image_sm = self.ready_r[int(frame)]
+            self.pos_a.x = self.pos.x - 40
+            self.pos_a.y = self.pos.y - 80
         elif self.orientation == 'left':# and self.OnGround == True:
             frame = (self.pos.x // 30) % len(self.ready_l)
-            if self.sb_on and not self.sb_drawing:
-                self.image_wf = self.sb_rdy_l[int(frame)]
+            if self.swd_on:
+                self.image_sm = self.swd_rdy_l[int(frame)]
             else:
-                self.image_wf = self.ready_l[int(frame)]
-            self.pos_a.x = self.pos.x - 80
-            self.pos_a.y = self.pos.y - 60
+                self.image_sm = self.ready_l[int(frame)]
+            self.pos_a.x = self.pos.x - 60
+            self.pos_a.y = self.pos.y - 80
 
 
 
 
-    def ani_sb_out(self):
+    def ani_swd_out(self):
         """ animate pulling out swords"""
-        period = 7
-        max_period = period * (len(self.sber_draw_r) - 1)
-        if (self.cnt_sber_draw >= max_period):
-            self.cnt_sber_draw = max_period
-            self.sb_drawing = False
+        period = 4
+        max_period = period * (len(self.swrd_draw_r) - 1)
+        if (self.cnt_swrd_draw >= max_period):
+            self.cnt_swrd_draw = max_period
+            self.swd_drawing = False
         else:
-            self.sb_drawing = True
+            self.swd_drawing = True
             if (self.orientation == 'right'):
-                self.image_wf = self.sber_draw_r[self.cnt_sber_draw // period]
-                self.pos_a.x = self.pos.x - 10
-                self.pos_a.y = self.pos.y - 60
+                self.image_sm = self.swrd_draw_r[self.cnt_swrd_draw // period]
+                self.pos_a.x = self.pos.x - 40
+                self.pos_a.y = self.pos.y - 80
             if (self.orientation == 'left'):
-                self.image_wf = self.sber_draw_l[self.cnt_sber_draw // period]
-                self.pos_a.x = self.pos.x - 80
-                self.pos_a.y = self.pos.y - 60
-            self.cnt_sber_draw += 1
+                self.image_sm = self.swrd_draw_l[self.cnt_swrd_draw // period]
+                self.pos_a.x = self.pos.x - 60
+                self.pos_a.y = self.pos.y - 80
+            self.cnt_swrd_draw += 1
 
-    def ani_sb_in(self):
+    def ani_swd_in(self):
         """animate drawing the saber staff """
-        period = 7
-        max_period = period * (len(self.sber_draw_l) - 1)
-        if (self.cnt_sber_draw <= 0):
-            self.cnt_sber_draw = 0
-            self.sb_drawing = False
+        period = 4
+        max_period = period * (len(self.swrd_draw_l) - 1)
+        if (self.cnt_swrd_draw <= 0):
+            self.cnt_swrd_draw = 0
+            self.swd_drawing = False
         else:
-            self.sb_drawing = True
-            self.cnt_sber_draw -= 1
+            self.swd_drawing = True
+            self.cnt_swrd_draw -= 1
             if (self.orientation == 'right'):
-                self.image_wf = self.sber_draw_r[self.cnt_sber_draw // period]
-                self.pos_a.x = self.pos.x - 10
-                self.pos_a.y = self.pos.y - 60
+                self.image_sm = self.swrd_draw_r[self.cnt_swrd_draw // period]
+                self.pos_a.x = self.pos.x - 40
+                self.pos_a.y = self.pos.y - 80
             if self.orientation == 'left':
-                self.image_wf = self.sber_draw_l[self.cnt_sber_draw // period]
-                self.pos_a.x = self.pos.x - 80
-                self.pos_a.y = self.pos.y - 60
+                self.image_sm = self.swrd_draw_l[self.cnt_swrd_draw // period]
+                self.pos_a.x = self.pos.x - 60
+                self.pos_a.y = self.pos.y - 80
 
 
 
 
-    def ani_sb_draw(self):
-        if self.sb_on == True:
-            self.ani_sb_out()
-        elif self.sb_on == False:
-            self.ani_sb_in()
+    def ani_swd_draw(self):
+        if self.swd_on == True:
+            self.ani_swd_out()
+        elif self.swd_on == False:
+            self.ani_swd_in()
 
 
     def animate(self):
         """animate the player. """
         self.ani_move()
-        self.ani_sb_draw()
+        self.ani_swd_draw()
 
 
 
     def render(self):
         """ paste the player object into screen """
         self.animate()
-        self.rect_wf = self.image_wf.get_rect(topleft=self.pos_a)
-        screen.blit(self.image_wf, self.pos_a)
+        self.rect_sm = self.image_sm.get_rect(topleft=self.pos_a)
 #        screen.blit(self.image, self.pos)
-
-
-
-P1 = Waffle()
+        screen.blit(self.image_sm, self.pos_a)

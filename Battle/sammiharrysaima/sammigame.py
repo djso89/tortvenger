@@ -4,7 +4,7 @@ import pygame
 from display import *
 #from fonts.yesmancombo import *
 import time as t
-from dozer_and_waffle.wafflebattle import P1
+from sammiharrysaima.sammibattle import P1
 
 
 
@@ -23,7 +23,7 @@ class Game:
         self.run = True
         self.prd = 0
         self.cnt_show_comb = 0
-        self.cnt_sb = 0
+        self.cnt_swd = 0
         self.frames = 0
 
 
@@ -38,7 +38,7 @@ class Game:
     def Key_a_delay(self):
         """Key release Key_a mechanism """
         self.a_stamp = pygame.time.get_ticks() - self.a_key_cnt
-        if P1.sb_on:
+        if P1.swd_on:
             if P1.ATK_DONE == False:
                 P1.ATK = True
 
@@ -76,7 +76,7 @@ class Game:
                 if event.key == pygame.K_a:
                     self.attack_event()
                 if event.key == pygame.K_d:
-                    P1.draw_the_sber()
+                    P1.draw_the_swrd()
                 if event.key == pygame.K_UP:
                     P1.jump()
             if (event.type == pygame.KEYUP):

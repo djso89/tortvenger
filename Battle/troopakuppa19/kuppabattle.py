@@ -67,8 +67,9 @@ class K_Battle(K_Act):
         if self.pos.x < 0:
             self.pos.x = 0
 
-        if self.pos.x > WIN_W - self.rect.width:
-            self.pos.x = WIN_W - self.rect.width
+        # setting boundary for right x - axis
+        if self.pos.x > (WIN_W / 2) - self.rect.width:
+            self.pos.x = (WIN_W / 2) - self.rect.width
 
         self.rect.x = self.pos.x
         self.collisionX()
