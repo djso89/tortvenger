@@ -3,7 +3,7 @@ import pygame
 import sys
 from pygame.locals import *
 from display import *
-from stage import *
+from stage import ST1
 from spritesheet import SpriteSheet
 
 
@@ -185,27 +185,27 @@ class Kuppa(pygame.sprite.Sprite):
         """ check the collision in Y direction """
 
         #touch ground platforms
-        hits = pygame.sprite.spritecollide(self, platforms, False)
+        hits = pygame.sprite.spritecollide(self, ST1.platforms, False)
         self.touchYU(hits)
 
         #touch Cars
-        hitC = pygame.sprite.spritecollide(self, Cars, False)
+        hitC = pygame.sprite.spritecollide(self, ST1.Cars, False)
         self.touchYU(hitC)
 
         # touch Bricks
-        hitB = pygame.sprite.spritecollide(self, Bricks, False)
+        hitB = pygame.sprite.spritecollide(self, ST1.Bricks, False)
         self.touchYUD(hitB)
 
         #touch Plats
-        hitP = pygame.sprite.spritecollide(self, Plats, False)
+        hitP = pygame.sprite.spritecollide(self, ST1.Plats, False)
         self.touchYUD(hitP)
 
         #touch Bldgs
-        hitBldg = pygame.sprite.spritecollide(self, Bldgs, False)
+        hitBldg = pygame.sprite.spritecollide(self, ST1.Bldgs, False)
         self.touchYUD(hitBldg)
 
         #touch Steps
-        hitSt = pygame.sprite.spritecollide(self, Steps, False)
+        hitSt = pygame.sprite.spritecollide(self, ST1.Steps, False)
         self.touchYUD(hitSt)
 
 

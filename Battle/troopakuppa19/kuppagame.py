@@ -18,7 +18,6 @@ from troopakuppa19.vid import *
 class Game:
     """ Game class """
     def __init__(self):
-#        pygame.init()
         self.clock = pygame.time.Clock()
         self.run = True
         self.prd = 0
@@ -76,6 +75,8 @@ class Game:
 
     def run_game(self):
         play_cutscene_1_1()
+        pygame.init()
+        pygame.display.init()
         while self.run:
             self._check_events()
             self._update_screen()
@@ -113,8 +114,30 @@ class Game:
             if (event.type == pygame.KEYUP):
                 if event.key == pygame.K_a:
                     self.a_key_cnt = pygame.time.get_ticks()
+                if event.key == pygame.K_LEFT:
+                    P1.acc.x = 0
+                if event.key == pygame.K_RIGHT:
+                    P1.acc.x = 0
                 if event.key == pygame.K_s:
                     self.SB_toggle = False
+
+    def player_boundary_x(self):
+        """set the boundary for player
+        in horizontal direction
+        """
+        # if the P1 gets near the right, shift the word left
+        if P1.pos.x >= 500 - P1.rect.width:
+            diff = (P1.pos.x + P1.rect.width) - 500
+            P1.pos.x = 500 - P1.rect.width
+            ST1.move_stage_bg(-diff)
+            ST1.move_stage(-diff)
+        # check position boundary for player
+        #if P1.pos.x < 0:
+        #    P1.pos.x = 0
+
+        # setting boundary for right x - axis
+        #if P1.pos.x > (WIN_W) - P1.rect.width:
+        #    P1.pos.x = (WIN_W) - P1.rect.width
 
 
     def _update_screen(self):
@@ -131,10 +154,13 @@ class Game:
             cell.move()
             cell.hp_show()
 
+        # player boundary
+        self.player_boundary_x()
+
 
         """ drawing routines """
         # draw the Stage
-        ST1.draw(screen, self.SB_toggle)
+        ST1.draw(screen, True)
 
         # draw the cells and player
         self.cell_draw()
@@ -146,12 +172,11 @@ class Game:
             screen.blit(g_over_txt, (WIN_W/2, WIN_H/2))
             self.run = False
 
-
-
         """refresh the page per (1000/FPS) ms """
         # tick the clock at 60Hz rate
         pygame.display.flip()
         self.clock.tick(FPS)
+
 
     def cell_draw(self):
         #draw the cells

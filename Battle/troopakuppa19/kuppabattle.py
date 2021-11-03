@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import pygame
 from troopakuppa19.k_action import *
 from covid19 import Cells
@@ -31,15 +32,15 @@ class K_Battle(K_Act):
     def collisionX(self):
         """check the collision in X direction """
         # touch bricks
-        hitB = pygame.sprite.spritecollide(self, Bricks, False)
+        hitB = pygame.sprite.spritecollide(self, ST1.Bricks, False)
         self.touchX(hitB)
 
         #touch Cars
-        hitC = pygame.sprite.spritecollide(self, Cars, False)
+        hitC = pygame.sprite.spritecollide(self, ST1.Cars, False)
         self.touchX(hitC)
 
         # touch Plat
-        hitP = pygame.sprite.spritecollide(self, Plats, False)
+        hitP = pygame.sprite.spritecollide(self, ST1.Plats, False)
         self.touchX(hitP)
 
     def gotHit_reset(self):
@@ -64,12 +65,12 @@ class K_Battle(K_Act):
         # routine when player didn't touch cells
         #left Most boundary of stage. Block the player from
         #moving further
-        if self.pos.x < 0:
-            self.pos.x = 0
+#        if self.pos.x < 0:
+#            self.pos.x = 0
 
         # setting boundary for right x - axis
-        if self.pos.x > (WIN_W / 2) - self.rect.width:
-            self.pos.x = (WIN_W / 2) - self.rect.width
+#        if self.pos.x > (WIN_W / 2) - self.rect.width:
+#            self.pos.x = (WIN_W / 2) - self.rect.width
 
         self.rect.x = self.pos.x
         self.collisionX()

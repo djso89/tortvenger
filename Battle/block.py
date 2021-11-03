@@ -3,6 +3,7 @@ import pygame
 from pygame import *
 from pygame.locals import *
 from display import *
+
 WIDTH = setting.screen_width
 HEIGHT = setting.screen_height
 

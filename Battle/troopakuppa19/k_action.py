@@ -4,7 +4,6 @@ Action Class - K_Act
 animating attacks and actions that involve when
 swords are drawn
 """
-import pygame
 from troopakuppa19.kuppa import *
 
 black = (0, 0, 0)
@@ -204,7 +203,7 @@ class K_Act(Kuppa):
 
     def ani_turn_off(self):
         """ turn off the action frame """
-        self.image_a = Surface((self.rect_a.width, self.rect_a.height), flags = SRCALPHA)
+        self.image_a = pygame.Surface((self.rect_a.width, self.rect_a.height), flags = SRCALPHA)
         self.image_a.fill((0, 0, 0, 0))
 
     def ani_cut(self):
