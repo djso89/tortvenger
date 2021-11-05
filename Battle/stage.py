@@ -46,14 +46,36 @@ class Stage(pygame.sprite.Sprite):
                 left_corner = (i * self.bgimg1.get_width(), 0)
                 self.stagesurf.blit(self.bgimg1, left_corner)
 
-    def move_stage_bg(self, shift):
-        """move the background """
-        self.scroll += shift
-
     def move_stage(self, shift):
+        """move the background """
+        self.scroll += round(shift)
+        print('+++++++++++++++++++++++')
+        print('scroll_x: {}'.format(self.scroll))
+
+
         """move the stage background and stage objects """
-        for StageBlock in self.StageBlocks:
-            StageBlock.rect.x = StageBlock.rect.x + shift
+        for Plat in self.Plats:
+            Plat.rect.x += round(shift)
+
+        for car in self.Cars:
+            car.rect.x += round(shift)
+
+        """move the stage background and stage objects """
+        for platform in self.platforms:
+            platform.rect.x += round(shift)
+
+        """move the Bricks """
+        for brick in self.Bricks:
+            brick.rect.x += round(shift)
+
+        """move the Step """
+        for step in self.Steps:
+            step.rect.x += round(shift)
+
+        """move the Bricks """
+        for bldg in self.Bldgs:
+            bldg.rect.x += round(shift)
+
 
 
 

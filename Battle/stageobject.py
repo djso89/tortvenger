@@ -14,7 +14,7 @@ Brick1 = Block()
 Brick1.loadBrick(411, 237)
 
 Bricks.add(Brick1)
-#Bricks.add(Brick2)
+
 
 Cars = pygame.sprite.Group()
 Car1 = Block()

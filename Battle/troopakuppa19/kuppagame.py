@@ -32,18 +32,7 @@ class Game:
         # release counter for measing how long the a key is let go after it's pressed
         self.a_key_cnt = 0
 
-    def kuppavision(self):
-        if self.SB_toggle:
-            if self.cnt_sb >= 35:
-                if kuppainfo.curr_ki <= 0:
-                    kuppainfo.curr_ki = 0
-                else:
-                    kuppainfo.curr_ki -= 1
-                    kuppainfo.update_bar = True
-                self.cnt_sb = 0
-            self.cnt_sb += 1
-        else:
-            self.cnt_sb = 0
+
 
     def Key_a_delay(self, cnt_h, cnt_btnM_h, cnt_btnM_l):
         """Key release Key_a mechanism """
@@ -117,6 +106,7 @@ class Game:
                 if event.key == pygame.K_LEFT:
                     P1.acc.x = 0
                 if event.key == pygame.K_RIGHT:
+                    print('here')
                     P1.acc.x = 0
                 if event.key == pygame.K_s:
                     self.SB_toggle = False
@@ -128,9 +118,11 @@ class Game:
         # if the P1 gets near the right, shift the word left
         if P1.pos.x >= 500 - P1.rect.width:
             diff = (P1.pos.x + P1.rect.width) - 500
-            P1.pos.x = 500 - P1.rect.width
-            ST1.move_stage_bg(-diff)
+            print(diff)
             ST1.move_stage(-diff)
+            P1.pos.x = 500 - P1.rect.width
+
+
         # check position boundary for player
         #if P1.pos.x < 0:
         #    P1.pos.x = 0
@@ -146,16 +138,18 @@ class Game:
 
         # do the Player 1 routines
         self.player_stuff()
-        self.kuppavision()
         self.show_info()
+
+
+
+        # player boundary
+        self.player_boundary_x()
 
         # do the COVID19 routines
         for cell in Cells:
             cell.move()
             cell.hp_show()
 
-        # player boundary
-        self.player_boundary_x()
 
 
         """ drawing routines """

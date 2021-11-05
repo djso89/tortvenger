@@ -17,5 +17,5 @@ WIN_H = setting.screen_height
 setting.flags = pygame.SCALED | pygame.RESIZABLE
 
 #pygame.display.init()
-screen = pygame.display.set_mode((WIN_W, WIN_H),
+screen = pygame.display.set_mode((WIN_W, WIN_H), \
     setting.flags)
