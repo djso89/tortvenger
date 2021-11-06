@@ -103,29 +103,26 @@ class Game:
             if (event.type == pygame.KEYUP):
                 if event.key == pygame.K_a:
                     self.a_key_cnt = pygame.time.get_ticks()
-                if event.key == pygame.K_LEFT:
-                    P1.acc.x = 0
-                if event.key == pygame.K_RIGHT:
-                    print('here')
+                if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                     P1.acc.x = 0
                 if event.key == pygame.K_s:
                     self.SB_toggle = False
 
-    def player_boundary_x(self):
-        """set the boundary for player
+    def player_boundary_x(self, x_range):
+        """
+        set the boundary for player
         in horizontal direction
         """
         # if the P1 gets near the right, shift the word left
-        if P1.pos.x >= 500 - P1.rect.width:
-            diff = (P1.pos.x + P1.rect.width) - 500
+        if P1.pos.x >= x_range - P1.rect.width:
+            diff = (P1.pos.x + P1.rect.width) - x_range
             print(diff)
             ST1.move_stage(-diff)
-            P1.pos.x = 500 - P1.rect.width
-
+            P1.pos.x = x_range - P1.rect.width
 
         # check position boundary for player
-        #if P1.pos.x < 0:
-        #    P1.pos.x = 0
+        if P1.pos.x < 0:
+            P1.pos.x = 0
 
         # setting boundary for right x - axis
         #if P1.pos.x > (WIN_W) - P1.rect.width:
@@ -140,10 +137,8 @@ class Game:
         self.player_stuff()
         self.show_info()
 
-
-
         # player boundary
-        self.player_boundary_x()
+        self.player_boundary_x(700)
 
         # do the COVID19 routines
         for cell in Cells:

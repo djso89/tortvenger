@@ -8,6 +8,10 @@ from display import *
 alph = 68
 
 Ground = Block()
+Ground2 = Block()
+Ground2.newBlock(WIDTH, HEIGHT - 20, WIDTH, 20, alph)
+Ground3 = Block()
+Ground3.newBlock((2 * WIDTH), HEIGHT - 20, WIDTH, 20, alph)
 
 Bricks = pygame.sprite.Group()
 Brick1 = Block()
@@ -71,6 +75,8 @@ Bldgs.add(Bldg1)
 
 platforms = pygame.sprite.Group()
 platforms.add(Ground)
+platforms.add(Ground2)
+platforms.add(Ground3)
 platforms.add(Step0)
 platforms.add(Step1)
 platforms.add(Step2)
