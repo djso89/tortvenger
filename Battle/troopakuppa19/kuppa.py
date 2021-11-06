@@ -83,7 +83,7 @@ class Kuppa(pygame.sprite.Sprite):
         period = 2
         if self.cell_atk_k:
             if self.cnt_dmg >= period:
-                self.image = Surface((self.rect.width, self.rect.height), flags = SRCALPHA)
+                self.image = pygame.Surface((self.rect.width, self.rect.height), flags = SRCALPHA)
                 self.image.fill((0, 0, 0, 0))
                 self.dmg_blinking = True
                 self.cnt_dmg = 0

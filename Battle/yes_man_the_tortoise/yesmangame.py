@@ -88,7 +88,7 @@ class Game:
                     else:
                         P1.go_combo()
 
-    def player_boundary_x(self, x_range):
+    def move_camera_x(self, x_range):
         """
         set the boundary for player
         in horizontal direction
@@ -98,6 +98,7 @@ class Game:
             diff = (P1.pos.x + P1.rect.width) - x_range
             print(diff)
             ST1.move_stage(-diff)
+            move_cell(-diff)
             P1.pos.x = x_range - P1.rect.width
 
         # check position boundary for player
@@ -112,7 +113,7 @@ class Game:
 
         # do the Player 1 routines
         self.player_stuff()
-        self.player_boundary_x(700)
+        self.move_camera_x(700)
 
         # do the COVID19 routines
         for cell in Cells:

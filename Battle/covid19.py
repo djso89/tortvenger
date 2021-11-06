@@ -143,14 +143,14 @@ class COVID19(C19_Gauge, pygame.sprite.Sprite):
 
     def move(self):
         """Make the cell move by itself """
-        if self.pos.x < 0:
-            self.direction = 0
+#        if self.pos.x < 0:
+#            self.direction = 0
         if self.pos.x <= self.start_x:
             self.direction = 0
         if self.pos.x >= self.end_x - self.rect.width:
             self.direction = 1
-        if self.pos.x >= WIN_W - self.rect.width:
-            self.direction = 1
+#        if self.pos.x >= WIN_W - self.rect.width:
+#           self.direction = 1
 
         if not (self.hitCell or self.hitCell_envk or self.hitCell_expk):
             if self.direction == 0:
@@ -205,11 +205,23 @@ def cell_gen(numcells):
         cell.set_range(cp.rect.left + x_ext_l, cp.rect.right + x_ext_r)
         Cells.add(cell)
 
-#cell_gen(NumCells)
 
-#C19 = COVID19(900, 500)
-#C19.set_range(0, 1200)
-#C1 = COVID19(400,300)
-#C1.set_range(0, 1200)
-#Cells.add(C19)
-#Cells.add(C1)
+
+
+def move_cell(shift):
+    """ shift the cells as camera moves """
+    for cell in Cells:
+        cell.pos.x += round(shift)
+        cell.start_x += round(shift)
+        cell.end_x += round(shift)
+
+cell_gen(NumCells)
+
+C19 = COVID19(900, 500)
+C19.set_range(0, 1200)
+C1 = COVID19(400,300)
+C1.set_range(0, 1200)
+
+
+Cells.add(C19)
+Cells.add(C1)

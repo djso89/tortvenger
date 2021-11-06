@@ -108,7 +108,7 @@ class Game:
                 if event.key == pygame.K_s:
                     self.SB_toggle = False
 
-    def player_boundary_x(self, x_range):
+    def move_camera_x(self, x_range):
         """
         set the boundary for player
         in horizontal direction
@@ -116,13 +116,15 @@ class Game:
         # if the P1 gets near the right, shift the word left
         if P1.pos.x >= x_range - P1.rect.width:
             diff = (P1.pos.x + P1.rect.width) - x_range
-            print(diff)
             ST1.move_stage(-diff)
+            move_cell(-diff)
             P1.pos.x = x_range - P1.rect.width
 
         # check position boundary for player
         if P1.pos.x < 0:
             P1.pos.x = 0
+
+
 
         # setting boundary for right x - axis
         #if P1.pos.x > (WIN_W) - P1.rect.width:
@@ -137,13 +139,22 @@ class Game:
         self.player_stuff()
         self.show_info()
 
+
         # player boundary
-        self.player_boundary_x(700)
+        self.move_camera_x(700)
 
         # do the COVID19 routines
         for cell in Cells:
             cell.move()
             cell.hp_show()
+
+
+
+        # COVID19 Cells boundary
+#        for cell in Cells:
+#            if cell.pos.x >= 700 - P1.rect.width:
+#                diff = (cell.pos.x + cell.rect.width) - 700
+#                cell.pos.x = 700 - cell.rect.width
 
 
 

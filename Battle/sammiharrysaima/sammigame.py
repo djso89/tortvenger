@@ -85,6 +85,23 @@ class Game:
 
 
 
+    def move_camera_x(self, x_range):
+        """
+        set the boundary for player
+        in horizontal direction
+        """
+        # if the P1 gets near the right, shift the word left
+        if P1.pos.x >= x_range - P1.rect.width:
+            diff = (P1.pos.x + P1.rect.width) - x_range
+            ST1.move_stage(-diff)
+            move_cell(-diff)
+            P1.pos.x = x_range - P1.rect.width
+
+        # check position boundary for player
+        if P1.pos.x < 0:
+            P1.pos.x = 0
+
+
 
     def _update_screen(self):
         """this function updates
@@ -92,6 +109,9 @@ class Game:
 
         # do the Player 1 routines
         self.player_stuff()
+
+        # Camera scroll
+        self.move_camera_x(700)
 
         # do the COVID19 routines
         for cell in Cells:
