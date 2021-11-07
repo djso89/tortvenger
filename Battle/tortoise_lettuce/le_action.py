@@ -146,10 +146,10 @@ class LE_Act(Lettuce):
     def ani_move(self):
         """ animate the left right movement"""
         if self.orientation == 'right' and self.OnGround == True:
-            frame = (self.pos_a.x // 30) % len(self.ready_r)
+            frame = (self.steps // 10) % len(self.ready_r)
             self.image_a = self.ready_r[int(frame)]
         elif self.orientation == 'left' and self.OnGround == True:
-            frame = (self.pos_a.x // 30) % len(self.ready_l)
+            frame = (self.steps // 10) % len(self.ready_l)
             self.image_a = self.ready_l[int(frame)]
 
 
@@ -159,10 +159,10 @@ class LE_Act(Lettuce):
         # reached to last frame of sword_draw spritesheet
         # there are 7 frames (starting from 0) in sword
         if self.orientation == 'right' and self.cnt_wand_draw // 5 == 7:
-            frame = (self.pos_a.x // 30) % len(self.wand_rdy_r)
+            frame = (self.steps // 10) % len(self.wand_rdy_r)
             self.image_a = self.wand_rdy_r[int(frame)]
         if self.orientation == 'left' and self.cnt_wand_draw // 5 == 7:
-            frame = (self.pos_a.x // 30) % len(self.wand_rdy_l)
+            frame = (self.steps // 10) % len(self.wand_rdy_l)
             self.image_a = self.wand_rdy_l[int(frame)]
 
     def ani_wand_out(self):

@@ -54,6 +54,7 @@ class Gooster(pygame.sprite.Sprite):
 
 
         # kinematic factors
+        self.steps = 0
         self.pos = vec((0, 0))
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
@@ -106,9 +107,11 @@ class Gooster(pygame.sprite.Sprite):
         if pressed_keys[K_LEFT]:
             self.acc.x = -ACC
             self.orientation = 'left'
+            self.steps += 1
         if pressed_keys[K_RIGHT]:
             self.acc.x = ACC
             self.orientation = 'right'
+            self.steps += 1
 
     def jump(self):
         """ jump action """
@@ -194,26 +197,10 @@ class Gooster(pygame.sprite.Sprite):
     def ani_move(self):
         """ animate the left right movement"""
         if self.orientation == 'right' and self.OnGround == True:
-            frame = (self.pos.x // 30) % len(self.ready_r)
+            frame = (self.steps // 10) % len(self.ready_r)
             self.image = self.ready_r[int(frame)]
 
 
         elif self.orientation == 'left' and self.OnGround == True:
-            frame = (self.pos.x // 30) % len(self.ready_l)
+            frame = (self.steps // 10) % len(self.ready_l)
             self.image = self.ready_l[int(frame)]
-
-
-
-
-    # def ani_jump(self):
-        # """ animate the jump """
-        # period = 2
-        # if self.OnGround == False:
-            # if (self.cnt >= period * (len(self.OnGround_r) -1 )):
-                # self.cnt = period * (len(self.OnGround_r) -1 )
-            # else:
-                # self.cnt += 1
-            # if self.orientation == 'right':
-                # self.image = self.OnGround_r[self.cnt//period]
-            # if self.orientation == 'left':
-                # self.image = self.OnGround_l[self.cnt//period]

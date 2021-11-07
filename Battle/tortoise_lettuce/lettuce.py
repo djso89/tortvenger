@@ -42,6 +42,7 @@ class Lettuce(pygame.sprite.Sprite):
         self.loadimages()
 
         # kinematic factors
+        self.steps = 0
         self.pos = vec((0, 0))
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
@@ -93,20 +94,26 @@ class Lettuce(pygame.sprite.Sprite):
             if not pressed_keys[K_a]:
                 self.acc.x = -ACC
                 self.orientation = 'left'
+                self.steps += 1
             if pressed_keys[K_a] and not self.wand_on:
                 self.acc.x = -ACC
                 self.orientation = 'left'
+                self.steps += 1
             if pressed_keys[K_a] and self.wand_on:
                 self.acc.x = 0
+                self.steps = 0
         if pressed_keys[K_RIGHT]:
             if not pressed_keys[K_a]:
                 self.acc.x = ACC
                 self.orientation = 'right'
+                self.steps += 1
             if pressed_keys[K_a] and not self.wand_on:
                 self.acc.x = ACC
                 self.orientation = 'right'
+                self.steps += 1
             if pressed_keys[K_a] and self.wand_on:
                 self.acc.x = 0
+                self.steps = 0
 
     def jump(self):
         """ jump action """

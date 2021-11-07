@@ -158,6 +158,7 @@ class Yesman(pygame.sprite.Sprite, YM_Attr):
 
 
         # kinematic factors
+        self.steps = 0
         self.pos = vec((0, 0))
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
@@ -242,20 +243,26 @@ class Yesman(pygame.sprite.Sprite, YM_Attr):
             if not pressed_keys[K_a]:
                 self.acc.x = -ACC
                 self.orientation = 'left'
+                self.steps += 1
             if pressed_keys[K_a] and not self.swd_on:
                 self.acc.x = -ACC
                 self.orientation = 'left'
+                self.steps += 1
             if pressed_keys[K_a] and self.swd_on:
                 self.acc.x = 0
+                self.steps = 0
         if pressed_keys[K_RIGHT]:
             if not pressed_keys[K_a]:
                 self.acc.x = ACC
                 self.orientation = 'right'
+                self.steps += 1
             if pressed_keys[K_a] and not self.swd_on:
                 self.acc.x = ACC
                 self.orientation = 'right'
+                self.steps += 1
             if pressed_keys[K_a] and self.swd_on:
                 self.acc.x = 0
+                self.steps = 0
 
     def jump(self):
         """ jump action """
@@ -340,7 +347,7 @@ class Yesman(pygame.sprite.Sprite, YM_Attr):
     def ani_move(self):
         """ animate the left right movement"""
         if self.orientation == 'right' and self.OnGround == True:
-            frame = (self.pos.x // 30) % len(self.ready_r)
+            frame = (self.steps // 10) % len(self.ready_r)
             if self.swd_on == True and self.swd_drawing == False:
                 self.image_ym = self.swd_rdy_r[int(frame)]
             else:
@@ -348,7 +355,7 @@ class Yesman(pygame.sprite.Sprite, YM_Attr):
             self.pos_a.x = self.pos.x
             self.pos_a.y = self.pos.y
         elif self.orientation == 'left' and self.OnGround == True:
-            frame = (self.pos.x // 30) % len(self.ready_l)
+            frame = (self.steps // 10) % len(self.ready_l)
             if self.swd_on == True and self.swd_drawing == False:
                 self.image_ym = self.swd_rdy_l[int(frame)]
             else:

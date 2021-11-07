@@ -105,6 +105,7 @@ class Game:
                     self.a_key_cnt = pygame.time.get_ticks()
                 if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                     P1.acc.x = 0
+                    P1.steps = 0
                 if event.key == pygame.K_s:
                     self.SB_toggle = False
 

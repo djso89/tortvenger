@@ -101,6 +101,7 @@ class Sammi(pygame.sprite.Sprite):#, WF_Attr):
 
 
         # kinematic factors
+        self.steps = 0
         self.pos = vec((0, 0))
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
@@ -182,20 +183,26 @@ class Sammi(pygame.sprite.Sprite):#, WF_Attr):
         if pressed_keys[K_LEFT]:
             if not pressed_keys[K_a]:
                 self.acc.x = -ACC
+                self.steps += 1
                 self.orientation = 'left'
             if pressed_keys[K_a] and not self.swd_on:
                 self.acc.x = -ACC
+                self.steps += 1
                 self.orientation = 'left'
             if pressed_keys[K_a] and self.swd_on:
+                self.steps = 0
                 self.acc.x = 0
         if pressed_keys[K_RIGHT]:
             if not pressed_keys[K_a]:
                 self.acc.x = ACC
+                self.steps += 1
                 self.orientation = 'right'
             if pressed_keys[K_a] and not self.swd_on:
                 self.acc.x = ACC
+                self.steps += 1
                 self.orientation = 'right'
             if pressed_keys[K_a] and self.swd_on:
+                self.steps = 0
                 self.acc.x = 0
 
     def jump(self):
@@ -281,7 +288,7 @@ class Sammi(pygame.sprite.Sprite):#, WF_Attr):
     def ani_move(self):
         """ animate the left right movement"""
         if self.orientation == 'right':# and self.OnGround == True:
-            frame = (self.pos.x // 30) % len(self.ready_r)
+            frame = (self.steps // 7) % len(self.ready_r)
             if self.swd_on:
                 self.image_sm = self.swd_rdy_r[int(frame)]
             else:
@@ -289,7 +296,7 @@ class Sammi(pygame.sprite.Sprite):#, WF_Attr):
             self.pos_a.x = self.pos.x - 40
             self.pos_a.y = self.pos.y - 80
         elif self.orientation == 'left':# and self.OnGround == True:
-            frame = (self.pos.x // 30) % len(self.ready_l)
+            frame = (self.steps // 7) % len(self.ready_l)
             if self.swd_on:
                 self.image_sm = self.swd_rdy_l[int(frame)]
             else:

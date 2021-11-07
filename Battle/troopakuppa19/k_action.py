@@ -247,10 +247,10 @@ class K_Act(Kuppa):
         # reached to last frame of sword_draw spritesheet
         # there are 11 frames (starting from 0) in sword
         if self.orientation == 'right' and self.cnt_swrd_draw // 2 == 11:
-            frame = (self.pos_a.x // 30) % len(self.swrd_rdy_r)
+            frame = (self.steps // 10) % len(self.swrd_rdy_r)
             self.image_a = self.swrd_rdy_r[int(frame)]
         if self.orientation == 'left' and self.cnt_swrd_draw // 2 == 11:
-            frame = (self.pos_a.x // 30) % len(self.swrd_rdy_l)
+            frame = (self.steps // 10) % len(self.swrd_rdy_l)
             self.image_a = self.swrd_rdy_l[int(frame)]
 
     def ani_swd_out(self):

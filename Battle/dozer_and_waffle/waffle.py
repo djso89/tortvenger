@@ -99,6 +99,7 @@ class Waffle(pygame.sprite.Sprite):#, WF_Attr):
 
 
         # kinematic factors
+        self.steps = 0
         self.pos = vec((0, 0))
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
@@ -180,21 +181,27 @@ class Waffle(pygame.sprite.Sprite):#, WF_Attr):
         if pressed_keys[K_LEFT]:
             if not pressed_keys[K_a]:
                 self.acc.x = -ACC
+                self.steps += 1
                 self.orientation = 'left'
             if pressed_keys[K_a] and not self.sb_on:
                 self.acc.x = -ACC
+                self.steps += 1
                 self.orientation = 'left'
             if pressed_keys[K_a] and self.sb_on:
                 self.acc.x = 0
+                self.steps = 0
         if pressed_keys[K_RIGHT]:
             if not pressed_keys[K_a]:
+                self.steps += 1
                 self.acc.x = ACC
                 self.orientation = 'right'
             if pressed_keys[K_a] and not self.sb_on:
                 self.acc.x = ACC
+                self.steps += 1
                 self.orientation = 'right'
             if pressed_keys[K_a] and self.sb_on:
                 self.acc.x = 0
+                self.steps = 0
 
     def jump(self):
         """ jump action """
@@ -279,7 +286,7 @@ class Waffle(pygame.sprite.Sprite):#, WF_Attr):
     def ani_move(self):
         """ animate the left right movement"""
         if self.orientation == 'right':# and self.OnGround == True:
-            frame = (self.pos.x // 30) % len(self.ready_r)
+            frame = (self.steps // 10) % len(self.ready_r)
             if self.sb_on and not self.sb_drawing:
                 self.image_wf = self.sb_rdy_r[int(frame)]
             else:
@@ -287,7 +294,7 @@ class Waffle(pygame.sprite.Sprite):#, WF_Attr):
             self.pos_a.x = self.pos.x - 10
             self.pos_a.y = self.pos.y - 60
         elif self.orientation == 'left':# and self.OnGround == True:
-            frame = (self.pos.x // 30) % len(self.ready_l)
+            frame = (self.steps // 10) % len(self.ready_l)
             if self.sb_on and not self.sb_drawing:
                 self.image_wf = self.sb_rdy_l[int(frame)]
             else:

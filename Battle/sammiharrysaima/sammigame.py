@@ -82,7 +82,8 @@ class Game:
             if (event.type == pygame.KEYUP):
                 if event.key == pygame.K_a:
                     self.a_key_cnt = pygame.time.get_ticks()
-
+                if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
+                    P1.steps = 0
 
 
     def move_camera_x(self, x_range):

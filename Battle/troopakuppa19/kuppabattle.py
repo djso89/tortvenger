@@ -62,15 +62,6 @@ class K_Battle(K_Act):
 
         self.touch_cell_X()
 
-        # routine when player didn't touch cells
-        #left Most boundary of stage. Block the player from
-        #moving further
-#        if self.pos.x < 0:
-#            self.pos.x = 0
-
-        # setting boundary for right x - axis
-#        if self.pos.x > (WIN_W / 2) - self.rect.width:
-#            self.pos.x = (WIN_W / 2) - self.rect.width
 
         self.rect.x = self.pos.x
         self.collisionX()

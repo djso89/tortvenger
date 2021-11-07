@@ -61,6 +61,7 @@ class Kuppa(pygame.sprite.Sprite):
 
         # kinematic factors
         self.pos = vec((0, 0))
+        self.steps = 0
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
 
@@ -118,20 +119,26 @@ class Kuppa(pygame.sprite.Sprite):
             if not pressed_keys[K_a]:
                 self.acc.x = -ACC
                 self.orientation = 'left'
+                self.steps += 1
             if pressed_keys[K_a] and not self.swd_on:
                 self.acc.x = -ACC
                 self.orientation = 'left'
+                self.steps += 1
             if pressed_keys[K_a] and self.swd_on:
                 self.acc.x = 0
+                self.steps = 0
         if pressed_keys[K_RIGHT]:
             if not pressed_keys[K_a]:
                 self.acc.x = ACC
                 self.orientation = 'right'
+                self.steps += 1
             if pressed_keys[K_a] and not self.swd_on:
                 self.acc.x = ACC
                 self.orientation = 'right'
+                self.steps += 1
             if pressed_keys[K_a] and self.swd_on:
                 self.acc.x = 0
+                self.steps = 0
 
     def jump(self):
         """ jump action """
@@ -215,12 +222,12 @@ class Kuppa(pygame.sprite.Sprite):
     def ani_move(self):
         """ animate the left right movement"""
         if self.orientation == 'right' and self.OnGround == True:
-            frame = (self.pos.x // 30) % len(self.ready_r)
+            frame = (self.steps // 10) % len(self.ready_r)
             self.image = self.ready_r[int(frame)]
 
 
         elif self.orientation == 'left' and self.OnGround == True:
-            frame = (self.pos.x // 30) % len(self.ready_l)
+            frame = (self.steps // 10) % len(self.ready_l)
             self.image = self.ready_l[int(frame)]
 
 

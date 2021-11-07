@@ -87,6 +87,8 @@ class Game:
                         P1.slash_number = 1
                     else:
                         P1.go_combo()
+                if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
+                    P1.steps = 0
 
     def move_camera_x(self, x_range):
         """

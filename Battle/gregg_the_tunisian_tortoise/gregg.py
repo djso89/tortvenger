@@ -102,6 +102,7 @@ class Gregg(pygame.sprite.Sprite):#, WF_Attr):
 
         # kinematic factors
         self.pos = vec((0, 0))
+        self.steps = 0
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
 
@@ -183,18 +184,22 @@ class Gregg(pygame.sprite.Sprite):#, WF_Attr):
             if not pressed_keys[K_a]:
                 self.acc.x = -ACC
                 self.orientation = 'left'
+                self.steps += 1
             if pressed_keys[K_a] and not self.gd_on:
                 self.acc.x = -ACC
                 self.orientation = 'left'
+                self.steps += 1
             if pressed_keys[K_a] and self.gd_on:
                 self.acc.x = 0
         if pressed_keys[K_RIGHT]:
             if not pressed_keys[K_a]:
                 self.acc.x = ACC
                 self.orientation = 'right'
+                self.steps += 1
             if pressed_keys[K_a] and not self.gd_on:
                 self.acc.x = ACC
                 self.orientation = 'right'
+                self.steps += 1
             if pressed_keys[K_a] and self.gd_on:
                 self.acc.x = 0
 
@@ -281,7 +286,7 @@ class Gregg(pygame.sprite.Sprite):#, WF_Attr):
     def ani_move(self):
         """ animate the left right movement"""
         if self.orientation == 'right':# and self.OnGround == True:
-            frame = (self.pos.x // 30) % len(self.ready_r)
+            frame = (self.steps // 10) % len(self.ready_r)
             if self.gd_on:
                 self.image_Gregg = self.gd_rdy_r[int(frame)]
             else:
@@ -289,7 +294,7 @@ class Gregg(pygame.sprite.Sprite):#, WF_Attr):
             self.pos_a.x = self.pos.x - 40
             self.pos_a.y = self.pos.y - 300
         elif self.orientation == 'left':# and self.OnGround == True:
-            frame = (self.pos.x // 30) % len(self.ready_l)
+            frame = (self.steps // 10) % len(self.ready_l)
             if self.gd_on:
                 self.image_Gregg = self.gd_rdy_l[int(frame)]
             else:
