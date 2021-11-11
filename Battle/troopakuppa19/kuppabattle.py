@@ -29,6 +29,23 @@ class K_Battle(K_Act):
             # set the x coordinate
             self.pos.x = self.rect.x
 
+
+    def touchXR(self, hits):
+        #touch hits coming from right side
+        for block in hits:
+            if self.vel.x > 0:
+                self.rect.right = block.rect.left
+            self.pos.x = self.rect.x
+
+
+    def touchXL(self, hits):
+        #touch hits coming from left side
+        for block in hits:
+            if self.vel.x < 0:
+                self.rect.left = block.rect.right
+            self.pos.x = self.rect.x
+
+
     def collisionX(self):
         """check the collision in X direction """
         # touch bricks
@@ -42,6 +59,8 @@ class K_Battle(K_Act):
         # touch Plat
         hitP = pygame.sprite.spritecollide(self, ST1.Plats, False)
         self.touchX(hitP)
+
+
 
     def gotHit_reset(self):
         # reset gotHit flag
@@ -79,7 +98,16 @@ class K_Battle(K_Act):
         hitCells = pygame.sprite.spritecollide(self, Cells, False)
         for cell in hitCells:
             self.num_cells += 1
-            self.check_dir_x(cell)
+            if self.vel.x > 0:
+                if not self.ATK:
+                    self.cell_hit_player_xr(cell)
+                else:
+                    self.player_hit_cell_xr(cell)
+            if self.vel.x < 0:
+                if not self.ATK:
+                    self.cell_hit_player_xl(cell)
+                else:
+                    self.player_hit_cell_xl(cell)
             # check for maximum number of cells to hit
             # for specific combo
             if self.atk_comb < 3:
@@ -194,14 +222,17 @@ class K_Battle(K_Act):
                 if self.pos_a.x <= (cell.pos.x + cell.rect.width) - 20:
                     if self.pos.x > cell.pos.x: # you are behind cell
                         self.player_attack(cell, -2, -50, -400)
-                    else: # cell is behind you
+                    else:
+                        # cell is behind you
                         if self.atk_comb == 4: #when combo4 is executed, go away
                             if self.cnt_swd_cut == cut_finish:
                                 self.show_comb = True
                                 self.player_dmg(cell, 400)
                         else:
-                            if not self.dmg_blinking:
-                                self.cell_do_dmg_x(cell, 400)
+                            self.cell_do_dmg_x(cell, -50)
+                            cell.direction = 0
+
+
 
     def player_combo_routine_xr(self, cell):
         """this is where how cells will be attacked from
@@ -224,8 +255,9 @@ class K_Battle(K_Act):
                                 self.show_comb = True
                                 self.player_dmg(cell, -400)
                         else:
-                            if not self.dmg_blinking:
-                                self.cell_do_dmg_x(cell, -400)
+                            self.cell_do_dmg_x(cell, 50)
+                            cell.direction = 1
+
 
 
     def player_hit_cell_xl(self, cell):
@@ -244,6 +276,7 @@ class K_Battle(K_Act):
                     self.player_dmg(cell, 50)
 
 
+
     def player_hit_cell_xr(self, cell):
         """
         function that checks for collision between player
@@ -259,22 +292,6 @@ class K_Battle(K_Act):
                 else:
                     self.player_dmg(cell, 50)
 
-
-    def check_dir_x(self, cell):
-        """
-        function that checks for player's direction
-        and cell's direction for collision
-        """
-        if self.vel.x > 0:
-            if not self.ATK:
-                self.cell_hit_player_xr(cell)
-            else:
-                self.player_hit_cell_xr(cell)
-        if self.vel.x < 0:
-            if not self.ATK:
-                self.cell_hit_player_xl(cell)
-            else:
-                self.player_hit_cell_xl(cell)
 
 
 

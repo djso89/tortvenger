@@ -6,7 +6,7 @@ from display import *
 from stage import *
 import random
 from spritesheet import SpriteSheet
-from stageobject import *
+from stageobjects_1_0 import *
 from c19gauge import *
 
 

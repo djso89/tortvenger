@@ -143,28 +143,26 @@ class Kuppa(pygame.sprite.Sprite):
     def jump(self):
         """ jump action """
         if self.OnGround == True:
-            self.vel.y = -40
+            self.vel.y = -43
             self.OnGround = False
 
-    # Kuppa touching the stage objects
-    def touchXR(self, hits):
-        #touch hits coming from right side
+    def touchYU_UP(self, hits):
+        """touch collision when player jump up
+        and touch the downside of the object,
+        move the player just above the downside"""
         for block in hits:
-            if self.vel.x > 0:
-                self.rect.right = block.rect.left
-            self.pos.x = self.rect.x
-
-    def touchXL(self, hits):
-        #touch hits coming from left side
-        for block in hits:
-            if self.vel.x < 0:
-                self.rect.left = block.rect.right
-            self.pos.x = self.rect.x
-
+            if self.vel.y > 0:
+                self.OnGround = True
+                self.cnt = 0
+                self.vel.y = 0
+                self.rect.bottom = block.rect.bottom
+            self.pos.y = self.rect.y
 
     def touchYUD(self, hits):
-        """ go through the list of collided sprites
-        in Y direction"""
+        """ when player jump up and touch the
+        downside of the object, go through the
+        list of collided sprites in Y direction
+        and block the player from moving up"""
         for block in hits:
             if self.vel.y > 0:
                 self.OnGround = True
@@ -188,16 +186,15 @@ class Kuppa(pygame.sprite.Sprite):
 
 
     def collisionY(self):
-
         """ check the collision in Y direction """
+        #touch Cars
+        hitC = pygame.sprite.spritecollide(self, ST1.Cars, False)
+        self.touchYUD(hitC)
 
         #touch ground platforms
         hits = pygame.sprite.spritecollide(self, ST1.platforms, False)
         self.touchYU(hits)
 
-        #touch Cars
-        hitC = pygame.sprite.spritecollide(self, ST1.Cars, False)
-        self.touchYU(hitC)
 
         # touch Bricks
         hitB = pygame.sprite.spritecollide(self, ST1.Bricks, False)
@@ -209,11 +206,8 @@ class Kuppa(pygame.sprite.Sprite):
 
         #touch Bldgs
         hitBldg = pygame.sprite.spritecollide(self, ST1.Bldgs, False)
-        self.touchYUD(hitBldg)
+        self.touchYU_UP(hitBldg)
 
-        #touch Steps
-        hitSt = pygame.sprite.spritecollide(self, ST1.Steps, False)
-        self.touchYUD(hitSt)
 
 
     """ animation functions """

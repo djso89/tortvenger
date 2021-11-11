@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from stageobject import Bldgs, platforms, Plats, Steps, Bricks, Cars
+from stageobjects_1_0 import Bldgs, platforms, Plats, Bricks, Cars, alph
 import pygame
 from display import *
 from block import *
@@ -10,24 +10,32 @@ from block import *
 class Stage(pygame.sprite.Sprite):
     """ class Stage """
 
+    def GND_LAYER(self):
+        """ generate the ground layers """
+        Ground = Block()
+        self.platforms.add(Ground)
+        for i in range(1, self.num_bg, 1):
+            Ground = Block()
+            Ground.newBlock(i * WIDTH, HEIGHT - 20, WIDTH, 20, alph)
+            self.platforms.add(Ground)
+
     def __init__(self):
         """initialize the Stage """
-        self.num_bg = 20
+        self.num_bg = 10
         self.scroll = 0
         self.Bldgs = Bldgs
         self.platforms = platforms
+        self.GND_LAYER()
         self.Plats = Plats
-        self.Steps = Steps
         self.Bricks = Bricks
         self.Cars = Cars
 
 
-        # stage objects
+        # stage objects to display
         self.StageBlocks = pygame.sprite.Group()
         self.StageBlocks.add(self.Plats)
         self.StageBlocks.add(self.platforms)
         self.StageBlocks.add(self.Cars)
-        self.StageBlocks.add(self.Steps)
         self.StageBlocks.add(self.Bldgs)
         self.StageBlocks.add(self.Bricks)
 
@@ -49,16 +57,10 @@ class Stage(pygame.sprite.Sprite):
     def move_stage(self, shift):
         """move the background """
         self.scroll += round(shift)
-        print('+++++++++++++++++++++++')
-        print('scroll_x: {}'.format(self.scroll))
-
 
         """move the stage background and stage objects """
         for Plat in self.Plats:
             Plat.rect.x += round(shift)
-
-        for car in self.Cars:
-            car.rect.x += round(shift)
 
         """move the stage background and stage objects """
         for platform in self.platforms:
@@ -68,11 +70,11 @@ class Stage(pygame.sprite.Sprite):
         for brick in self.Bricks:
             brick.rect.x += round(shift)
 
-        """move the Step """
-        for step in self.Steps:
-            step.rect.x += round(shift)
+        for car in self.Cars:
+            car.rect.x += round(shift)
 
-        """move the Bricks """
+
+        """move the Bldgs """
         for bldg in self.Bldgs:
             bldg.rect.x += round(shift)
 
