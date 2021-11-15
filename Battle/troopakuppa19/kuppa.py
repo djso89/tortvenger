@@ -13,8 +13,8 @@ class Kuppa(pygame.sprite.Sprite):
 
     def loadimages(self):
         """ load all the kuppa action frames """
-        sprite_sheet = SpriteSheet("images/krdy.png", (0, 0, 0))
-        sprite_sheetjmp = SpriteSheet("images/kjmp.png", (0, 0, 0))
+        sprite_sheet = SpriteSheet("images/troopakuppa19/krdy.png", (0, 0, 0))
+        sprite_sheetjmp = SpriteSheet("images/troopakuppa19/kjmp.png", (0, 0, 0))
 
         ss = sprite_sheet.sprite_sheet
         ss_jmp = sprite_sheetjmp.sprite_sheet
@@ -62,6 +62,7 @@ class Kuppa(pygame.sprite.Sprite):
         # kinematic factors
         self.pos = vec((0, 0))
         self.steps = 0
+        self.battlesteps = 0
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import pygame
 from troopakuppa19.k_action import *
-from covid19 import Cells
+from stage import ST1
 from kuppagauge import kuppainfo
 
 
@@ -17,6 +17,7 @@ class K_Battle(K_Act):
         #touch hits
         for block in hits:
             if self.vel.x > 0: #moving right
+                self.battlesteps = 0
                 if self.gotHit:
                     self.rect.left = block.rect.right
                 else:
@@ -95,7 +96,7 @@ class K_Battle(K_Act):
 
     def touch_cell_X(self):
         """ detecting collision between player and cells"""
-        hitCells = pygame.sprite.spritecollide(self, Cells, False)
+        hitCells = pygame.sprite.spritecollide(self, ST1.cells, False)
         for cell in hitCells:
             self.num_cells += 1
             if self.vel.x > 0:
@@ -138,20 +139,28 @@ class K_Battle(K_Act):
         player facing left and cell when player is not attacking
         """
         if cell.direction == 0: # cell direction right
-            if self.pos.x + 80  <= (cell.pos.x + cell.rect.width):
-                if not self.dmg_blinking:
-                    self.cell_do_dmg_x(cell, 200)
-                    self.gotHit = True
+            if self.start_field:
+                cell.pos.x -= 50
+                cell.direction = 1
+            else:
+                if self.pos.x + 80  <= (cell.pos.x + cell.rect.width):
+                    if not self.dmg_blinking and not self.start_field:
+                        self.cell_do_dmg_x(cell, 200)
+                        self.gotHit = True
         if cell.direction == 1:  # cell direction left
             if self.pos.x < cell.pos.x: # the cell is behind the player
                 if cell.pos.x <= (self.pos.x + self.rect.width) - 80:
                     if not self.dmg_blinking:
                         self.cell_do_dmg_x(cell, -100)
             else: # the cell is front of the player
-                if self.pos.x <= (cell.pos.x + cell.rect.width - 80):
-                    if not self.dmg_blinking:
-                        self.cell_do_dmg_x(cell, 100)
-                        self.gotHit = True
+                if self.start_field:
+                    cell.pos.x -= 50
+                else:
+                    if self.pos.x <= (cell.pos.x + cell.rect.width - 80):
+                        if not self.dmg_blinking and not self.start_field:
+                            self.cell_do_dmg_x(cell, 100)
+                            self.gotHit = True
+
 
 
     def cell_hit_player_xr(self, cell):
@@ -160,20 +169,30 @@ class K_Battle(K_Act):
         facing right and cell when player is not attacking
         """
         if cell.direction == 1:
-            if (self.pos.x + self.rect.width - 80) >= cell.pos.x:
-                if not self.dmg_blinking:
-                    self.cell_do_dmg_x(cell, -200)
-                    self.gotHit = True
+            if self.start_field:
+                cell.pos.x += 50
+                cell.direction = 0
+            else:
+                if (self.pos.x + self.rect.width - 80) >= cell.pos.x:
+                    if not self.dmg_blinking:
+                        self.cell_do_dmg_x(cell, -200)
+                        self.gotHit = True
+
         if cell.direction == 0:
             if self.pos.x > cell.pos.x:
                 if self.pos.x + 80 <= (cell.pos.x + cell.rect.width):
                     if not self.dmg_blinking:
                         self.cell_do_dmg_x(cell, 100)
             else:
-                if self.pos.x + self.rect.width >= cell.pos.x + 80:
-                    if not self.dmg_blinking:
-                        self.cell_do_dmg_x(cell, -100)
-                        self.gotHit = True
+                if self.start_field:
+                    cell.pos.x += 50
+                else:
+                    if self.pos.x + self.rect.width >= cell.pos.x + 80:
+                        if not self.dmg_blinking:
+                            self.cell_do_dmg_x(cell, -100)
+                            self.gotHit = True
+
+
 
     def player_dmg(self, cell, knock_back):
         """player damage function """

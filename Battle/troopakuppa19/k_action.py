@@ -42,26 +42,45 @@ class K_Act(Kuppa):
         self.swd_jmp_r = []
         self.swd_jmp_l = []
 
+        # force field frames
+        self.f_field_r = []
+        self.f_field_l = []
+
     def load_images(self):
         """ load the images from sprite sheets """
-        sprite_sheet_swd_draw = SpriteSheet("images/k_swd_d.png", black)
-        sprite_sheet_swd_rdy = SpriteSheet("images/k_swd_rdy.png", black)
-        sprite_sheet_swd_cuts = SpriteSheet('images/k_swd_cut.png', black)
-        sprite_sheet_swd_cuts2 = SpriteSheet('images/k_swd_cut2.png', black)
-        sprite_sheet_swd_cuts3 = SpriteSheet('images/k_swd_cut3.png', black)
-        sprite_sheet_swd_cuts4 = SpriteSheet('images/k_swd_cut4.png', black)
-        sprite_sheet_swd_cuts5 = SpriteSheet('images/k_swd_cut5.png', black)
-        sprite_sheet_swd_cuts6 = SpriteSheet('images/k_swd_cut6.png', black)
-        sprite_sheet_swd_cuts7 = SpriteSheet('images/k_swd_cut7.png', black)
-        sprite_sheet_swd_jmp = SpriteSheet('images/k_swd_jmp.png', black)
+        #sword draw
+        sprite_sheet_swd_draw = SpriteSheet("images/troopakuppa19/k_swd_d.png", black)
+        # walking/ready with sword held
+        sprite_sheet_swd_rdy = SpriteSheet("images/troopakuppa19/k_swd_rdy.png", black)
+        # sword cuts
+        sprite_sheet_swd_cuts = SpriteSheet('images/troopakuppa19/k_swd_cut.png', black)
+        sprite_sheet_swd_cuts2 = SpriteSheet('images/troopakuppa19/k_swd_cut2.png', black)
+        sprite_sheet_swd_cuts3 = SpriteSheet('images/troopakuppa19/k_swd_cut3.png', black)
+        sprite_sheet_swd_cuts4 = SpriteSheet('images/troopakuppa19/k_swd_cut4.png', black)
+        sprite_sheet_swd_cuts5 = SpriteSheet('images/troopakuppa19/k_swd_cut5.png', black)
+        sprite_sheet_swd_cuts6 = SpriteSheet('images/troopakuppa19/k_swd_cut6.png', black)
+        sprite_sheet_swd_cuts7 = SpriteSheet('images/troopakuppa19/k_swd_cut7.png', black)
+        # jump with sword held
+        sprite_sheet_swd_jmp = SpriteSheet('images/troopakuppa19/k_swd_jmp.png', black)
+        # force field block
+        sprite_sheet_f_field = SpriteSheet('images/troopakuppa19/k_field.png', black)
 
+        # load all the L/R frames for force field block
+        for i in range(0, 7, 1):
+            ss_f_field = sprite_sheet_f_field.sprite_sheet
+            width = ss_f_field.get_width()
+            height = ss_f_field.get_height()
+            image = sprite_sheet_f_field.get_image(i * width // 7, 0, width // 7, height)
+            self.f_field_r.append(image)
+            image = pygame.transform.flip(image, True, False)
+            self.f_field_l.append(image)
 
         # load all the L/R frames for jumping with swords held
-        for i in range(0, 7, 1):
+        for i in range(0, 11, 1):
             ss_swd_jmp = sprite_sheet_swd_jmp.sprite_sheet
             width = ss_swd_jmp.get_width()
             height = ss_swd_jmp.get_height()
-            image = sprite_sheet_swd_jmp.get_image(i * width // 7, 0, width // 7, height)
+            image = sprite_sheet_swd_jmp.get_image(i * width // 11, 0, width // 11, height)
             self.swd_jmp_r.append(image)
             image = pygame.transform.flip(image, True, False)
             self.swd_jmp_l.append(image)
@@ -162,7 +181,6 @@ class K_Act(Kuppa):
     def __init__(self):
         super().__init__()
         self.empty_frames()
-
         self.load_images()
 
 
@@ -173,11 +191,18 @@ class K_Act(Kuppa):
         self.cnt_got_dmg = 0
         self.num_blinks = 0
 
+        self.cnt_f_field = 0
+
         # sword cut flag and combo count
         self.ATK = False
         self.ATK_DONE = False
         self.atk_comb = 1
         self.frame_atk = 0
+
+        # force field block flags
+        self.start_field = False
+        self.FLD_DONE = False
+
 
 
         # position of the Action Frames
@@ -238,6 +263,37 @@ class K_Act(Kuppa):
             self.ani_cut()
         elif not self.ATK:
             self.cnt_swd_cut = 0
+
+
+
+    def ani_f_field(self):
+        """ animate the force field block """
+        period = 3
+        total_time = period * 7
+        if self.cnt_f_field >= total_time:
+            self.cnt_f_field = 0
+            self.start_field = False
+            self.FLD_DONE = True
+        else:
+            self.FLD_DONE = False
+            if self.orientation == 'right':
+                self.image_a = self.f_field_r[self.cnt_f_field // period]
+            if self.orientation == 'left':
+                self.image_a = self.f_field_l[self.cnt_f_field // period]
+            self.cnt_f_field += 1
+            print(self.cnt_f_field)
+
+    def block(self):
+        """ game logic for block
+        the start field flag is triggered true. ATK is true when
+        Key_a is pressed
+        Go refer to game.py for keyboard mechanism for Key_a
+        """
+        if self.start_field:
+            self.ani_f_field()
+        elif not self.start_field:
+            self.cnt_f_field = 0
+
 
 
 
@@ -335,6 +391,7 @@ class K_Act(Kuppa):
         self.ani_swd_move()
         self.ani_swd_jmp()
         self.attack()
+        self.block()
         self.ani_dmg_blink()
 
     def render_a(self):

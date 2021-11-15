@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 from stageobjects_1_0 import Bldgs, platforms, Plats, Bricks, Cars, alph
 import pygame
+
+from covid19 import *
 from display import *
 from block import *
 
@@ -23,12 +25,27 @@ class Stage(pygame.sprite.Sprite):
         """initialize the Stage """
         self.num_bg = 10
         self.scroll = 0
+
+        # stage objects
         self.Bldgs = Bldgs
         self.platforms = platforms
         self.GND_LAYER()
         self.Plats = Plats
         self.Bricks = Bricks
         self.Cars = Cars
+
+        # battlemode switch
+        self.battlemode = True
+        self.steps = 0
+
+        # enemies to generate
+        self.cells = Cells
+
+        self.cell_plats = pygame.sprite.Group()
+        #self.cell_plats.add(self.Plat1)
+        #self.cell_plats.add(self.Ground)
+        #self.cell_plats.add(self.Brick2)
+
 
 
         # stage objects to display
@@ -53,6 +70,8 @@ class Stage(pygame.sprite.Sprite):
             else:
                 left_corner = (i * self.bgimg1.get_width(), 0)
                 self.stagesurf.blit(self.bgimg1, left_corner)
+
+
 
     def move_stage(self, shift):
         """move the background """

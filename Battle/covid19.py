@@ -143,14 +143,14 @@ class COVID19(C19_Gauge, pygame.sprite.Sprite):
 
     def move(self):
         """Make the cell move by itself """
-#        if self.pos.x < 0:
-#            self.direction = 0
+        if self.pos.x < 0:
+            self.direction = 0
         if self.pos.x <= self.start_x:
             self.direction = 0
         if self.pos.x >= self.end_x - self.rect.width:
             self.direction = 1
-#        if self.pos.x >= WIN_W - self.rect.width:
-#           self.direction = 1
+        if self.pos.x >= WIN_W - self.rect.width:
+           self.direction = 1
 
         if not (self.hitCell or self.hitCell_envk or self.hitCell_expk):
             if self.direction == 0:
@@ -182,30 +182,65 @@ class COVID19(C19_Gauge, pygame.sprite.Sprite):
 
 
 
-Cells = pygame.sprite.Group()
 
-def cell_gen(numcells):
-    last_cp = random.choice(cell_plats.sprites())
-    num_last = 0
+def place_cells(Cells, platform, last_cp, numcells, num_last, player_x):
     for i in range (0, numcells, 1):
-        cp = random.choice(cell_plats.sprites())
+        cp = random.choice(platform.sprites())
+
         if cp == last_cp:
             num_last += 1
         else:
             num_last = 0
-        while (cp == last_cp and num_last <= (numcells // 5)):
-            cp = random.choice(cell_plats.sprites())
+        if len(platform) > 1:
+            while (cp == last_cp and num_last <= (numcells // 5)):
+                cp = random.choice(platform.sprites())
+
         last_cp = cp
-        x = random.randint(cp.rect.left, cp.rect.right)
-        x_ext_l = random.randrange(-200, 200, 25)
-        x_ext_r = random.randrange(100, 200, 25)
+        #print(len(platform))
+
+        x = random.randint(player_x + 200, player_x + 500)
+        #x_ext_l = random.randrange(-200, 200, 25)
+        #x_ext_r = random.randrange(100, 200, 25)
         y = cp.rect.y
+
+        print('__________________________________________')
+        print('cell platform location: {}'.format((cp.rect.left, cp.rect.top)))
+        print('cell platform right side: {}'.format(cp.rect.right))
+        print('cell location: {}'.format((x, y)))
+        print('__________________________________________')
+
         cell = COVID19(x, y)
         cell.place_cell(x, y - cell.image.get_height())
-        cell.set_range(cp.rect.left + x_ext_l, cp.rect.right + x_ext_r)
+        cell.set_range(0, WIN_W)
         Cells.add(cell)
 
 
+def cell_gen(Cells, numcells, platform, player_x):
+    """generate the cells on chosen platform
+    for the battle mode"""
+    last_cp = random.choice(platform.sprites())
+    num_last = 0
+    place_cells(Cells, platform, last_cp, numcells, num_last, player_x)
+
+
+def cells_on_ground(Cells, numcells, p1):
+    for i in range(0, numcells, 1):
+        p_xl = int(p1.pos.x)
+        p_xr = int(p1.pos.x + p1.rect.width)
+        ex_p_xl = int(p_xl - 500)
+        ex_p_xr = int(p_xr + 500)
+
+        x = random.choice([i for i in range(p_xl - WIN_W, p_xr + WIN_W, 10) if i not in [ex_p_xl, ex_p_xr]])
+        print(x)
+        #random.randrange(p_xl - 800, p_xr + 800, 100)
+#        choice([i for i in range(0,9) if i not in [2,5,7]])
+        y = WIN_H - 20
+
+
+        cell = COVID19(x, y)
+        cell.place_cell(x, y - cell.image.get_height())
+        cell.set_range(0, WIN_W)
+        Cells.add(cell)
 
 
 def move_cell(shift):
@@ -215,8 +250,7 @@ def move_cell(shift):
         cell.start_x += round(shift)
         cell.end_x += round(shift)
 
-cell_gen(NumCells)
-
+Cells = pygame.sprite.Group()
 C19 = COVID19(900, 500)
 C19.set_range(0, 1200)
 C1 = COVID19(400,300)

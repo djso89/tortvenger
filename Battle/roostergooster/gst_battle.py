@@ -1,5 +1,5 @@
 import pygame
-from covid19 import Cells
+from stage import ST1
 from roostergooster.gst_action import *
 from roostergooster.expkage import expk_bullets
 from roostergooster.envkunai import envk_bullets
@@ -89,7 +89,7 @@ class GST_Battle(GST_Act):
 
     def touch_cell_X(self):
         """ detecting collision between player and cells"""
-        hitCells = pygame.sprite.spritecollide(self, Cells, False)
+        hitCells = pygame.sprite.spritecollide(self, ST1.cells, False)
         for cell in hitCells:
             self.check_dir_x(cell)
 

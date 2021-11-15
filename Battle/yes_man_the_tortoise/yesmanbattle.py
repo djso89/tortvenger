@@ -1,6 +1,6 @@
 import pygame
 from yes_man_the_tortoise.yesman import *
-from covid19 import Cells
+from stage import ST1
 
 
 
@@ -44,7 +44,7 @@ class YM_Battle(Yesman):
 
     def touch_cell_X(self):
         """ detecting collision between player and cells"""
-        hitCells = pygame.sprite.spritecollide(self, Cells, False)
+        hitCells = pygame.sprite.spritecollide(self, ST1.cells, False)
         for cell in hitCells:
             self.num_cells += 1
             self.check_dir_x(cell)

@@ -128,7 +128,7 @@ class Game:
 
         """ drawing routines """
         # draw the Stage
-        ST1.draw(screen, self.SB_toggle)
+        ST1.draw(screen, True)
         goosterinfo.show_gauge()
 
         # draw the cells and player

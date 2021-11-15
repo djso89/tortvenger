@@ -125,7 +125,7 @@ class Game:
 
         """ drawing routines """
         # draw the Stage
-        ST1.draw(screen, False)
+        ST1.draw(screen, True)
         # draw the gauge
         Yesmaninfo.show_gauge()
 
