@@ -7,6 +7,7 @@ import time as t
 from troopakuppa19.kuppabattle import *
 from fonts.kuppacombo import *
 from kuppagauge import kuppainfo
+from battlemode import move_camera_x, lock_camera_x
 
 
 from stage import *
@@ -58,9 +59,8 @@ class Game:
                     if P1.ATK_DONE:
                         P1.atk_comb += 1
 
-    def Key_w_delay(self):#, cnt_h, cnt_btnM_h, cnt_btnM_l):
+    def Key_w_delay(self):
         """Key release Key_a mechanism """
-        self.w_key_cnt = pygame.time.get_ticks() - self.w_key_cnt
         if P1.swd_on:
             P1.start_field = True
 
@@ -71,10 +71,8 @@ class Game:
         self.Key_a_delay(cut_len + 100, 90 ,34)
 
     def block_event(self):
-        """attacking routine of player """
-        block_period = cut_frame_period * (cut_frame_num)
-        block_len = (block_period * 1000) / FPS
-        self.Key_w_delay()#(block_len + 100, 90 ,34)
+        """blocking routine of player """
+        self.Key_w_delay()
 
 
     def run_game(self):
@@ -90,8 +88,7 @@ class Game:
         pygame.quit()
         sys.exit()
 
-    def print_key(self, key):
-        print(key)
+
 
     def _check_events(self):
         """ this function checks the events"""
@@ -102,9 +99,7 @@ class Game:
                 sys.exit()
             if (event.type == pygame.KEYDOWN):
                 if event.key == pygame.K_q:
-                    pygame.display.quit()
-                    pygame.quit()
-                    sys.exit()
+                    print('q is pressed')
                 if event.key == pygame.K_d:
                     P1.draw_the_swrd()
                 if event.key == pygame.K_s:
@@ -112,12 +107,13 @@ class Game:
                         if kuppainfo.curr_ki > 0:
                             self.SB_toggle = True
                 if event.key == pygame.K_w:
-                    print('w here')
                     self.block_event()
                 if event.key == pygame.K_a:
                     self.attack_event()
                 if event.key == pygame.K_UP:
                     P1.jump()
+                if event.key == pygame.K_DOWN:
+                    P1.jmp_dwn_plat()
             if (event.type == pygame.KEYUP):
                 if event.key == pygame.K_a:
                     self.a_key_cnt = pygame.time.get_ticks()
@@ -126,65 +122,34 @@ class Game:
                 if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                     P1.acc.x = 0
                     P1.steps = 0
+                if event.key == pygame.K_DOWN:
+                    pass
+                    #P1.get_off = False
                 if event.key == pygame.K_s:
                     self.SB_toggle = False
 
-    def move_camera_x(self, x_range):
-        """
-        set the boundary for player
-        in horizontal direction
-        """
-        # player reached the end of the stage
-        # lock the camera
-        if abs(ST1.scroll) >= (ST1.num_bg - 1) * WIN_W:
-            ST1.scroll = -1 * (ST1.num_bg - 1) * WIN_W
-            P1.battlesteps = 0
-            if P1.pos.x < 0:
-                P1.pos.x = 0
-            if P1.pos.x >= WIN_W - P1.rect.width:
-                P1.pos.x = WIN_W - P1.rect.width
-        else:
-            if P1.pos.x < 0:
-                P1.pos.x = 0
-            if P1.pos.x >= x_range - P1.rect.width:
-                diff = (P1.pos.x + P1.rect.width) - x_range
-                ST1.move_stage(-diff)
-                move_cell(-diff)
-                P1.pos.x = x_range - P1.rect.width
-                print(P1.vel.x)
-                if P1.vel.x >= 4 and P1.vel.x < 5:
-                    P1.battlesteps += 1
 
-    def lock_camera_x(self):
-        if P1.pos.x < 0:
-            P1.pos.x = 0
-        if P1.pos.x >= WIN_W - P1.rect.width:
-            P1.pos.x = WIN_W - P1.rect.width
-        if not ST1.cells:
-            ST1.battlemode = False
-            ST1.cell_plats.empty()
-
-    def cell_generate(self):
+    def cell_generate(self, num_cells):
         """choose the platform to place the cell
         and generate the cells"""
-        print(ST1.scroll)
+        print("Scroll value: {}".format(abs(ST1.scroll)))
 
         curr_stage = abs(ST1.scroll) // WIN_W
         shift_value = abs(ST1.scroll) - (curr_stage * WIN_W)
         print('shifted value: {}'.format(shift_value))
 
         # generate cells on the ground
-        cells_on_ground(ST1.cells, 3, P1)
+        cells_on_ground(ST1.cells, num_cells, P1)
 
 
 
     def battlemode_switch(self):
         if not ST1.battlemode:
-            step_encounter = random.randrange(200, 800, 20)
+            step_encounter = random.randrange(300, 800, 20)
             if P1.battlesteps >= step_encounter:
                 P1.battlesteps = 0
                 ST1.battlemode = True
-                self.cell_generate()
+                self.cell_generate(7)
 
     def _update_screen(self):
         """this function updates
@@ -198,9 +163,9 @@ class Game:
         # horizontal map scrolling
         self.battlemode_switch()
         if not ST1.battlemode:
-            self.move_camera_x(700)
+            move_camera_x(P1, ST1, 700)
         else:
-            self.lock_camera_x()
+            lock_camera_x(P1, ST1)
 
         # do the COVID19 routines
         for cell in ST1.cells:
@@ -259,7 +224,9 @@ class Game:
     def get_coord(self):
         m1, m2, m3 = pygame.mouse.get_pressed()
         if m1 == 1:
-            print("Point 1: {}".format(pygame.mouse.get_pos()))
+            mouse_pt = pygame.mouse.get_pos()
+            mouse_coord = (mouse_pt[0] + abs(ST1.scroll), mouse_pt[1])
+            print("Point 1: {}".format(mouse_coord))
 
     def show_info(self):
         if (self.prd >= 13):

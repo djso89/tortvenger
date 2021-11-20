@@ -29,6 +29,8 @@ class Block(pygame.sprite.Sprite):
             ob = pygame.image.load('images/blocks/block1.png').convert()
         if color == 'grey':
             ob = pygame.image.load('images/blocks/block2.png').convert()
+        if color == 'whitegrey':
+            ob = pygame.image.load('images/blocks/block3.png').convert()
         self.surf = pygame.Surface([ob.get_width(), ob.get_height()])
         self.surf.blit(ob, (0, 0), (0, 0, ob.get_width(), ob.get_height()))
         #self.surf.set_colorkey((0, 0, 0))

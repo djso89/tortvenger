@@ -139,8 +139,8 @@ class K_Battle(K_Act):
         player facing left and cell when player is not attacking
         """
         if cell.direction == 0: # cell direction right
-            if self.start_field:
-                cell.pos.x -= 50
+            if self.cnt_f_field == 20:
+                cell.pos.x -= 300
                 cell.direction = 1
             else:
                 if self.pos.x + 80  <= (cell.pos.x + cell.rect.width):
@@ -153,8 +153,8 @@ class K_Battle(K_Act):
                     if not self.dmg_blinking:
                         self.cell_do_dmg_x(cell, -100)
             else: # the cell is front of the player
-                if self.start_field:
-                    cell.pos.x -= 50
+                if self.cnt_f_field == 20:
+                    cell.pos.x -= 300
                 else:
                     if self.pos.x <= (cell.pos.x + cell.rect.width - 80):
                         if not self.dmg_blinking and not self.start_field:
@@ -168,9 +168,9 @@ class K_Battle(K_Act):
         function that checks for collision between player
         facing right and cell when player is not attacking
         """
-        if cell.direction == 1:
+        if self.cnt_f_field == 20:
             if self.start_field:
-                cell.pos.x += 50
+                cell.pos.x += 300
                 cell.direction = 0
             else:
                 if (self.pos.x + self.rect.width - 80) >= cell.pos.x:
@@ -184,8 +184,8 @@ class K_Battle(K_Act):
                     if not self.dmg_blinking:
                         self.cell_do_dmg_x(cell, 100)
             else:
-                if self.start_field:
-                    cell.pos.x += 50
+                if self.cnt_f_field == 20:
+                    cell.pos.x += 300
                 else:
                     if self.pos.x + self.rect.width >= cell.pos.x + 80:
                         if not self.dmg_blinking:

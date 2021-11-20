@@ -32,10 +32,10 @@ class GST_Act(Gooster):
 
     def load_images(self):
         """ load the images from sprite sheets """
-        sprite_sheet_envk = SpriteSheet("images/gst_env_k.png", black)
+        sprite_sheet_envk = SpriteSheet("images/gst_env_k.png")
         ss_envk = sprite_sheet_envk.sprite_sheet
 
-        sprite_sheet_expk = SpriteSheet("images/gst_exp_k.png", black)
+        sprite_sheet_expk = SpriteSheet("images/gst_exp_k.png")
         ss_expk = sprite_sheet_expk.sprite_sheet
 
         # load all the L/R frames for throwing envelop or packages
@@ -194,6 +194,7 @@ class GST_Act(Gooster):
         """animate the player. """
 
         self.ani_move()
+        self.ani_flap()
         self.no_atk_dmg_blink()
         self.atk_envk()
         self.atk_expk()

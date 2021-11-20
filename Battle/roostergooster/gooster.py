@@ -16,8 +16,10 @@ class Gooster(pygame.sprite.Sprite):
         """ load all the kuppa action frames """
         sprite_sheet = SpriteSheet("images/gst_rdy.png", black)
         #sprite_sheet_envk = SpriteSheet("images/gst_env_k.png", black)
+        sprite_sheet_flap = SpriteSheet('images/gst_flap.png')
 
         ss = sprite_sheet.sprite_sheet
+        ss_flap = sprite_sheet_flap.sprite_sheet
         #ss_envk = sprite_sheet_envk.sprite_sheet
 
         # load all right facing ready images
@@ -32,6 +34,18 @@ class Gooster(pygame.sprite.Sprite):
             image.set_colorkey((0, 0, 0))
             self.ready_l.append(image)
 
+        # load all right facing ready images
+        for i in range(0, 4, 1):
+            width = ss_flap.get_width()
+            height = ss_flap.get_height()
+            image = sprite_sheet_flap.get_image(i * width / 4, 0,
+                                           width / 4, height)
+            image.set_colorkey((0, 0, 0))
+            self.flap_r.append(image)
+            image = pygame.transform.flip(image, True, False)
+            image.set_colorkey((0, 0, 0))
+            self.flap_l.append(image)
+
 
 
     def __init__(self):
@@ -40,14 +54,15 @@ class Gooster(pygame.sprite.Sprite):
 
         # counter for animating jumping
         self.cnt = 0
+        self.num_jmp = 0
         # counter for damage blinking
         self.cnt_dmg = 0
 
         # action frames
         self.ready_r = []
         self.ready_l = []
-        self.jmp_l = []
-        self.jmp_r = []
+        self.flap_l = []
+        self.flap_r = []
 
         # load the image
         self.loadimages()
@@ -66,6 +81,7 @@ class Gooster(pygame.sprite.Sprite):
         # orientation and movement status
         self.orientation = 'right'
         self.OnGround = True
+        self.go_flap = False
 
         # cell attack and damage blinking
         self.cell_atk_g = False
@@ -102,7 +118,7 @@ class Gooster(pygame.sprite.Sprite):
         this just simply sets acceleration
         according to the key presses
         """
-        self.acc = vec(0, 2.5)
+        self.acc = vec(0, 2)
         pressed_keys = pygame.key.get_pressed()
         if pressed_keys[K_LEFT]:
             self.acc.x = -ACC
@@ -116,8 +132,15 @@ class Gooster(pygame.sprite.Sprite):
     def jump(self):
         """ jump action """
         if self.OnGround == True:
-            self.vel.y = -25
-            self.OnGround = False
+            self.num_jmp += 1
+            if self.num_jmp <= 7:
+                self.vel.y = -20
+                self.go_flap = True
+            else:
+                self.num_jmp = 0
+                self.OnGround = False
+                self.go_flap = False
+        #    self.OnGround = False
 
     # gooster touching the stage objects
     def touchXR(self, hits):
@@ -141,12 +164,15 @@ class Gooster(pygame.sprite.Sprite):
         for block in hits:
             if self.vel.y > 0:
                 self.OnGround = True
+                self.go_flap = False
                 self.cnt = 0
                 self.vel.y = 0
                 self.rect.bottom = block.rect.top
             elif self.vel.y < 0:
                 self.rect.top = block.rect.bottom
                 self.vel.y = 0
+                self.cnt = 0
+                self.go_flap = False
             self.pos.y = self.rect.y
 
     def touchYU(self, hits):
@@ -154,6 +180,7 @@ class Gooster(pygame.sprite.Sprite):
         for block in hits:
             if self.vel.y > 0:
                 self.OnGround = True
+                self.go_flap = False
                 self.cnt = 0
                 self.vel.y = 0
                 self.rect.bottom = block.rect.top
@@ -204,3 +231,18 @@ class Gooster(pygame.sprite.Sprite):
         elif self.orientation == 'left' and self.OnGround == True:
             frame = (self.steps // 10) % len(self.ready_l)
             self.image = self.ready_l[int(frame)]
+
+    def ani_flap(self):
+        period = 4
+        if self.go_flap:
+            if (self.cnt >= period * len(self.flap_r)):
+                self.cnt = 0
+                self.go_flap = False
+            else:
+                if self.orientation == 'right':
+                    self.image = self.flap_r[self.cnt // period]
+                if self.orientation == 'left':
+                    self.image = self.flap_l[self.cnt // period]
+                self.cnt += 1
+        else:
+            self.cnt = 0

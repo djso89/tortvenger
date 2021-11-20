@@ -66,7 +66,7 @@ class Game:
         if P1.pos.x >= x_range - P1.rect.width:
             diff = (P1.pos.x + P1.rect.width) - x_range
             ST1.move_stage(-diff)
-            move_cell(-diff)
+            move_cell(-diff, ST1.cells)
             P1.pos.x = x_range - P1.rect.width
 
         # check position boundary for player
@@ -94,7 +94,7 @@ class Game:
 
         """ drawing routines """
         # draw the Stage
-        ST1.draw(screen, False)
+        ST1.draw(screen, True)
 
         # draw the cells and player
         self.cell_draw()

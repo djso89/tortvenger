@@ -187,6 +187,7 @@ class K_Act(Kuppa):
         # frame counter
         self.cnt_swrd_draw = 0
         self.cnt_swd_jmp = 0
+        self.cnt_swd_get_off = 0
         self.cnt_swd_cut = 0
         self.cnt_got_dmg = 0
         self.num_blinks = 0
@@ -281,7 +282,7 @@ class K_Act(Kuppa):
             if self.orientation == 'left':
                 self.image_a = self.f_field_l[self.cnt_f_field // period]
             self.cnt_f_field += 1
-            print(self.cnt_f_field)
+
 
     def block(self):
         """ game logic for block
@@ -361,6 +362,23 @@ class K_Act(Kuppa):
         else:
             self.cnt_swd_jmp = 0
 
+    def ani_swd_get_off(self):
+        """ animate getting off Plats """
+        period = 3
+        if self.swd_drwn and self.go_get_off:
+            if self.cnt_swd_get_off >= period * (len(self.swd_jmp_r) - 1):
+                self.cnt_swd_get_off = period * (len(self.swd_jmp_r) - 1)
+                self.get_off = True
+                self.go_get_off = False
+            else:
+                self.cnt_swd_get_off += 1
+            if self.orientation == 'right':
+                self.image_a = self.swd_jmp_r[self.cnt_swd_get_off // period]
+            if self.orientation == 'left':
+                self.image_a = self.swd_jmp_l[self.cnt_swd_get_off // period]
+        else:
+            self.cnt_swd_get_off = 0
+
 
     def ani_adj_offset(self, x_off, y_off):
         """adjust the action frame coordinate """
@@ -375,6 +393,7 @@ class K_Act(Kuppa):
 
 
     def combo_frame_adj_offset(self):
+        """adjust the action frames """
         if self.ATK == False:
             self.ani_adj_offset(0, 0)
         elif self.ATK == True and self.atk_comb <= 2:
@@ -385,11 +404,12 @@ class K_Act(Kuppa):
             self.ani_adj_offset(2, -20)
 
     def ani_action(self):
-        self.combo_frame_adj_offset()
         """animate all the action frames """
+        self.combo_frame_adj_offset()
         self.ani_swd_draw()
         self.ani_swd_move()
         self.ani_swd_jmp()
+        self.ani_swd_get_off()
         self.attack()
         self.block()
         self.ani_dmg_blink()

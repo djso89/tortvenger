@@ -5,7 +5,7 @@ import pygame
 
 class SpriteSheet(object):
     """ class used to grab the image from spritesheet """
-    def __init__(self, filename, bck_drop_clr):
+    def __init__(self, filename, bck_drop_clr=(0, 0, 0)):
         """ constructor """
 
         # load the spritesheet

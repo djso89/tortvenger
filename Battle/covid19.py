@@ -243,7 +243,7 @@ def cells_on_ground(Cells, numcells, p1):
         Cells.add(cell)
 
 
-def move_cell(shift):
+def move_cell(shift, Cells):
     """ shift the cells as camera moves """
     for cell in Cells:
         cell.pos.x += round(shift)

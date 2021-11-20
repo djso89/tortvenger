@@ -46,8 +46,13 @@ class Kuppa(pygame.sprite.Sprite):
 
         #counter for animating jumping
         self.cnt = 0
+        #counter for animating sword drawing
         self.cnt_swrd_draw = 0
+        # counter for damage
         self.cnt_dmg = 0
+
+        # counter for animating get off
+        self.cnt_get_off = 0
         # action frames
         self.ready_r = []
         self.ready_l = []
@@ -66,6 +71,10 @@ class Kuppa(pygame.sprite.Sprite):
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
 
+        # flag to get off the platform
+        self.go_get_off  = False
+        self.get_off = False
+
         # set the image the player start with
         self.image = self.ready_r[0]
         self.rect = self.image.get_rect(topleft=self.pos)
@@ -73,13 +82,25 @@ class Kuppa(pygame.sprite.Sprite):
         # orientation and movement status
         self.orientation = 'right'
         self.OnGround = True
+        self.OnVeryBottom = False
 
+        # action flags for drawing swords
         self.swd_on = False
         self.swd_drwn = False
 
+        # collision flag for cell attacking kuppa
         self.cell_atk_k = False
         self.dmg_blinking = False
         self.n_blinks = 0
+
+    def jmp_dwn_plat(self):
+        """turn on get off the platform """
+        if self.OnVeryBottom == False:
+            self.go_get_off = True
+        else:
+            self.go_get_off = False
+            self.get_off = False
+
 
     def no_swd_dmg_blink(self):
         period = 2
@@ -165,11 +186,18 @@ class Kuppa(pygame.sprite.Sprite):
         list of collided sprites in Y direction
         and block the player from moving up"""
         for block in hits:
+            self.OnVeryBottom = False
             if self.vel.y > 0:
-                self.OnGround = True
-                self.cnt = 0
-                self.vel.y = 0
-                self.rect.bottom = block.rect.top
+                if self.get_off:
+                    self.get_off = False
+                    self.cnt_get_off = 0
+                    self.rect.top = block.rect.bottom
+                    self.vel.y = 0
+                else:
+                    self.OnGround = True
+                    self.cnt = 0
+                    self.vel.y = 0
+                    self.rect.bottom = block.rect.top
             elif self.vel.y < 0:
                 self.rect.top = block.rect.bottom
                 self.vel.y = 0
@@ -180,6 +208,7 @@ class Kuppa(pygame.sprite.Sprite):
         for block in hits:
             if self.vel.y > 0:
                 self.OnGround = True
+                self.OnVeryBottom = True
                 self.cnt = 0
                 self.vel.y = 0
                 self.rect.bottom = block.rect.top
@@ -190,7 +219,7 @@ class Kuppa(pygame.sprite.Sprite):
         """ check the collision in Y direction """
         #touch Cars
         hitC = pygame.sprite.spritecollide(self, ST1.Cars, False)
-        self.touchYUD(hitC)
+        self.touchYU(hitC)
 
         #touch ground platforms
         hits = pygame.sprite.spritecollide(self, ST1.platforms, False)
@@ -240,12 +269,27 @@ class Kuppa(pygame.sprite.Sprite):
             if self.orientation == 'left':
                 self.image = self.OnGround_l[self.cnt//period]
 
+    def ani_get_off(self):
+        period = 2
+        if self.go_get_off:
+            if self.cnt_get_off >= period * (len(self.OnGround_r) - 1):
+                self.cnt_get_off = period * (len(self.OnGround_r) - 1)
+                self.get_off = True
+                self.go_get_off = False
+            else:
+                self.cnt_get_off += 1
+            if self.orientation == 'right':
+                self.image = self.OnGround_r[self.cnt_get_off//period]
+            if self.orientation == 'left':
+                self.image = self.OnGround_l[self.cnt_get_off//period]
+
 
 
     def animate(self):
         """animate the player. """
         self.ani_move()
         self.ani_jump()
+        self.ani_get_off()
         self.no_swd_dmg_blink()
 
     def render(self):

@@ -95,18 +95,23 @@ class Game:
         set the boundary for player
         in horizontal direction
         """
-        # if the P1 gets near the right, shift the word left
-        if P1.pos.x >= x_range - P1.rect.width:
-            diff = (P1.pos.x + P1.rect.width) - x_range
-            print(diff)
-            ST1.move_stage(-diff)
-            move_cell(-diff)
-            P1.pos.x = x_range - P1.rect.width
-
-        # check position boundary for player
-        if P1.pos.x < 0:
-            P1.pos.x = 0
-
+        # player reached the end of the stage
+        # lock the camera
+        if abs(ST1.scroll) >= (ST1.num_bg - 1) * WIN_W:
+            ST1.scroll = -1 * (ST1.num_bg - 1) * WIN_W
+            P1.battlesteps = 0
+            if P1.pos.x < 0:
+                P1.pos.x = 0
+            if P1.pos.x >= WIN_W - P1.rect.width:
+                P1.pos.x = WIN_W - P1.rect.width
+        else:
+            if P1.pos.x < 0:
+                P1.pos.x = 0
+            if P1.pos.x >= x_range - P1.rect.width:
+                diff = (P1.pos.x + P1.rect.width) - x_range
+                ST1.move_stage(-diff)
+                move_cell(-diff, ST1.cells)
+                P1.pos.x = x_range - P1.rect.width
 
 
     def _update_screen(self):
@@ -121,6 +126,8 @@ class Game:
         for cell in Cells:
             cell.move()
             cell.hp_show()
+
+        self.get_coord()
 
 
         """ drawing routines """
@@ -164,4 +171,5 @@ class Game:
     def get_coord(self):
         m1, m2, m3 = pygame.mouse.get_pressed()
         if m1 == 1:
-            print("Point 1: {}".format(pygame.mouse.get_pos()))
+            mouse_pt = pygame.mouse.get_pos()
+            print("Point 1: {}".format((abs(ST1.scroll) + mouse_pt[0], mouse_pt[1])))
