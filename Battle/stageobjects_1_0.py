@@ -165,6 +165,11 @@ Plat9_2.expand_brick(10501, 123, 24, 2, 'grey')
 Plats.add(Plat9_2)
 
 # x-axis 10800 - 12000
+PS10_1 = Block()
+PS10_1.loadobject(11760, 194, 'images/buildings/petsmart.png')
+Bldgs.add(PS10_1)
+
+
 Plat10_1 = Block()
 Plat10_1.expand_brick(11684, 430, 10, 1, 'grey')
 Plats.add(Plat10_1)

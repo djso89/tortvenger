@@ -10,7 +10,7 @@ black = (0, 0, 0)
 
 
 # show one frame per 33ms = cut_frame_period * (1000 / FPS)
-cut_frame_period = 2
+cut_frame_period = 3
 # number of frames for one cut
 cut_frame_num = 7
 
