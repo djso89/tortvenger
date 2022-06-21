@@ -63,7 +63,7 @@ class C19_Attr(Attr):
 class GST_Attr(Attr):
     """ Gooster's attribute class """
     def __init__(self):
-        Attr.__init__(self, 1, 35, 30, 20, 25, 30, 120)
+        Attr.__init__(self, 1, 45, 37, 30, 25, 30, 120)
         self.PKGS = 50
         self.curr_pkgs = self.PKGS
         self.max_combo = 3

@@ -2,7 +2,6 @@
 import sys
 import random
 import pygame
-from display import *
 import time as t
 from troopakuppa19.kuppabattle import *
 from fonts.kuppacombo import *
@@ -13,7 +12,7 @@ from battlemode import move_camera_x, lock_camera_x
 from stage import *
 
 from troopakuppa19.vid import *
-
+from display import *
 
 
 class Game:
@@ -79,6 +78,7 @@ class Game:
         play_cutscene_1_1()
         pygame.init()
         pygame.display.init()
+        full_screen()
         while self.run:
             self._check_events()
             self._update_screen()

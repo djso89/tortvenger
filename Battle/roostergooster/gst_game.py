@@ -8,6 +8,7 @@ from roostergooster.envkunai import *
 from roostergooster.expkage import *
 from goostergauge import *
 from fonts.goostercombo import *
+from battlemode import move_camera_x, lock_camera_x
 
 from covid19 import *
 from stage import *
@@ -82,29 +83,27 @@ class Game:
                     P1.steps = 0
 
 
-    def move_camera_x(self, x_range):
-        """
-        set the boundary for player
-        in horizontal direction
-        """
-        # player reached the end of the stage
-        # lock the camera
-        if abs(ST1.scroll) >= (ST1.num_bg - 1) * WIN_W:
-            ST1.scroll = -1 * (ST1.num_bg - 1) * WIN_W
-            P1.battlesteps = 0
-            if P1.pos.x < 0:
-                P1.pos.x = 0
-            if P1.pos.x >= WIN_W - P1.rect.width:
-                P1.pos.x = WIN_W - P1.rect.width
-        else:
-            if P1.pos.x < 0:
-                P1.pos.x = 0
-            if P1.pos.x >= x_range - P1.rect.width:
-                diff = (P1.pos.x + P1.rect.width) - x_range
-                ST1.move_stage(-diff)
-                move_cell(-diff, ST1.cells)
-                P1.pos.x = x_range - P1.rect.width
+    def cell_generate(self, num_cells):
+        """choose the platform to place the cell
+        and generate the cells"""
+        print("Scroll value: {}".format(abs(ST1.scroll)))
 
+        curr_stage = abs(ST1.scroll) // WIN_W
+        shift_value = abs(ST1.scroll) - (curr_stage * WIN_W)
+        print('shifted value: {}'.format(shift_value))
+
+        # generate cells on the ground
+        cells_on_ground(ST1.cells, num_cells, P1)
+
+
+
+    def battlemode_switch(self):
+        if not ST1.battlemode:
+            step_encounter = random.randrange(300, 800, 20)
+            if P1.battlesteps >= step_encounter:
+                P1.battlesteps = 0
+                ST1.battlemode = True
+                self.cell_generate(4)
 
     def _update_screen(self):
         """this function updates
@@ -114,8 +113,12 @@ class Game:
         self.player_stuff()
         self.show_info()
 
-        #player boundary
-        self.move_camera_x(700)
+        # horizontal map scrolling
+        self.battlemode_switch()
+        if not ST1.battlemode:
+            move_camera_x(P1, ST1, 700)
+        else:
+            lock_camera_x(P1, ST1)
 
 
         # do the COVID19 routines

@@ -30,6 +30,7 @@ class YM_Battle(Yesman):
         #touch hits
         for block in hits:
             if self.vel.x > 0: #moving right
+                self.battlesteps = 0
                 if self.gotHit:
                     self.rect.left = block.rect.right
                 else:

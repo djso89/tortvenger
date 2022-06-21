@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-from stageobjects_1_0 import Bldgs, platforms, Plats, Bricks, Cars, alph
+from stageobjects_1_0 import Bldgs, platforms, Plats, Bricks, Cars, alph, Portals
 import pygame
 
 from covid19 import *
 from display import *
 from block import *
+from portal import Portal
 
 
 
@@ -34,6 +35,8 @@ class Stage(pygame.sprite.Sprite):
         self.Bricks = Bricks
         self.Cars = Cars
 
+        self.warp_doors = Portals
+
         # battlemode switch
         self.battlemode = True
         self.steps = 0
@@ -42,9 +45,7 @@ class Stage(pygame.sprite.Sprite):
         self.cells = Cells
 
         self.cell_plats = pygame.sprite.Group()
-        #self.cell_plats.add(self.Plat1)
-        #self.cell_plats.add(self.Ground)
-        #self.cell_plats.add(self.Brick2)
+
 
 
 
@@ -56,20 +57,33 @@ class Stage(pygame.sprite.Sprite):
         self.StageBlocks.add(self.Bldgs)
         self.StageBlocks.add(self.Bricks)
 
-        self.bgimg = pygame.image.load("images/bg_level.png").convert()
-        self.bgimg1 = pygame.transform.flip(self.bgimg, True, False)
+        self.bgimg = pygame.image.load("images/stages/stage1-1/1_1_0.png").convert()
+        self.bgimg1 = pygame.image.load("images/stages/stage1-1/1_1_1.png").convert()
+        self.bg_rpt = pygame.image.load("images/stages/stage1-1/1_1_RPT.png").convert()
 
         self.stagesurf = pygame.Surface([self.num_bg * self.bgimg.get_width(),\
                                          self.bgimg.get_height()]).convert()
 
+        left_corner = (0, 0)
+        self.stagesurf.blit(self.bgimg, left_corner)
 
-        for i in range(0, self.num_bg, 1):
+        left_corner = (self.bgimg1.get_width(), 0)
+        self.stagesurf.blit(self.bgimg1, left_corner)
+
+        for i in range(2, self.num_bg, 1):
             if i % 2 == 0:
-                left_corner = (i * self.bgimg.get_width(), 0)
-                self.stagesurf.blit(self.bgimg, left_corner)
+                left_corner = (i * self.bg_rpt.get_width(), 0)
+                self.stagesurf.blit(self.bg_rpt, left_corner)
             else:
-                left_corner = (i * self.bgimg1.get_width(), 0)
-                self.stagesurf.blit(self.bgimg1, left_corner)
+                left_corner = (i * self.bg_rpt.get_width(), 0)
+                bg_rpt1 = pygame.transform.flip(self.bg_rpt, True, False)
+                self.stagesurf.blit(bg_rpt1, left_corner)
+
+    def insert_bg(self, bg_num, image_path):
+        """change the background at specific background index(bg_num) """
+        bgimg = pygame.image.load(image_path).convert()
+        left_corner = ((bg_num - 1) * self.bg_rpt.get_width(), 0)
+        self.stagesurf.blit(bgimg, left_corner)
 
 
 
@@ -97,6 +111,9 @@ class Stage(pygame.sprite.Sprite):
         for bldg in self.Bldgs:
             bldg.rect.x += round(shift)
 
+        for door in self.warp_doors:
+            door.pos.x += round(shift)
+
 
 
 
@@ -109,6 +126,9 @@ class Stage(pygame.sprite.Sprite):
         if SB_SW:
             for block in self.StageBlocks:
                 screen.blit(block.surf, block.rect)
+
+        for door in self.warp_doors:
+            door.render()
 
 
 

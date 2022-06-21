@@ -70,6 +70,7 @@ class Gooster(pygame.sprite.Sprite):
 
         # kinematic factors
         self.steps = 0
+        self.battlesteps = 0
         self.pos = vec((0, 0))
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
@@ -187,6 +188,20 @@ class Gooster(pygame.sprite.Sprite):
             self.pos.y = self.rect.y
 
 
+    def touchYU_UP(self, hits):
+        """touch collision when player jump up
+        and touch the downside of the object,
+        move the player just above the downside"""
+        for block in hits:
+            if self.vel.y > 0:
+                self.OnGround = True
+                self.go_flap = False
+                self.cnt = 0
+                self.vel.y = 0
+                self.rect.bottom = block.rect.bottom
+            self.pos.y = self.rect.y
+
+
 
 
     def collisionY(self):
@@ -194,33 +209,29 @@ class Gooster(pygame.sprite.Sprite):
         """ check the collision in Y direction """
 
         #touch ground platforms
-        hits = pygame.sprite.spritecollide(self, platforms, False)
+        hits = pygame.sprite.spritecollide(self, ST1.platforms, False)
         self.touchYU(hits)
 
         #touch Cars
-        hitC = pygame.sprite.spritecollide(self, Cars, False)
+        hitC = pygame.sprite.spritecollide(self, ST1.Cars, False)
         self.touchYUD(hitC)
 
         # touch Bricks
-        hitB = pygame.sprite.spritecollide(self, Bricks, False)
+        hitB = pygame.sprite.spritecollide(self, ST1.Bricks, False)
         self.touchYUD(hitB)
 
         #touch Plats
-        hitP = pygame.sprite.spritecollide(self, Plats, False)
+        hitP = pygame.sprite.spritecollide(self, ST1.Plats, False)
         self.touchYUD(hitP)
 
         #touch Bldgs
-        hitBldg = pygame.sprite.spritecollide(self, Bldgs, False)
-        self.touchYUD(hitBldg)
+        hitBldg = pygame.sprite.spritecollide(self, ST1.Bldgs, False)
+        self.touchYU_UP(hitBldg)
 
-        #touch Steps
-        hitSt = pygame.sprite.spritecollide(self, Steps, False)
-        self.touchYUD(hitSt)
+
 
 
     """ animation functions """
-
-
     def ani_move(self):
         """ animate the left right movement"""
         if self.orientation == 'right' and self.OnGround == True:

@@ -519,7 +519,7 @@ class Yesman(pygame.sprite.Sprite, YM_Attr):
     def cut_delay(self):
         cut_frame_period = self.get_cut_frame_period(self.slash_number)
         if (self.ATK_DONE):
-            if (self.cnt_hold >=  3 * cut_frame_period):
+            if (self.cnt_hold >=  2 * cut_frame_period):
                 self.atk_isDone()
             else:
                 self.cnt_hold += 1

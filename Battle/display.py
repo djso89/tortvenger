@@ -8,7 +8,7 @@ setting = Settings()
 
 ACC = 0.6
 FRIC = -0.12
-FPS = 70
+FPS = 60
 
 WIN_W = setting.screen_width
 WIN_H = setting.screen_height
@@ -16,6 +16,12 @@ WIN_H = setting.screen_height
 
 setting.flags = pygame.SCALED | pygame.RESIZABLE
 
-#pygame.display.init()
 screen = pygame.display.set_mode((WIN_W, WIN_H), \
-    setting.flags)
+                                 setting.flags)
+
+
+#pygame.display.init()
+def full_screen():
+    screen = pygame.display.set_mode((WIN_W, WIN_H), \
+                                     setting.flags)
+    pygame.display.set_caption('Tortvenger:Attack of COVID')

@@ -37,14 +37,14 @@ class GST_Battle(GST_Act):
     def collisionX(self):
         """check the collision in X direction """
         # touch bricks
-        hitB = pygame.sprite.spritecollide(self, Bricks, False)
+        hitB = pygame.sprite.spritecollide(self, ST1.Bricks, False)
         self.touchX(hitB)
 
         #touch Cars
-        hitC = pygame.sprite.spritecollide(self, Cars, False)
+        hitC = pygame.sprite.spritecollide(self, ST1.Cars, False)
         self.touchX(hitC)
 
-        hitP = pygame.sprite.spritecollide(self, Plats, False)
+        hitP = pygame.sprite.spritecollide(self, ST1.Plats, False)
         self.touchX(hitP)
 
     def gotHit_reset(self):
@@ -194,7 +194,7 @@ class GST_Battle(GST_Act):
         for bullet in expk_bullets:
             hitCells = pygame.sprite.spritecollide(bullet, Cells, False)
             for cell in hitCells:
-                expk_dmg = 4 * goosterinfo.get_dmg(cell.defense, cell.luck)
+                expk_dmg = 10 * goosterinfo.get_dmg(cell.defense, cell.luck)
                 cell.hit_hp(expk_dmg)
                 bullet.hitlanded = True
                 cell.hitCell_expk = True

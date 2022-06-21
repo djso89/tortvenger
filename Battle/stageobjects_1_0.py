@@ -2,6 +2,7 @@
 """Stage 1-0 objects"""
 from block import *
 from display import *
+from portal import Portal
 
 
 
@@ -14,6 +15,8 @@ Plats = pygame.sprite.Group()
 Steps = pygame.sprite.Group()
 Bldgs = pygame.sprite.Group()
 platforms = pygame.sprite.Group()
+
+Portals = pygame.sprite.Group()
 
 # objects located from 0 to 1200 in x axis
 Brick1 = Block()
@@ -57,6 +60,9 @@ PS2_1.loadobject(1300, 245, 'images/buildings/petsmart.png')
 
 Bldgs.add(Bldg2_1)
 Bldgs.add(PS2_1)
+
+PS2_1_ENT = Portal(1411, 379)
+Portals.add(PS2_1_ENT)
 
 
 # x-axis : 2400 - 3600
@@ -168,6 +174,12 @@ Plats.add(Plat9_2)
 PS10_1 = Block()
 PS10_1.loadobject(11760, 194, 'images/buildings/petsmart.png')
 Bldgs.add(PS10_1)
+
+PS10_1_ENT = Portal(11871, 328)
+Portals.add(PS10_1_ENT)
+
+NextArea = Portal(11900, 520)
+Portals.add(NextArea)
 
 
 Plat10_1 = Block()

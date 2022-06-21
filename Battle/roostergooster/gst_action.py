@@ -164,22 +164,22 @@ class GST_Act(Gooster):
     def throw_envk(self):
         if self.orientation == 'right':
             start_x = self.pos.x + self.rect.width
-            start_y = self.pos.y + 50 + random.randint(-50, 50)
+            start_y = self.pos.y + 50 + random.randint(-20, 20)
             envk_bullet = ENV_K(start_x, start_y, self.orientation)
         if self.orientation == 'left':
             start_x = self.pos.x
-            start_y = self.pos.y + 50 + random.randint(-50, 50)
+            start_y = self.pos.y + 50 + random.randint(-20, 20)
             envk_bullet = ENV_K(start_x, start_y, self.orientation)
         envk_bullets.add(envk_bullet)
 
     def throw_expk(self):
         if self.orientation == 'right':
             start_x = self.pos.x + self.rect.width
-            start_y = self.pos.y + 50 + random.randint(-100, 50)
+            start_y = self.pos.y + 50 + random.randint(-20, 20)
             expk_bullet = EXP_K(start_x, start_y, self.orientation)
         if self.orientation == 'left':
             start_x = self.pos.x
-            start_y = self.pos.y + 50 + random.randint(-100, 50)
+            start_y = self.pos.y + 50 + random.randint(-20, 20)
             expk_bullet = EXP_K(start_x, start_y, self.orientation)
         if goosterinfo.curr_pkgs >= 5:
             goosterinfo.curr_pkgs -= 5

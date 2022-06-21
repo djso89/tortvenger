@@ -217,10 +217,6 @@ class Kuppa(pygame.sprite.Sprite):
 
     def collisionY(self):
         """ check the collision in Y direction """
-        #touch Cars
-        hitC = pygame.sprite.spritecollide(self, ST1.Cars, False)
-        self.touchYU(hitC)
-
         #touch ground platforms
         hits = pygame.sprite.spritecollide(self, ST1.platforms, False)
         self.touchYU(hits)
@@ -230,14 +226,19 @@ class Kuppa(pygame.sprite.Sprite):
         hitB = pygame.sprite.spritecollide(self, ST1.Bricks, False)
         self.touchYUD(hitB)
 
-        #touch Plats
-        hitP = pygame.sprite.spritecollide(self, ST1.Plats, False)
-        self.touchYUD(hitP)
+        #touch Cars
+        hitC = pygame.sprite.spritecollide(self, ST1.Cars, False)
+        self.touchYU(hitC)
+
+
 
         #touch Bldgs
         hitBldg = pygame.sprite.spritecollide(self, ST1.Bldgs, False)
         self.touchYU_UP(hitBldg)
 
+        #touch Plats
+        hitP = pygame.sprite.spritecollide(self, ST1.Plats, False)
+        self.touchYUD(hitP)
 
 
     """ animation functions """

@@ -6,6 +6,7 @@ from kuppagauge import kuppainfo
 
 
 class K_Battle(K_Act):
+    """Kuppa Battle Class """
     def __init__(self):
         super().__init__()
         self.gotHit = False
@@ -14,6 +15,7 @@ class K_Battle(K_Act):
         self.num_cells = 0
 
     def touchX(self, hits):
+        """touching x direction """
         #touch hits
         for block in hits:
             if self.vel.x > 0: #moving right
@@ -32,7 +34,7 @@ class K_Battle(K_Act):
 
 
     def touchXR(self, hits):
-        #touch hits coming from right side
+        """touch hits coming from right side"""
         for block in hits:
             if self.vel.x > 0:
                 self.rect.right = block.rect.left
@@ -40,7 +42,7 @@ class K_Battle(K_Act):
 
 
     def touchXL(self, hits):
-        #touch hits coming from left side
+        """ touch hits coming from left side """
         for block in hits:
             if self.vel.x < 0:
                 self.rect.left = block.rect.right
@@ -79,19 +81,20 @@ class K_Battle(K_Act):
         self.pos.x += self.vel.x + 0.5 * self.acc.x
 
 
-
+        # check for collision with cell in x-direction
         self.touch_cell_X()
 
 
         self.rect.x = self.pos.x
         self.collisionX()
         self.gotHit_reset()
+
         #moving along the y direction
         self.vel.y += self.acc.y
         self.pos.y += self.vel.y + 0.5 * self.acc.y
+
         # assign the y coordinate to frame's y
         self.rect.y = self.pos.y
-
         self.collisionY()
 
     def touch_cell_X(self):
@@ -117,11 +120,11 @@ class K_Battle(K_Act):
             elif self.atk_comb == 3:
                 if self.num_cells == 2:
                     break
-            elif self.atk_comb == 5:
+            elif self.atk_comb == 5 or self.atk_comb == 6:
                 #attack up to 3 cells
                 if self.num_cells == 4:
                     break
-            elif self.atk_comb >= 6 and self.atk_comb < 9:
+            elif self.atk_comb >= 7 and self.atk_comb <= 10:
                 if self.num_cells == 5:
                     break
         self.num_cells = 0
@@ -191,6 +194,7 @@ class K_Battle(K_Act):
                         if not self.dmg_blinking:
                             self.cell_do_dmg_x(cell, -100)
                             self.gotHit = True
+        # needs conditional statement when cell is going left
 
 
 
@@ -233,7 +237,8 @@ class K_Battle(K_Act):
         """this is where how cells will be attacked from
         combo 1 through 9 when player is facing left"""
         cut_finish = cut_frame_num * cut_frame_period - 1
-        if self.atk_comb >= 1 and self.atk_comb <= 9:
+        if (self.atk_comb >= 1 and self.atk_comb <= 6) \
+           or self.atk_comb >= 9:
             if cell.direction == 0:
                 if self.pos_a.x <= (cell.pos.x + cell.rect.width) - 40:
                     self.player_attack(cell, -2, -50, -400)
@@ -250,18 +255,31 @@ class K_Battle(K_Act):
                         else:
                             self.cell_do_dmg_x(cell, -50)
                             cell.direction = 0
+        self.player_combo_7_8_routine_l(cell)
 
-
+    def player_combo_7_8_routine_l(self, cell):
+        cut_finish = cut_frame_num * cut_frame_period - 1
+        if self.atk_comb == 7 or self.atk_comb == 8:
+            if cell.direction == 1:
+                if self.pos.x > cell.pos.x:
+                    if self.cnt_swd_cut == cut_finish:
+                        self.player_dmg(cell, -120)
+                else:
+                    if self.cnt_swd_cut == cut_finish:
+                        self.player_dmg(cell, 120)
+            if cell.direction == 0:
+                if self.cnt_swd_cut == cut_finish:
+                        self.player_dmg(cell, -200)
 
     def player_combo_routine_xr(self, cell):
         """this is where how cells will be attacked from
         combo 1 through 9 when player is facing right"""
         cut_finish = cut_frame_num * cut_frame_period - 1
-        if self.atk_comb >= 1 and self.atk_comb <= 9:
+        if (self.atk_comb >= 1 and self.atk_comb <= 6) or \
+           self.atk_comb >= 9:
             if cell.direction == 1:
-                if self.atk_comb >= 1 and self.atk_comb <= 9:
-                    if self.pos_a.x + self.rect_a.width - 40 >= cell.pos.x:
-                        self.player_attack(cell, 2, 50, 400)
+                if self.pos_a.x + self.rect_a.width - 40 >= cell.pos.x:
+                    self.player_attack(cell, 2, 50, 400)
             if cell.direction == 0:
                 if self.rect_a.left + self.rect_a.width >= (cell.rect.left + 40):
                     if self.pos.x < cell.pos.x:
@@ -276,6 +294,17 @@ class K_Battle(K_Act):
                         else:
                             self.cell_do_dmg_x(cell, 50)
                             cell.direction = 1
+        if self.atk_comb == 7 or self.atk_comb == 8:
+            if cell.direction == 0:
+                if self.pos.x < cell.pos.x:
+                    if self.cnt_swd_cut == cut_finish:
+                        self.player_dmg(cell, 120)
+                else:
+                    if self.cnt_swd_cut == cut_finish:
+                        self.player_dmg(cell, -120)
+            if cell.direction == 1:
+                if self.cnt_swd_cut == cut_finish:
+                        self.player_dmg(cell, 200)
 
 
 
@@ -285,14 +314,7 @@ class K_Battle(K_Act):
         facing left and cell when player is attacking
         """
         self.player_combo_routine_xl(cell)
-        if self.atk_comb == 10:
-            if cell.direction == 0:
-                self.player_dmg(cell, -50)
-            if cell.direction == 1:
-                if self.pos.x > cell.pos.x:
-                    self.player_dmg(cell, -50)
-                else:
-                    self.player_dmg(cell, 50)
+
 
 
 
@@ -302,14 +324,6 @@ class K_Battle(K_Act):
         facing right and cell when player is attacking
         """
         self.player_combo_routine_xr(cell)
-        if self.atk_comb == 10:
-            if cell.direction == 1:
-                self.player_dmg(cell, 50)
-            if cell.direction == 0:
-                if self.pos.x > cell.pos.x:
-                    self.player_dmg(cell, -50)
-                else:
-                    self.player_dmg(cell, 50)
 
 
 
