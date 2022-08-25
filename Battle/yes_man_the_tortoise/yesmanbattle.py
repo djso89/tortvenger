@@ -11,6 +11,7 @@ class YM_Battle(Yesman):
         self.show_comb = False
         self.hold_frame = 0
         self.num_cells = 0
+        self.battlesteps = 0
 
     def collisionX(self):
         """check the collision in X direction """
